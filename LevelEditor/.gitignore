@@ -1,0 +1,12 @@
+level-editor
+level-editor-test
+*.o
+*~
+.fuse_hidden*
+*.opensdf
+*.sdf
+Debug/
+Release/
+.vs/
+ipch/
+allegro.log
