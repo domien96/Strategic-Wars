@@ -10,7 +10,9 @@ Pos pos_init(int row, int col)
 
 Path* path_alloc(int step_count, int distance)
 {
-	Path* path = (Path*)calloc(step_count,sizeof(Pos));
+	Pos* steps = (Pos*)calloc(step_count, sizeof(Pos));
+	Path* path = (Path*) calloc(1,sizeof(Path));
+	(*path).steps = steps;
 	(*path).distance = distance;
 	(*path).step_count = step_count;
     return path;
