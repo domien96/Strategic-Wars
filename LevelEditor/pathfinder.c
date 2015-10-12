@@ -10,10 +10,15 @@
 #include <assert.h>
 
 
-Path* find_path(Level* level, Cell* start, Cell* target)
-{
+Path* find_path(Level* level, Cell* start, Cell* target) {
     //this is a dummy implementation, and is to be replaced by a real implementation
-    Path* res = path_alloc(100, 0);
+    
+	DWGraph* graph = (DWGraph*)calloc(1, sizeof(DWGraph));
+
+	
+
+	
+	/*Path* res = path_alloc(100, 0);
 
     Pos cur;
     cur.row = start->row;
@@ -41,6 +46,6 @@ Path* find_path(Level* level, Cell* start, Cell* target)
         res->distance += 12;
     }
 
-    return res;
+    return res;*/
 }
 
