@@ -39,7 +39,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 
 	}
 	
-
+	return 0;
 	
 	/*Path* res = path_alloc(100, 0);
 
