@@ -6,10 +6,18 @@
 
 typedef struct
 {
-	int todo3;
+	int todo;
     //TODO define struct
 } DWGraph;
 
+typedef struct
+{
+	Node* neighbours;
+	int* costs;
+	//TODO
+} Node;
+
+Node* cellToNode(Cell* cell);
 
 //TODO define additional functions
 

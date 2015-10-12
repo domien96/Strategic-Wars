@@ -8,14 +8,15 @@
 #include <stdlib.h>
 #include <stdio.h> 
 #include <assert.h>
+#include "dwgraph.h"
 
 
 Path* find_path(Level* level, Cell* start, Cell* target) {
     //this is a dummy implementation, and is to be replaced by a real implementation
     
 	DWGraph* graph = (DWGraph*)calloc(1, sizeof(DWGraph));
-
-	
+	Node* node = cellToNode(start);
+	//Node(*node).neighbours;
 
 	
 	/*Path* res = path_alloc(100, 0);

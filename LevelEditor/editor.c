@@ -22,7 +22,7 @@ int main()
     const char* filename = al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP);
     Level* level = level_alloc_read_from_file(filename);
     //TODO: uncomment this 
-    //if (level == NULL) { //TEST
+    //if (level == NULL) {
     //    fprintf(stdout, "Reading level from \"%s\" failed.\n", filename);
     //    al_destroy_path(path);
     //    return 1;
