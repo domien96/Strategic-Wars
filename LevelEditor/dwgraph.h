@@ -6,7 +6,7 @@
 
 typedef struct
 {
-	int todo2;
+	int todo3;
     //TODO define struct
 } DWGraph;
 
