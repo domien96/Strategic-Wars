@@ -4,19 +4,41 @@
 #include "pqueue.h"
 #include "level.h"
 #include "common.h"
+#include "dwgraph.h"
 
 #include <stdlib.h>
 #include <stdio.h> 
 #include <assert.h>
-#include "dwgraph.h"
-
 
 Path* find_path(Level* level, Cell* start, Cell* target) {
-    //this is a dummy implementation, and is to be replaced by a real implementation
     
-	DWGraph* graph = (DWGraph*)calloc(1, sizeof(DWGraph));
-	Node* node = cellToNode(start);
-	//Node(*node).neighbours;
+	DWGraph* graph = makeGraph(level);
+	Path* path = path_alloc(0,0);
+
+	Node* startNode = (graph->nodes) + cellToNode(start);
+	Node* targetNode = (graph->nodes) + cellToNode(target);
+	int currentCost = 0;
+
+	PriorityQueue* queue = pqueue_alloc();
+	for (int i = 0; i < sizeof(startNode->neighbours)/sizeof(Node); i++) {
+		pqueue_update(queue, startNode->neighbours + i, *(startNode->costs + i));
+	}
+	
+	while (sizeof(queue) > 0) {
+		Node* current = pqueue_remove_first(queue);
+		for (int i = 0; i < sizeof(current->neighbours) / sizeof(Node); i++) {
+			Node* neighbour = (current->neighbours) + i;
+			neighbour->cost = current->cost + *(current->costs + i);
+			pqueue_update(queue, (current->neighbours) + i, neighbour->cost);
+		}
+	}
+
+	if (targetNode->cost == +INT_MAX) {
+		//There is no path
+	} else {
+
+	}
+	
 
 	
 	/*Path* res = path_alloc(100, 0);
