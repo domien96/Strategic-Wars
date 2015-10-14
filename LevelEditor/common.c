@@ -7,7 +7,7 @@ Pos pos_init(int row, int col)
     Pos res;
     return res;
 }
-
+/*commit test*/
 Path* path_alloc(int step_count, int distance)
 {
 	Pos* steps = (Pos*)calloc(step_count, sizeof(Pos));
