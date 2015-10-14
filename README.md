@@ -32,7 +32,13 @@ Meeting 1:
     Mergen naar juiste repo
     
     Geen antwoord 12 uur voor deadline
+  
+  Testen:
     
+    Hoe meer testen hoe beter
+    
+    Conform voorbeeldtesten
+  
   Tegen volgende meeting (19/10/2015:16h):
     
     Issue tracker activeren
@@ -45,10 +51,4 @@ Meeting 1:
     - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken.
     
     
-  Testen:
-    
-    Hoe meer testen hoe beter
-    
-    Conform voorbeeldtesten
-
 
