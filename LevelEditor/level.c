@@ -14,7 +14,7 @@
 * For example, it converts the char '*' to the CellType GROUND
 */
 CellType level_symbol_to_cell_type(char symbol) {
-	/*switch (symbol) {
+	switch (symbol) {
 	case '*': 
 		return GROUND;
 		break;
@@ -48,10 +48,9 @@ CellType level_symbol_to_cell_type(char symbol) {
 	case '9':
 		return UNIT_3;
 		break;
-	/*default:
-		return NULL;
-	}*/
-	return UNIT_3;
+	default:
+		return (CellType) NULL;
+	}
 
 }
 /*
@@ -102,6 +101,8 @@ Owner level_symbol_to_owner(char symbol) {
 	case '9':
 		return OWNER_AI;
 		break;
+	default:
+		return (Owner) NULL;
 	}
 }
 
@@ -109,7 +110,10 @@ Owner level_symbol_to_owner(char symbol) {
 * This function converts a Cell to the textual representation of
 * that cell in the level file format.
 */
-char cell_to_symbol(Cell* cell);
+char cell_to_symbol(Cell* cell) {
+	return cell_type_and_owner_to_symbol(cell->type, cell->owner); /* hier zou ik pointers willen doorgeven aangezien die sneller gekopiëerd worden,
+																   maar ik mag de header niet wijzigen, veronderstel ik.*/
+}
 
 /*
 * This function converts a combination of an owner and cell_type
@@ -119,7 +123,67 @@ char cell_to_symbol(Cell* cell);
 * for example, it converts the combination UNIT_2, OWNER_AI
 * to the character '8'
 */
-char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner);
+char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
+	/* code smell*/
+	switch (owner) {
+	case OWNER_HUMAN:
+
+		switch (cell_type) {
+		case HEADQUARTER:
+			return 'h';
+			break;
+		case UNIT_1:
+			return '1';
+			break;
+		case UNIT_2:
+			return '2';
+			break;
+		case UNIT_3:
+			return '3';
+			break;
+		/*default:
+			return */
+		}
+		break;
+
+	case OWNER_AI:
+
+		switch (cell_type) {
+		case HEADQUARTER:
+			return 'H';
+			break;
+		case UNIT_1:
+			return '7';
+			break;
+		case UNIT_2:
+			return '8';
+			break;
+		case UNIT_3:
+			return '9';
+			break;
+		}
+		break;
+
+	case OWNER_NONE:
+
+		switch (cell_type) {
+		case GROUND:
+			return '*';
+			break;
+		case WATER:
+			return 'W';
+			break;
+		case BRIDGE:
+			return 'B';
+			break;
+		case ROCK:
+			return 'R';
+			break;
+		}
+		break;
+
+	}
+}
 
 /*
 * This functions returns true if the unit in a given Cell can
