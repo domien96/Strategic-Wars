@@ -4,10 +4,10 @@
 
 Pos pos_init(int row, int col)
 {
-    Pos res;
+	Pos res = {row, col};
     return res;
 }
-/*commit test*/
+
 Path* path_alloc(int step_count, int distance)
 {
 	Pos* steps = (Pos*)calloc(step_count, sizeof(Pos));
@@ -34,4 +34,5 @@ int cell_type_is_player_owned(CellType cell_type)
 {
 	return cell_type_is_unit(cell_type) || cell_type == HEADQUARTER;
 }
+
 
