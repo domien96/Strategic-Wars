@@ -39,13 +39,11 @@ Meeting 1:
     
     Uitbereidingen kiezen
     
+    
   Testen:
     
     Hoe meer testen hoe beter
     
     Conform voorbeeldtesten
 
-Vragen voor meeting (19/10/2015) : 
-- Hoe issue tracker gebruiken in Visual studio?
-- Hoe merge conflicts oplossen in VS.
-- Errors in C, vb. verkeerd opgestelde file om level-struct van te maken.
+
