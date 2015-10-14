@@ -13,7 +13,47 @@
 *
 * For example, it converts the char '*' to the CellType GROUND
 */
-CellType level_symbol_to_cell_type(char symbol);
+CellType level_symbol_to_cell_type(char symbol) {
+	/*switch (symbol) {
+	case '*': 
+		return GROUND;
+		break;
+	case 'W':
+		return WATER;
+		break;
+	case 'B':
+		return BRIDGE;
+		break;
+	case 'R':
+		return ROCK;
+		break;
+	case 'h' :
+		return HEADQUARTER;
+		break;
+	case '1':
+		return UNIT_1;
+		break;
+	case '2':
+		return UNIT_2;
+		break;
+	case '3':
+		return UNIT_3;
+		break;
+	case '7':
+		return UNIT_1;
+		break;
+	case '8':
+		return UNIT_2;
+		break;
+	case '9':
+		return UNIT_3;
+		break;
+	/*default:
+		return NULL;
+	}*/
+	return UNIT_3;
+
+}
 /*
 * This function converts the textual representation of a Cell,
 * which is used in the Level file format,
