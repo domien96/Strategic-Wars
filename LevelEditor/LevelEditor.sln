@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestLevelEditor", "TestLeve
 		{C624E484-FB60-4258-B6B5-BB49EAA121F1} = {C624E484-FB60-4258-B6B5-BB49EAA121F1}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "..\Sandbox\Sandbox.vcxproj", "{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -41,6 +43,14 @@ Global
 		{55844587-3DB2-4BCC-BC81-25EECDD155FD}.Release|Win32.ActiveCfg = Release|Win32
 		{55844587-3DB2-4BCC-BC81-25EECDD155FD}.Release|Win32.Build.0 = Release|Win32
 		{55844587-3DB2-4BCC-BC81-25EECDD155FD}.Release|x64.ActiveCfg = Release|Win32
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Debug|Win32.ActiveCfg = Debug|Win32
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Debug|Win32.Build.0 = Debug|Win32
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Debug|x64.ActiveCfg = Debug|x64
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Debug|x64.Build.0 = Debug|x64
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Release|Win32.ActiveCfg = Release|Win32
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Release|Win32.Build.0 = Release|Win32
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Release|x64.ActiveCfg = Release|x64
+		{361BB98C-8A0D-4193-9C9B-D6B6D8777CED}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
