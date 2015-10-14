@@ -21,7 +21,49 @@ CellType level_symbol_to_cell_type(char symbol);
 *
 * For example, it converts the char 'h' to the Owner HUMAN_PLAYER
 */
-Owner level_symbol_to_owner(char symbol);
+Owner level_symbol_to_owner(char symbol) {
+	switch (symbol) {
+		/*owner_none*/
+	case '*':
+		return OWNER_NONE;
+		break;
+	case 'W':
+		return OWNER_NONE;
+		break;
+	case 'B':
+		return OWNER_NONE;
+		break;
+	case 'R':
+		return OWNER_NONE;
+		break;
+		/*owner_human*/
+	case 'h':
+		return OWNER_HUMAN;
+		break;
+	case '1':
+		return OWNER_HUMAN;
+		break;
+	case '2':
+		return OWNER_HUMAN;
+		break;
+	case '3':
+		return OWNER_HUMAN;
+		break;
+		/*owner_ai*/
+	case 'H':
+		return OWNER_AI;
+		break;
+	case '7':
+		return OWNER_AI;
+		break;
+	case '8':
+		return OWNER_AI;
+		break;
+	case '9':
+		return OWNER_AI;
+		break;
+	}
+}
 
 /*
 * This function converts a Cell to the textual representation of
