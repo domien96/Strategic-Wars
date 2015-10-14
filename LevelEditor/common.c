@@ -18,9 +18,10 @@ Path* path_alloc(int step_count, int distance)
     return path;
 }
 
+/*niet alleen path zelf moet vrijgegeven worden maar ook de pointer die het bevat*/
 void path_free(Path* path)
 {
-	free(path->steps);
+	free((*path).steps);
 	free(path);
 }
 

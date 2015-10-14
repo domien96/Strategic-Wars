@@ -13,6 +13,7 @@
 
 int main()
 {
+
     printf("Strategic War Level Editor\n");
 
     ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
