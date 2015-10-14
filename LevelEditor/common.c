@@ -4,23 +4,29 @@
 
 Pos pos_init(int row, int col)
 {
-    Pos res;
+	Pos res = {row, col};
     return res;
 }
 
 Path* path_alloc(int step_count, int distance)
 {
-	Pos* steps = (Pos*)calloc(step_count, sizeof(Pos));
-	Path* path = (Path*) calloc(1,sizeof(Path));
-	(*path).steps = steps;
-	(*path).distance = distance;
-	(*path).step_count = step_count;
-    return path;
+	/*bij steps calloc of malloc gebruiken
+	er staat in header dat het geïnitialiseerd moet worden
+	maar lijkt mij geen goed idee aangezien (O ,O) 
+	een geldige coordinaat is*/
+	Pos* steps = (Pos*) malloc(step_count, sizeof(Pos));
+	Path* p = (Path*) malloc(1,sizeof(Path));
+	(*p).steps = steps;
+	(*p).step_count = step_count;
+	(*p).distance = distance;
+
+    return p;
 }
 
+/*niet alleen path zelf moet vrijgegeven worden maar ook steps*/
 void path_free(Path* path)
 {
-	free(path->steps);
+	free((*path).steps);
 	free(path);
 }
 
@@ -34,4 +40,5 @@ int cell_type_is_player_owned(CellType cell_type)
 {
 	return cell_type_is_unit(cell_type) || cell_type == HEADQUARTER;
 }
+
 
