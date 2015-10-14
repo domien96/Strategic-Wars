@@ -5,12 +5,13 @@
 #include "common.h"
 #include <stdbool.h>
 
-typedef struct NodeT
+typedef struct Node
 {
-	struct NodeT* neighbours;
+	struct Node* neighbours;
+	Pos pos; //Corresponding position in grid
 	int* costs; //Costs of edges, in same order as corresponding neighbours.
 	bool visited;
-	int cost;
+	int cost; //Initialize as INT_MAX
 	//TODO
 } Node;
 
@@ -24,7 +25,8 @@ typedef struct
 DWGraph* makeGraph(Level* level);
 
 //Returns position in nodes array that corresponds with the cell
-int cellToNode(Cell* cell);
+int cellToNode(DWGraph* graph, Cell* cell);
+
 
 //TODO define additional functions
 

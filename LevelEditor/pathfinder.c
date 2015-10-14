@@ -13,10 +13,12 @@
 Path* find_path(Level* level, Cell* start, Cell* target) {
     
 	DWGraph* graph = makeGraph(level);
-	Path* path = path_alloc(0,0);
+	Path* path = path_alloc(1,sizeof(Path));
+	int pathLength = 1;
 
-	Node* startNode = (graph->nodes) + cellToNode(start);
-	Node* targetNode = (graph->nodes) + cellToNode(target);
+	Node* startNode = (graph->nodes) + cellToNode(graph, start);
+	Node* targetNode = (graph->nodes) + cellToNode(graph, target);
+	Node* current = startNode;
 	int currentCost = 0;
 
 	PriorityQueue* queue = pqueue_alloc();
@@ -24,20 +26,34 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 		pqueue_update(queue, startNode->neighbours + i, *(startNode->costs + i));
 	}
 	
-	while (sizeof(queue) > 0) {
-		Node* current = pqueue_remove_first(queue);
+	while (sizeof(queue) > 0 && (current->pos.col != targetNode->pos.col || current->pos.row != targetNode->pos.row)) {
+		current = pqueue_remove_first(queue);
 		for (int i = 0; i < sizeof(current->neighbours) / sizeof(Node); i++) {
 			Node* neighbour = (current->neighbours) + i;
-			neighbour->cost = current->cost + *(current->costs + i);
-			pqueue_update(queue, (current->neighbours) + i, neighbour->cost);
+			int c = current->cost + *(current->costs + i);
+			if (c < neighbour->cost) {
+				neighbour->cost = c;
+				path->steps = realloc(path->steps,(pathLength+1)*sizeof(Pos));
+				*(path->steps + (pathLength - 1)) = current->pos;
+				pathLength++;
+			}
+			pqueue_update(queue, (current->neighbours) + i, c);
 		}
 	}
 
-	if (targetNode->cost == +INT_MAX) {
+	/*if (targetNode->cost == INT_MAX) {
 		//There is no path
+		return NULL;
 	} else {
+		Node* current = startNode;
+		*(path->steps) = current->pos;
+		while (current->pos.col != targetNode->pos.col && current->pos.row != targetNode->pos.row) {
+			Node* neighbours = current->neighbours;
+			Node 
 
-	}
+		}
+
+	}*/
 	
 	return 0;
 	
