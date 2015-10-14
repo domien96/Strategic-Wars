@@ -1,5 +1,6 @@
 # SOI2015-opgave_HIER_PUSHEN
-Opgave project SOI 2015 van onze groep( niet de algemene repo ). Dus hier pushen/mergen.
+Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
+<b>Indien je vragen of andere opmerkingen hebt, gelieve die dan hier te schrijven bij het gepaste onderwerp.</b>
 
 # Meeting 1:
 
