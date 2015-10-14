@@ -33,11 +33,16 @@ Meeting 1:
     
     Geen antwoord 12 uur voor deadline
     
-  Tegen volgende meeting (16h):
+  Tegen volgende meeting (19/10/2015:16h):
     
     Issue tracker activeren
     
     Uitbereidingen kiezen
+    
+    Vragen : 
+    - Hoe issue tracker gebruiken in Visual studio?
+    - Hoe merge conflicts oplossen in VS.
+    - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken.
     
     
   Testen:
