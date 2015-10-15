@@ -3,6 +3,14 @@
 
 #include "common.h"
 
+
+// MACROS
+
+/*Make sure these 3 properties (of a Cell) are consistent !*/
+#define DEFAULT_SYMBOL '*'
+#define DEFAULT_CELLTYPE GROUND
+#define DEFAULT_OWNER OWNER_NONE
+
 #define LEVEL_MAX_WIDTH 25
 #define LEVEL_MAX_HEIGHT 12
 
@@ -38,6 +46,7 @@ typedef struct Level
  * This function converts the textual representation of a Cell,
  * which is used in the Level file format,
  * to a CellType.
+ * If symbol is not found, this function returns DEFAULT_CELLTYPE
  *
  * For example, it converts the char '*' to the CellType GROUND
  */
@@ -46,6 +55,7 @@ CellType level_symbol_to_cell_type(char symbol);
  * This function converts the textual representation of a Cell,
  * which is used in the Level file format,
  * to an owner.
+ * If symbol is not found, this function returns DEFAULT_OWNER
  *
  * For example, it converts the char 'h' to the Owner HUMAN_PLAYER
  */
@@ -61,6 +71,8 @@ char cell_to_symbol(Cell* cell);
  * This function converts a combination of an owner and cell_type
  * to the textual representation of the corresponding cell in the 
  * level file format.
+ * 
+ * If celltype or owner is not found, this function returns DEFAULT_SYMBOL.
  *
  * for example, it converts the combination UNIT_2, OWNER_AI
  * to the character '8'
@@ -114,6 +126,8 @@ void level_free(Level* level);
 
 /*
  * This functions stores the given level to file.
+ * Returns 1 : when file cannot be found.
+ *		   2 : when writing to file is not allowed
  */
 int level_write_to_file(Level* level, const char* filename);
 

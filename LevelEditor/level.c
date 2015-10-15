@@ -5,16 +5,31 @@
 #include <stdio.h> 
 #include <assert.h>
 
-//TODO: implement all function from level.h
+/////////////////////////////////////////////////////////////
+
+// (PRIVATE) METHODS
+/*
+* Initialises the given level with the data inside the given file.
+* Returns 0 when everything went fine.
+* File needs the minimal length for each line, otherwise this function will return 1.
+*/
+int init_level(Level* level, FILE* fp);
+
+
+/////////////////////////////////////////////////////////////
+
 /*
 * This function converts the textual representation of a Cell,
 * which is used in the Level file format,
 * to a CellType.
+* If symbol is not found, this function returns DEFAULT_CELLTYPE.
 *
 * For example, it converts the char '*' to the CellType GROUND
 */
 CellType level_symbol_to_cell_type(char symbol) {
 	switch (symbol) {
+	default:
+		return DEFAULT_CELLTYPE; 
 	case '*': 
 		return GROUND;
 		break;
@@ -26,6 +41,9 @@ CellType level_symbol_to_cell_type(char symbol) {
 		break;
 	case 'R':
 		return ROCK;
+		break;
+	case 'H':
+		return HEADQUARTER;
 		break;
 	case 'h' :
 		return HEADQUARTER;
@@ -48,8 +66,6 @@ CellType level_symbol_to_cell_type(char symbol) {
 	case '9':
 		return UNIT_3;
 		break;
-	default:
-		return (CellType) NULL;
 	}
 
 }
@@ -57,11 +73,16 @@ CellType level_symbol_to_cell_type(char symbol) {
 * This function converts the textual representation of a Cell,
 * which is used in the Level file format,
 * to an owner.
+* If symbol is not found, this function returns DEFAULT_OWNER
 *
 * For example, it converts the char 'h' to the Owner HUMAN_PLAYER
 */
 Owner level_symbol_to_owner(char symbol) {
 	switch (symbol) {
+	/*default*/
+	default:
+		return DEFAULT_OWNER;
+		break;
 		/*owner_none*/
 	case '*':
 		return OWNER_NONE;
@@ -101,8 +122,6 @@ Owner level_symbol_to_owner(char symbol) {
 	case '9':
 		return OWNER_AI;
 		break;
-	default:
-		return (Owner) NULL;
 	}
 }
 
@@ -119,6 +138,8 @@ char cell_to_symbol(Cell* cell) {
 * This function converts a combination of an owner and cell_type
 * to the textual representation of the corresponding cell in the
 * level file format.
+* 
+* If celltype or owner is not found, this function returns DEFAULT_SYMBOL.
 *
 * for example, it converts the combination UNIT_2, OWNER_AI
 * to the character '8'
@@ -126,6 +147,9 @@ char cell_to_symbol(Cell* cell) {
 char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 	/* code smell*/
 	switch (owner) {
+	default:
+		return DEFAULT_SYMBOL; 
+		break;
 	case OWNER_HUMAN:
 
 		switch (cell_type) {
@@ -141,8 +165,9 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 		case UNIT_3:
 			return '3';
 			break;
-		/*default:
-			return */
+		default:
+			return DEFAULT_SYMBOL;
+			break;
 		}
 		break;
 
@@ -161,6 +186,9 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 		case UNIT_3:
 			return '9';
 			break;
+		default:
+			return DEFAULT_SYMBOL;
+			break;
 		}
 		break;
 
@@ -178,6 +206,9 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 			break;
 		case ROCK:
 			return 'R';
+			break;
+		default:
+			return DEFAULT_SYMBOL;
 			break;
 		}
 		break;
@@ -206,7 +237,21 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 *     1    |   HEADQUARTER |     BRIDGE
 *     1    |   HEADQUARTER |     UNIT_1
 */
-int level_can_walk_over(Cell* unit, Cell* target);
+int level_can_walk_over(Cell* unit, Cell* target) {
+	/*"When a non ownable "unit" is passed, the output of this function is undefined."*/
+	if (unit->owner == OWNER_NONE) {
+		return 0;
+	}
+
+	/* "A special exception is made if the unit is a HEADQUARTER. ..." */
+	// This "exception" is implied by the next section.
+	if (target->type == WATER || target->type == ROCK) {
+		return 0;
+	}
+
+	/* PASSED ALL ELIMINATIONS ABOVEBOARD*/
+	return 1;
+}
 
 /*
 * This function returns true if the given position is a valid cell
@@ -215,13 +260,54 @@ int level_can_walk_over(Cell* unit, Cell* target);
 * Note: Take negative row and coloumn values into account (they are always invalid)
 */
 int level_is_valid_pos(Level* level, int row, int col) {
+	/* Negatives => invalid**/
+	if (row < 0 || col < 0) {
+		return 0;
+	}
 
+	/* check if between 0 and size-1*/
+	if (row >= level->height || col >= level->width) {
+		return 0;
+	}
+	/*PASSED ALL ELIMINATIONS ABOVEBOARD*/
+	return 1;
 }
 
 /*
 * This functions stores the given level to file.
+* Returns 1 : when file cannot be found.
+*		  2 : when writing to file is not allowed
 */
-int level_write_to_file(Level* level, const char* filename);
+int level_write_to_file(Level* level, const char* filename) {
+	/* open() clears all the data if the file already exists*/
+	FILE* fp = fopen(filename, "w");
+	if (!fp) {
+		return 1;
+	}
+
+	/* Write dimensions*/
+	if (fprintf(fp, "%i|%i\n", level->width, level->height) < 0) {
+		return 2;
+	}
+
+	/* Write each row (as symbols)*/
+	for (int r = 0; r < level->height; r++) {
+		for (int c = 0; c < level->width; c++) {
+			Cell cell = level->cells[r][c];
+			char symbol = cell_to_symbol(&cell);
+			if (fprintf(fp, "%c", symbol) < 0) {
+				return 2;
+			}
+		}
+		if (fprintf(fp, "\n") < 0) {
+			return 2;
+		}
+	}
+	/*Close file*/
+	fclose(fp);
+
+	return 0;
+}
 
 /*
 * This functions returns pointer to an empty newly allocated level.
@@ -235,11 +321,68 @@ Level* level_alloc_empty()
 
 Level* level_alloc_read_from_file(const char* filename)
 {
-    //TODO
-        return NULL;
+    // init empty level
+	Level* level = level_alloc_empty();
+
+	/* open() the file */
+	FILE* fp = fopen(filename, "r");
+	if (!fp) {
+		return (Level*) NULL;
+	}
+
+	/*init level*/
+	if (init_level(level, fp)) {
+		return (Level*)NULL;
+	}	
+	
+	/*Close file*/
+	fclose(fp);
+    
+	return level;
 }
+
+/*
+ * Initialises the given level with the data inside the given file.
+ * Returns 0 when everything went fine.
+ * File needs the minimal length for each line, otherwise this function will return 1.
+ */
+int init_level(Level* level, FILE* fp) {
+	/* Initializes dimensions*/
+	int height=0, width=0;
+	fscanf(fp, "%i|%i\n", &width, &height);
+	level->height = height;
+	level->width = width;
+
+	/* Initializes cells, opletten dat er juist 'width' characters gelezen worden per line*/
+	char* buffer = malloc((LEVEL_MAX_WIDTH+1)*sizeof(int));
+	for (int r = 0; r < level->height; r++) {
+		if (!fgets(buffer, LEVEL_MAX_WIDTH+2, fp)) { 
+			return 1;
+		}
+		/*lijn omzetten*/
+		//Cell current_row[] = level->cells[r];
+		for (int c = 0; c < level->width; c++) {
+			char symbol = *(buffer+c);
+			/* init cell */
+			Cell* cell = malloc(sizeof(Cell)); 
+			cell->row = r;
+			cell->col = c;
+			cell->type=level_symbol_to_cell_type(symbol);
+			cell->owner=level_symbol_to_owner(symbol);
+			/* place cell */
+			level->cells[r][c] = *cell;
+			free(cell);
+		}
+	}
+	//rewind(fp); // help
+	free(buffer);
+	
+	return 0;
+}
+
 
 void level_free(Level* level)
 {
-    //TODO
+    /* No direct/non-direct dynamic allocated memory by level's contents */
+	free(level);
 }
