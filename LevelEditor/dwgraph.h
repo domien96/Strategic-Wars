@@ -10,8 +10,9 @@ typedef struct Node
 	struct Node* neighbours;
 	Pos pos; //Corresponding position in grid
 	int* costs; //Costs of edges, in same order as corresponding neighbours.
-	bool visited;
+	bool visited; //Initialize as false
 	int cost; //Initialize as INT_MAX
+	struct Node* prev; //Initialize as NULL
 	//TODO
 } Node;
 

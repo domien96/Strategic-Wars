@@ -50,4 +50,5 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     - Hoe issue tracker gebruiken in Visual studio?
     - Hoe merge conflicts oplossen in VS.
     - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken.
+    - level.c:init_level(): nodig voor free(cell)? + level.c:level_free(): voldoende ?
 
