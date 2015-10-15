@@ -17,7 +17,7 @@ int main()
 
     ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
     al_append_path_component(path, FILES_LEVELS_SUBDIRNAME);
-    al_set_path_filename(path, "basic.worldd");
+    al_set_path_filename(path, "basic.world");
 
     const char* filename = al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP);
     Level* level = level_alloc_read_from_file(filename);
