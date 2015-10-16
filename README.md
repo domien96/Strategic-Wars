@@ -14,6 +14,8 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
       
       grafen voorstellen      ->Silke
       
+      GUI/Editor.c            ->Jens + Domien
+      
   Testen schrijven:
   
       Kortste pad algoritme   ->Domien
