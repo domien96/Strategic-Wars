@@ -45,15 +45,39 @@ int main()
                     gui_draw_frame();
                     break;
                 }
+			case EVENT_LEVEL:
+			{
+				printf("select");
+				break;
+			}
             case EVENT_BUTTON: 
                 {
                     if (event.button_event.mouse_event_type == MOUSE_CLICK) {
                         switch (event.button_event.function) {
                             case UI_EXIT:
-                                {
-                                    stop = 1;
-                                    break;
-                                }
+                            {
+								stop = 1;
+                                break;
+                            }
+							case UI_SAVE:
+							{
+								/*save level*/
+								printf("save/n");
+								break;
+							}
+							case UI_LOAD:
+							{
+								/*load level*/
+								printf("load/n");
+								break;
+							}
+							case UI_CLEAR:
+							{
+								/*clear level*/
+								printf("clear/n");
+								break;
+							}
+							
                             default: break;
                                         }
                                     }
