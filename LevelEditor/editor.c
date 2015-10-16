@@ -41,50 +41,65 @@ int main()
 
         switch (event.type) {
             case EVENT_TIMER:
-                {
-                    gui_draw_frame();
-                    break;
-                }
+            {
+                gui_draw_frame();
+                break;
+            }
 			case EVENT_LEVEL:
 			{
-				printf("select");
-				break;
+				switch (event.level_event.mouse_event_type) {
+					case MOUSE_HOVER:
+					{
+						int row = event.level_event.row;
+						int col = event.level_event.col;
+						gui_set_level_highlight(row, col);
+						break;
+					}
+					case MOUSE_CLICK:
+					{
+						//TODO
+						break;
+					}
+				}
 			}
             case EVENT_BUTTON: 
-                {
-                    if (event.button_event.mouse_event_type == MOUSE_CLICK) {
-                        switch (event.button_event.function) {
-                            case UI_EXIT:
-                            {
-								stop = 1;
+            {
+                if (event.button_event.mouse_event_type == MOUSE_CLICK) {
+                    switch (event.button_event.function) {
+                        case UI_EXIT:
+                        {
+							stop = 1;
+                            break;
+                        }
+						case UI_SAVE:
+						{
+							/*save level*/
+							printf("save\n");
+							gui_show_save_file_dialog();
+							break;
+						}
+						case UI_LOAD:
+						{
+							/*load level*/
+							printf("load\n");
+							gui_show_load_file_dialog();
+							break;
+						}
+						case UI_CLEAR:
+						{
+							/*clear level*/
+							printf("clear\n");
+							break;
+						}
+							
+                        default: break;
+                                    }
+                                }
                                 break;
                             }
-							case UI_SAVE:
-							{
-								/*save level*/
-								printf("save/n");
-								break;
-							}
-							case UI_LOAD:
-							{
-								/*load level*/
-								printf("load/n");
-								break;
-							}
-							case UI_CLEAR:
-							{
-								/*clear level*/
-								printf("clear/n");
-								break;
-							}
-							
-                            default: break;
-                                        }
-                                    }
-                                    break;
-                                }
-            default: break;
+        default: break;
         }
+
 	}
 
 	gui_free();
