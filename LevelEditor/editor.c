@@ -75,14 +75,20 @@ int main()
 						{
 							/*save level*/
 							printf("save\n");
-							gui_show_save_file_dialog();
+							char* filename = gui_show_save_file_dialog();
+							level_write_to_file(level,filename);
 							break;
 						}
 						case UI_LOAD:
 						{
 							/*load level*/
 							printf("load\n");
-							gui_show_load_file_dialog();
+							char* filename = gui_show_load_file_dialog();
+							/* Free the previous level first*/
+							level_free(level);
+							/* Assign new level to the level-pointer */
+							level = level_alloc_read_from_file(filename);
+							gui_set_level(level);
 							break;
 						}
 						case UI_CLEAR:
