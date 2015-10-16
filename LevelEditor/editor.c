@@ -88,6 +88,7 @@ int main()
 							level_free(level);
 							/* Assign new level to the level-pointer */
 							level = level_alloc_read_from_file(filename);
+							/* Draw */
 							gui_set_level(level);
 							break;
 						}
@@ -95,6 +96,12 @@ int main()
 						{
 							/*clear level*/
 							printf("clear\n");
+							/* Free the current level first*/
+							level_free(level);
+							/* Set net empty level*/
+							level = level_alloc_empty();
+							/* Draw */
+							gui_set_level(level);
 							break;
 						}
 							
