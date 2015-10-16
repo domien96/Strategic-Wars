@@ -311,10 +311,27 @@ int level_write_to_file(Level* level, const char* filename) {
 
 /*
 * This functions returns pointer to an empty newly allocated level.
+* Each cell will be set to DEFAULT.
 */
 Level* level_alloc_empty()
 {
+	/* Allocate struct*/
 	Level* lvlP = (Level*) malloc(sizeof(Level));
+
+	/* Init width and height*/
+	int width = LEVEL_MAX_WIDTH, height = LEVEL_MAX_HEIGHT; /* Always max*/
+	lvlP->height = height;
+	lvlP->width = width;
+
+	/* Init cells : Fill up with cells*/
+	Cell cell = { 0 , 0 , DEFAULT_CELLTYPE, DEFAULT_OWNER };/* Sample cell */
+	for (int r = 0; r < height; r++) {
+		cell.row = r;
+		for (int c = 0; c < width; c++) {
+			cell.col = c;
+			lvlP->cells[r][c] = cell;
+		}
+	}
 	return lvlP;
 		
 }
@@ -342,7 +359,7 @@ Level* level_alloc_read_from_file(const char* filename)
 }
 
 /*
- * Initialises the given level with the data inside the given file.
+ * Initializes the given level with the data inside the given file.
  * Returns 0 when everything went fine.
  * File needs the minimal length for each line, otherwise this function will return 1.
  */

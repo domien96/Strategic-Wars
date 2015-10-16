@@ -112,6 +112,7 @@ int level_is_valid_pos(Level* level, int row, int col);
 
 /*
  * This functions returns pointer to an empty newly allocated level.
+ * Each cell will be set to DEFAULT.
  */
 Level* level_alloc_empty();
 /*
