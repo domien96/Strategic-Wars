@@ -36,9 +36,9 @@ int main()
     gui_draw_frame();
 
 	/* Build_selector chosen type and owner (By default: GROUND and OWNER_NONE) */
-	CellType choosen_cell_type = GROUND;
-	Owner choosen_owner = OWNER_NONE;
-	gui_set_build_highlight(choosen_cell_type, choosen_owner);
+	CellType chosen_cell_type = GROUND;
+	Owner chosen_owner = OWNER_NONE;
+	gui_set_build_highlight(chosen_cell_type, chosen_owner);
 
 	/* GAME LOOP */
     int stop = 0;
@@ -50,9 +50,9 @@ int main()
 			case EVENT_BUILD_SELECTOR:
 			{
 				if (event.button_event.mouse_event_type == MOUSE_CLICK) {
-					choosen_cell_type = event.build_selector_event.cell_type;
-					choosen_owner = event.build_selector_event.owner;
-					gui_set_build_highlight(choosen_cell_type, choosen_owner);
+					chosen_cell_type = event.build_selector_event.cell_type;
+					chosen_owner = event.build_selector_event.owner;
+					gui_set_build_highlight(chosen_cell_type, chosen_owner);
 				}
 				break;
 			}
@@ -76,7 +76,7 @@ int main()
 						//TODO
 						int row = event.level_event.row;
 						int col = event.level_event.col;
-						Cell new_cell = { row, col, choosen_cell_type,choosen_owner };
+						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
 
 						level->cells[row][col] = new_cell;
 						break;
