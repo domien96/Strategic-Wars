@@ -167,7 +167,10 @@ static char * all_tests()
     mu_run_test(test_cell_type_is_player_owned);
     //TODO: add other common.h tests
     //mu_run_test(test_cell_type_is_unit);
-	path_alloc(7, 5);
+
+	mu_run_test(test_path_start);
+	mu_run_test(test_path_short);
+	mu_run_test(test_path_short_island);
     //Tests for pathfinder.h
     //TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
