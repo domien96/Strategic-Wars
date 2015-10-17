@@ -34,12 +34,28 @@ int main()
     gui_set_level(level);
     
     gui_draw_frame();
+
+	/* Build_selector chosen type and owner (By default: GROUND and OWNER_NONE) */
+	CellType choosen_cell_type = GROUND;
+	Owner choosen_owner = OWNER_NONE;
+	gui_set_build_highlight(choosen_cell_type, choosen_owner);
+
+	/* GAME LOOP */
     int stop = 0;
 	while(!stop) {
         Event event;
         gui_get_next_game_event(&event);
 
         switch (event.type) {
+			case EVENT_BUILD_SELECTOR:
+			{
+				if (event.button_event.mouse_event_type == MOUSE_CLICK) {
+					choosen_cell_type = event.build_selector_event.cell_type;
+					choosen_owner = event.build_selector_event.owner;
+					gui_set_build_highlight(choosen_cell_type, choosen_owner);
+				}
+				break;
+			}
             case EVENT_TIMER:
             {
                 gui_draw_frame();
@@ -58,9 +74,15 @@ int main()
 					case MOUSE_CLICK:
 					{
 						//TODO
+						int row = event.level_event.row;
+						int col = event.level_event.col;
+						Cell new_cell = { row, col, choosen_cell_type,choosen_owner };
+
+						level->cells[row][col] = new_cell;
 						break;
 					}
 				}
+				break;
 			}
             case EVENT_BUTTON: 
             {
@@ -88,8 +110,7 @@ int main()
 							level_free(level);
 							/* Assign new level to the level-pointer */
 							level = level_alloc_read_from_file(filename);
-							/* Draw */
-							gui_set_level(level);
+							/* Draw => automatic (gui_set_level(level); not needed) */
 							break;
 						}
 						case UI_CLEAR:
@@ -106,11 +127,11 @@ int main()
 						}
 							
                         default: break;
-                                    }
-                                }
-                                break;
-                            }
-        default: break;
+					}
+				}
+				break;
+			}
+			default: break;
         }
 
 	}
