@@ -54,4 +54,4 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     - Hoe merge conflicts oplossen in VS. OK
     - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken. OK
     - GUI aan level object geraken om vorige level te free'en. OK
-
+    - Verschil tussen binary/text file achterhalen.
