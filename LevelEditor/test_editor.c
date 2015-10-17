@@ -113,12 +113,39 @@ static char* test_path_short_island() {
 }
 
 static char* test_level_can_walk_over() {
-	mu_assert(level_can_walk_over(UNIT_2, ROCK) == 0);
-	mu_assert(level_can_walk_over(UNIT_3, GROUND) == 1);
-	mu_assert(level_can_walk_over(UNIT_1, UNIT_1) == 0);
-	mu_assert(level_can_walk_over(HEADQUARTER, WATER) == 0);
-	mu_assert(level_can_walk_over(HEADQUARTER, BRIDGE) == 1);
-	mu_assert(level_can_walk_over(HEADQUARTER, UNIT_1) == 1);
+	Cell* unit = & (Cell){0,0,level_symbol_to_cell_type('2'), level_symbol_to_owner('2')};
+	Cell* target = &(Cell) { 0, 0, level_symbol_to_cell_type('R'), level_symbol_to_owner('R') };
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('3');
+	unit->owner = level_symbol_to_owner('3');
+	target->type = level_symbol_to_cell_type('*');
+	target->owner = level_symbol_to_owner('*');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('1');
+	target->owner = level_symbol_to_owner('1');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('H');
+	unit->owner = level_symbol_to_owner('H');
+	target->type = level_symbol_to_cell_type('W');
+	target->owner = level_symbol_to_owner('W');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('h');
+	unit->owner = level_symbol_to_owner('h');
+	target->type = level_symbol_to_cell_type('B');
+	target->owner = level_symbol_to_owner('B');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('h');
+	unit->owner = level_symbol_to_owner('H');
+	target->type = level_symbol_to_cell_type('7');
+	target->owner = level_symbol_to_owner('7');
+	mu_assert(level_can_walk_over(unit, target) == 1);
 }
 
 static char* test_cell_type_is_player_owned()
@@ -140,11 +167,8 @@ static char * all_tests()
     mu_run_test(test_cell_type_is_player_owned);
     //TODO: add other common.h tests
     //mu_run_test(test_cell_type_is_unit);
-
+	path_alloc(7, 5);
     //Tests for pathfinder.h
-	mu_run_test(test_path_start);
-	mu_run_test(test_path_short);
-	mu_run_test(test_path_short_island);
     //TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
     //Tests for level.h

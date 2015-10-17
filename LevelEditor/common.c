@@ -14,8 +14,8 @@ Path* path_alloc(int step_count, int distance)
 	er staat in header dat het geïnitialiseerd moet worden
 	maar lijkt mij geen goed idee aangezien (O ,O) 
 	een geldige coordinaat is*/
-	Pos* steps = (Pos*) malloc(step_count, sizeof(Pos));
-	Path* p = (Path*) malloc(1,sizeof(Path));
+	Pos* steps = (Pos*) malloc(step_count * sizeof(Pos));
+	Path* p = (Path*) malloc(sizeof(Path));
 	(*p).steps = steps;
 	(*p).step_count = step_count;
 	(*p).distance = distance;
