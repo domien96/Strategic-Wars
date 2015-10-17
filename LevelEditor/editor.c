@@ -73,11 +73,14 @@ int main()
 					}
 					case MOUSE_CLICK:
 					{
-						//TODO
 						int row = event.level_event.row;
 						int col = event.level_event.col;
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
-
+						if (chosen_cell_type == HEADQUARTER) {
+							level->cells[row + 1][col] = new_cell;
+							level->cells[row][col + 1] = new_cell;
+							level->cells[row + 1][col + 1] = new_cell;
+						}
 						level->cells[row][col] = new_cell;
 						break;
 					}
