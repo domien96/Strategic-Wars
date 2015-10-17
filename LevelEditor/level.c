@@ -239,17 +239,26 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 */
 int level_can_walk_over(Cell* unit, Cell* target) {
 	/*"When a non ownable "unit" is passed, the output of this function is undefined."*/
-	if (unit->owner == OWNER_NONE) {
+	if (! cell_type_is_player_owned(unit->type)) {
 		return 0;
 	}
 
-	/* "A special exception is made if the unit is a HEADQUARTER. ..." */
-	// This "exception" is implied by the next section.
+	/* Units cannot cross other units.
+	 * "A special exception is made if the unit is a HEADQUARTER. ..." 
+	 * This "exception" is implied by the next section. */
+	if (cell_type_is_unit(target->type)) {
+		if (cell_type_is_unit(unit->type))
+			return 0;
+		else if (unit->type == HEADQUARTER)
+			return 1;
+	}
+
+	/* Unable to cross water or rocks*/
 	if (target->type == WATER || target->type == ROCK) {
 		return 0;
 	}
 
-	/* PASSED ALL ELIMINATIONS ABOVEBOARD*/
+	/* ALL OTHER COMBINATIONS ARE LEGAL */
 	return 1;
 }
 
@@ -257,7 +266,7 @@ int level_can_walk_over(Cell* unit, Cell* target) {
 * This function returns true if the given position is a valid cell
 * position within the given level.
 * A position is valid when it is within the dimensions of the level.
-* Note: Take negative row and coloumn values into account (they are always invalid)
+* Note: Take negative row and column values into account (they are always invalid)
 */
 int level_is_valid_pos(Level* level, int row, int col) {
 	/* Negatives => invalid**/
