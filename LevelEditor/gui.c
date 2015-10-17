@@ -160,7 +160,7 @@ void gui_add_message(char* message, ...)
         char* msg = gui->messages+(gui->next_message_index*GUI_MSG_MAX_LEN);
 
         //add \0 at msg end to make sure string is correctly terminated
-        msg[GUI_MSG_MAX_LEN] = '\0';
+        msg[GUI_MSG_MAX_LEN-1] = '\0';
 
         int message_len = vsnprintf(msg, GUI_MSG_MAX_LEN, message, argptr);
 
