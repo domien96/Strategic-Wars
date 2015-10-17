@@ -26,7 +26,7 @@ typedef struct
 DWGraph* makeGraph(Level* level);
 
 //Returns position in nodes array that corresponds with the cell
-Node* cellToNode(DWGraph* graph, Cell* cell);
+int cellToNode(DWGraph* graph, Cell* cell);
 
 
 //TODO define additional functions

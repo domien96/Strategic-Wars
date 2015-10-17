@@ -11,7 +11,7 @@ DWGraph* makeGraph(Level* level) {
 	return (DWGraph*) calloc(0,0);
 }
 
-Node* cellToNode(DWGraph* graph, Cell* cell) {
+int cellToNode(DWGraph* graph, Cell* cell) {
 	//TODO
 	return 0;
 }
