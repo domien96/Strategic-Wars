@@ -55,3 +55,4 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken. OK
     - GUI aan level object geraken om vorige level te free'en. OK
     - Verschil tussen binary/text file achterhalen.
+    - Kunnen units door elkaar bewegen? met andere woorden: volstaat de level_can_walk_over() functie van level.h 
