@@ -76,12 +76,15 @@ int main()
 						int row = event.level_event.row;
 						int col = event.level_event.col;
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
+						level->cells[row][col] = new_cell;
+						
+						/*headquarter is altijs 4 tegels groot*/
 						if (chosen_cell_type == HEADQUARTER) {
 							level->cells[row + 1][col] = new_cell;
 							level->cells[row][col + 1] = new_cell;
 							level->cells[row + 1][col + 1] = new_cell;
+							/*ook nog vorige headquarter verwijderen*/
 						}
-						level->cells[row][col] = new_cell;
 						break;
 					}
 				}
@@ -98,28 +101,34 @@ int main()
                         }
 						case UI_SAVE:
 						{
-							/*save level*/
-							printf("save\n");
 							char* filename = gui_show_save_file_dialog();
 							level_write_to_file(level,filename);
 							break;
 						}
 						case UI_LOAD:
 						{
-							/*load level*/
-							printf("load\n");
-							char* filename = gui_show_load_file_dialog();
 							/* Free the previous level first*/
 							level_free(level);
+							char* filename = gui_show_load_file_dialog();
 							/* Assign new level to the level-pointer */
 							level = level_alloc_read_from_file(filename);
-							/* Draw => automatic (gui_set_level(level); not needed) */
+
+							//TODO werkt nog niet: bij fout inladen is level niet 0
+							/*fout bij inladen*/
+							while (level == NULL) {
+								printf("error");
+								gui_add_message("Error: invalid file. Please choose another file");
+								char* filename = gui_show_load_file_dialog();
+								level = level_alloc_read_from_file(filename);
+							}
+							/* Draw */
+							gui_set_level(level);
+							/*error messages nog wegdoen als er een geldige file gekozen is*/
+							gui_clear_messages();
 							break;
 						}
 						case UI_CLEAR:
 						{
-							/*clear level*/
-							printf("clear\n");
 							/* Free the current level first*/
 							level_free(level);
 							/* Set net empty level*/
