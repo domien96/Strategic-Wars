@@ -59,6 +59,7 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     Taakverdeling:
       Level.h OK
       Common.h OK
+      pathfinder.h OK
       Dwgraph
       Game loop/ Editor.c : Grootste deel af, wachten tot dwgraph-header klaar is zodat we weten welke functies er gebruikt kunnen worden.
       GUI functionaliteit OK
@@ -72,5 +73,6 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     - Verschil tussen binary/text file achterhalen.
     - Kunnen units door elkaar bewegen? met andere woorden: volstaat de level_can_walk_over() functie van level.h 
     - level.h nieuwe functie: updateCell(...), toegelaten? Er is anders te veel code in de game loop voor bv. de headquarters       bij te houden. 
+    - level loaden dan annuleren -> crash, hoe oplossen?
 
 ## Verslag:
