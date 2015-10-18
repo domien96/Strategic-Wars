@@ -15,37 +15,25 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	DWGraph* graph = makeGraph(level);
 	int pathLength = 1;
 
-	
-	Node* startNode = (graph->nodes) + cellToNode(graph, start);
-	//Change to:
-	//Node* startNode = cellToNode(graph, start);
-	Node* targetNode = (graph->nodes) + cellToNode(graph, target);
-	//Change to: 
-	//Node* targetNode = cellToNode(graph, target);
+	Node* startNode = cellToNode(graph, start); 
+	Node* targetNode = cellToNode(graph, target);
 	Node* current = startNode;
 	int currentCost = 0;
 
 	PriorityQueue* queue = pqueue_alloc();
-	for (int i = 0; i < sizeof(startNode->neighbours)/sizeof(Node); i++) {
-		pqueue_update(queue, startNode->neighbours + i, *(startNode->costs + i));
-	}
-	/* Change to:
 	Node **neighbours = (startNode->neighbours);
 	for (int i = 0; i < startNode->amountOfNeighbours; i++) {
 		pqueue_update(queue, neighbours[i], *(startNode->costs + i));
 	}
-	*/
+	
 	
 	while (sizeof(queue) > 0 && (current->pos.col != targetNode->pos.col || current->pos.row != targetNode->pos.row)) {
 		current = pqueue_remove_first(queue);
 
-		for (int i = 0; i < sizeof(current->neighbours) / sizeof(Node); i++) {
-			Node* neighbour = (current->neighbours) + i;
-		/* Change to: 
 		Node **neighbours = (current->neighbours);
 		for (int i = 0; i < current->amountOfNeighbours; i++) {
 			Node *neighbour = neighbours[i];
-		*/
+		
 	
 			if (!neighbour->visited) {
 				int c = current->cost + *(current->costs + i);
@@ -53,9 +41,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 					neighbour->cost = c;
 					neighbour->prev = current;
 				}
-				pqueue_update(queue, (current->neighbours) + i, c);
-				//Change to: 
-				//pqueue_update(queue, neighbours[i], c);
+				pqueue_update(queue, neighbours[i], c);
 			}
 		}
 		current->visited = true;
@@ -81,35 +67,5 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 		}
 		return path;
 	}
-
-	/*Path* res = path_alloc(100, 0);
-
-    Pos cur;
-    cur.row = start->row;
-    cur.col = start->col;
-
-    res->step_count = 1;
-    res->steps[0] = cur;
-
-    while (cur.row != target->row || cur.col != target->col)
-    {
-        if (cur.row < target->row) cur.row += 1;
-        if (cur.col < target->col) cur.col += 1;
-        if (cur.row > target->row) cur.row -= 1;
-        if (cur.col > target->col) cur.col -= 1;
-
-        if (res->step_count >= 100)
-        {
-            free(res->steps);
-            free(res);
-            return NULL;
-        }
-
-        res->steps[res->step_count] = cur;
-        res->step_count++;
-        res->distance += 12;
-    }
-
-    return res;*/
 }
 
