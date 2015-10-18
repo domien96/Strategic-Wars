@@ -15,8 +15,11 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	DWGraph* graph = makeGraph(level);
 	int pathLength = 1;
 
+	
 	Node* startNode = (graph->nodes) + cellToNode(graph, start);
+	//Change to: Node* startNode = cellToNode(graph, start);
 	Node* targetNode = (graph->nodes) + cellToNode(graph, target);
+	//Change to: Node* targetNode = cellToNode(graph, target);
 	Node* current = startNode;
 	int currentCost = 0;
 
