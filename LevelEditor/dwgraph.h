@@ -29,6 +29,9 @@ DWGraph* makeGraph(Level *level);
 //Returns the node of the graph that corresponds with the given cell in the level grid
 Node* cellToNode(DWGraph *graph, Cell* cell);
 
+//Updates the graph after a cell on the level grid has changed
+void updateGraph(DWGraph *graph, Cell *cell);
+
 //Free the allocated space of the given graph
 void free_graph(DWGraph *graph);
 

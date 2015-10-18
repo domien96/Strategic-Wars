@@ -88,6 +88,10 @@ Node* cellToNode(DWGraph *graph, Cell *cell) {
 	return &(graph->nodes[row][col]);
 }
 
+void updateGraph(DWGraph *graph, Cell *cell) {
+
+}
+
 void free_graph(DWGraph *graph) {
 	Node **nodes = graph->nodes;
 	for (int i = 0; i < graph->amountOfNodes; i++) {
