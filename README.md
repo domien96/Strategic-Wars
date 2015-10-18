@@ -52,7 +52,7 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     
     Uitbereidingen kiezen OK
       - Flexibele Level dimensies
-      - Extra themes
+      - Extra themes OK
       - BugFix OK
       - Meer indien tijd
       
