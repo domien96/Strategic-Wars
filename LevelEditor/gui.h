@@ -33,4 +33,6 @@ void gui_draw_frame(void);
 char* gui_show_save_file_dialog();
 char* gui_show_load_file_dialog();
 
+void gui_load_theme(const char*);
+
 #endif

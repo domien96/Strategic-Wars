@@ -398,6 +398,23 @@ static void gui_button_init_build_select(GuiButton* button, CellType cell_type, 
     button->cell_type = cell_type;
     button->owner = owner;
 }
+void gui_load_theme(const char* theme) {
+	Gui* gui = _strategic_wars_gui;
+	load_cell_type_bitmap(GROUND, "terrain", theme);
+	load_cell_type_bitmap(WATER, "water", theme);
+	load_cell_type_bitmap(ROCK, "rock", theme);
+	load_cell_type_bitmap(HEADQUARTER, "hq", theme);
+	load_cell_type_bitmap(BRIDGE, "bridge", theme);
+	load_cell_type_bitmap(UNIT_1, "infantry", theme);
+	load_cell_type_bitmap(UNIT_2, "archery", theme);
+	load_cell_type_bitmap(UNIT_3, "fire", theme);
+	gui->select_bitmap = load_bitmap("select", theme);
+	gui->actor_bitmap = load_bitmap("actor", theme);
+	gui->step_bitmap = load_bitmap("path", theme);
+	gui->flag_bitmaps[0] = load_bitmap("flag1", theme);
+	gui->flag_bitmaps[1] = load_bitmap("flag2", theme);
+
+}
 
 void gui_initialize(const char* theme) 
 {
@@ -426,19 +443,7 @@ void gui_initialize(const char* theme)
 
 	gui->tiles_by_cell_type = (ALLEGRO_BITMAP**) calloc(CELL_TYPE_COUNT, sizeof(ALLEGRO_BITMAP*));
 
-    load_cell_type_bitmap(GROUND, "terrain", theme);
-    load_cell_type_bitmap(WATER, "water", theme);
-    load_cell_type_bitmap(ROCK, "rock", theme);
-    load_cell_type_bitmap(HEADQUARTER, "hq", theme);
-    load_cell_type_bitmap(BRIDGE, "bridge", theme);
-    load_cell_type_bitmap(UNIT_1, "infantry", theme);
-    load_cell_type_bitmap(UNIT_2, "archery", theme);
-    load_cell_type_bitmap(UNIT_3, "fire", theme);
-    gui->select_bitmap = load_bitmap("select", theme);
-    gui->actor_bitmap = load_bitmap("actor", theme);
-    gui->step_bitmap = load_bitmap("path", theme);
-    gui->flag_bitmaps[0] = load_bitmap("flag1", theme);
-    gui->flag_bitmaps[1] = load_bitmap("flag2", theme);
+	gui_load_theme(theme);
 
     al_set_display_icon(gui->display, gui->tiles_by_cell_type[(int)UNIT_3]);
 
@@ -465,7 +470,8 @@ void gui_initialize(const char* theme)
     //gui->font = load_font(FONT_DOTTED);
     //gui->font = load_font(FONT_SQUARED);
 
-    int button_count = CELL_TYPE_COUNT + 4 + 3;
+	/* AMOUNT OF : celltype_buttons, cell_type with 2 owners, other buttons - domien */
+    int button_count = CELL_TYPE_COUNT + 4 + 4;
     gui->buttons = calloc(button_count, sizeof(GuiButton));
     int cur_button_index = 0;
     for (int i = 0; i < CELL_TYPE_COUNT; i++) {
@@ -485,7 +491,10 @@ void gui_initialize(const char* theme)
     cur_button_x += button_w + (2*UI_BUTTON_GAP_Y);
     gui_button_init_function(&gui->buttons[cur_button_index++], cur_button_x, cur_button_y, button_w, button_h, UI_LOAD, "Load...");
     cur_button_x += button_w + (2*UI_BUTTON_GAP_Y);
-    gui_button_init_function(&gui->buttons[cur_button_index++], cur_button_x, cur_button_y, button_w, button_h, UI_CLEAR, "Clear");
+	gui_button_init_function(&gui->buttons[cur_button_index++], cur_button_x, cur_button_y, button_w, button_h, UI_CLEAR, "Clear");
+	cur_button_x += button_w + (2 * UI_BUTTON_GAP_Y);
+	button_w = ((2 * UI_TEXT_GAP_X) + 80) *2; /* 2 times wider , because it's two words - domien */
+	gui_button_init_function(&gui->buttons[cur_button_index++], cur_button_x, cur_button_y, button_w, button_h, UI_THEME, "Change Theme");
     gui->button_count = cur_button_index;
     assert(button_count >= gui->button_count);
 

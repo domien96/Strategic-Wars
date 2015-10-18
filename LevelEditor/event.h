@@ -8,7 +8,7 @@ typedef enum { EVENT_NONE, EVENT_TIMER, EVENT_LEVEL, EVENT_BUTTON, EVENT_BUILD_S
 
 typedef enum { MOUSE_CLICK, MOUSE_HOVER } MouseEventType;
 
-typedef enum { UI_SAVE, UI_LOAD, UI_CLEAR, UI_EXIT } ButtonFunction; 
+typedef enum { UI_SAVE, UI_LOAD, UI_CLEAR, UI_EXIT, UI_THEME } ButtonFunction; 
 
 typedef struct {
 	EventType type;

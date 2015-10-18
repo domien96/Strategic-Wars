@@ -28,8 +28,9 @@ int main()
     }
     al_destroy_path(path);
 
-    //gui_initialize("civ_b");
-    gui_initialize("civ");
+	/* Theme */
+	const char* theme = "civ";
+	gui_initialize(theme);
 
     gui_set_level(level);
     
@@ -135,6 +136,16 @@ int main()
 							level = level_alloc_empty();
 							/* Draw */
 							gui_set_level(level);
+							break;
+						}
+						case UI_THEME:
+						{
+							if (theme == "civ") {
+								theme = "civ_b";
+							} else { /* theme == "civ_b" */
+								theme = "civ";
+							}
+							gui_load_theme(theme);
 							break;
 						}
 							
