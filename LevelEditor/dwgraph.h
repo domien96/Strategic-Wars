@@ -24,10 +24,11 @@ typedef struct DWGraph
 //Initialize graph given the level. All used nodes have standard cost +INFINITY and visited is false.
 DWGraph* makeGraph(Level* level);
 
-//Returns position in nodes array that corresponds with the cell
+//Returns the node of the graph that corresponds with the given cell in the level grid.
 Node* cellToNode(DWGraph* graph, Cell* cell);
 
+//Free the allocated space of the given graph
+void free_graph(DWGraph* graph);
 
-//TODO define additional functions
 
 #endif
