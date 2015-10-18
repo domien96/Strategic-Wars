@@ -42,16 +42,37 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     
     Conform voorbeeldtesten
     
-  Tegen volgende meeting (19/10/2015 : 16h):
     
-    Issue tracker activeren
+# Meeting 2  (19/10/2015 : 16h)
     
-    Uitbereidingen kiezen
+## Voorbereiding:  
+    
+    TODO:
+    Issue tracker activeren OK
+    
+    Uitbereidingen kiezen OK
+      - Flexibele Level dimensies
+      - Extra themes
+      - BugFix OK
+      - Meer indien tijd
+      
+    Taakverdeling:
+      Level.h OK
+      Common.h OK
+      pathfinder.h OK
+      Dwgraph
+      Game loop/ Editor.c : Grootste deel af, wachten tot dwgraph-header klaar is zodat we weten welke functies er gebruikt kunnen worden.
+      GUI functionaliteit OK
     
     Vragen : 
     - Hoe issue tracker gebruiken in Visual studio?
-    - Hoe merge conflicts oplossen in VS.
-    - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken.
     - level.c:init_level(): nodig voor free(cell)? + level.c:level_free(): voldoende ?
-    - GUI aan level object geraken om vorige elvel te free'en.
+    - Hoe merge conflicts oplossen in VS. OK
+    - Errors in C, vb. verkeerd opgestelde file om level-struct van te maken. OK
+    - GUI aan level object geraken om vorige level te free'en. OK
+    - Verschil tussen binary/text file achterhalen.
+    - Kunnen units door elkaar bewegen? met andere woorden: volstaat de level_can_walk_over() functie van level.h 
+    - level.h nieuwe functie: updateCell(...), toegelaten? Er is anders te veel code in de game loop voor bv. de headquarters       bij te houden. 
+    - level loaden dan annuleren -> crash, hoe oplossen?
 
+## Verslag:

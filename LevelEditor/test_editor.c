@@ -67,6 +67,87 @@ static char * test_path_short()
     return 0;
 }
 
+static char* test_path_short_island() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[4][6];
+	Cell* target_cell = &level->cells[6][9];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 17 + 17 + 12);
+	mu_assert(path->step_count == 4);
+	mu_assert(path->steps != NULL);
+	mu_assert(path->steps[0].row == start_cell->row);
+	mu_assert(path->steps[0].col == start_cell->col);
+
+	mu_assert(path->steps[1].row >= start_cell->row);
+	mu_assert(path->steps[1].col >= start_cell->col);
+	mu_assert(path->steps[2].row >= start_cell->row);
+	mu_assert(path->steps[2].col >= start_cell->col);
+	mu_assert(path->steps[3].row >= start_cell->row);
+	mu_assert(path->steps[3].col >= start_cell->col);
+
+	mu_assert(path->steps[1].row <= target_cell->row);
+	mu_assert(path->steps[1].col <= target_cell->col);
+	mu_assert(path->steps[2].row <= target_cell->row);
+	mu_assert(path->steps[2].col <= target_cell->col);
+	mu_assert(path->steps[3].row <= target_cell->row);
+	mu_assert(path->steps[3].col <= target_cell->col);
+
+	mu_assert(path->steps[path->step_count - 1].row == target_cell->row);
+	mu_assert(path->steps[path->step_count - 1].col == target_cell->col);
+
+	//test if all steps are over terrain that unit in start_cell can walk over
+	Cell* c0 = &path->steps[0];
+	Cell* c1 = &path->steps[1];
+	Cell* c2 = &path->steps[2];
+	Cell* c3 = &path->steps[3];
+	mu_assert(level_can_walk_over(c0, c1));
+	mu_assert(level_can_walk_over(c1, c2));
+	mu_assert(level_can_walk_over(c2, c3));
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
+static char* test_level_can_walk_over() {
+	Cell* unit = & (Cell){0,0,level_symbol_to_cell_type('2'), level_symbol_to_owner('2')};
+	Cell* target = &(Cell) { 0, 0, level_symbol_to_cell_type('R'), level_symbol_to_owner('R') };
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('3');
+	unit->owner = level_symbol_to_owner('3');
+	target->type = level_symbol_to_cell_type('*');
+	target->owner = level_symbol_to_owner('*');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('1');
+	target->owner = level_symbol_to_owner('1');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('H');
+	unit->owner = level_symbol_to_owner('H');
+	target->type = level_symbol_to_cell_type('W');
+	target->owner = level_symbol_to_owner('W');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('h');
+	unit->owner = level_symbol_to_owner('h');
+	target->type = level_symbol_to_cell_type('B');
+	target->owner = level_symbol_to_owner('B');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('h');
+	unit->owner = level_symbol_to_owner('H');
+	target->type = level_symbol_to_cell_type('7');
+	target->owner = level_symbol_to_owner('7');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+}
+
 static char* test_cell_type_is_player_owned()
 {
     mu_assert(!cell_type_is_player_owned(GROUND));
@@ -87,14 +168,15 @@ static char * all_tests()
     //TODO: add other common.h tests
     //mu_run_test(test_cell_type_is_unit);
 
+	mu_run_test(test_path_start);
+	mu_run_test(test_path_short);
+	mu_run_test(test_path_short_island);
     //Tests for pathfinder.h
-    mu_run_test(test_path_start);
-    mu_run_test(test_path_short);
     //TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
     //Tests for level.h
     //TODO
-
+	mu_run_test(test_level_can_walk_over);
     //Tests for dwgraph.h
     //TODO
 
