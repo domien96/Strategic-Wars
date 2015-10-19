@@ -30,18 +30,20 @@ DWGraph* makeGraph(Level *level) {
 	//construct the adjacency list and the correspondings costs list
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-
+			// calculate the row- and columnindex of the neighbouring cells
 			int mask[8][2] = {
 				{ i - 1,j - 1 },
+				{ i + 1,j + 1 },
+
 				{ i - 1,j },
+				{ i + 1,j },
+
 				{ i - 1,j + 1 },
+				{ i + 1,j - 1 },
+
 				{ i,j - 1 },
 				{ i,j + 1 },
-				{ i + 1,j - 1 },
-				{ i + 1,j },
-				{ i + 1,j + 1 }
 			};
-
 			int amount_neighbours = 0;
 			Node **neighbours = malloc(sizeof(Node*) * 8);
 			Node *node = nodes[(i*m) + j];
@@ -53,15 +55,9 @@ DWGraph* makeGraph(Level *level) {
 				int b = mask[x][1];
 				if (level_is_valid_pos(level, a, b)) {
 					Cell *neighbour = &(level->cells[a, b]);
-					/* TODO: 
-						* level_can_walk_over() is niet de juiste methode hiervoor
-						* indien er namelijk geen unit op cell staat opstaat, wordt het niet gezien alsof er een verbinding is naar zijn neighbour
-						* voorlopig bestaat de burenlijst dus uit alle nabijgelegen vakjes, geen rekening houdend met het celltype.
-					*/
-					//if (level_can_walk_over(cell, neighbour)) {
 					Node *neighbour_node = nodes[(a*m) + b];
 					neighbours[amount_neighbours] = neighbour_node;
-					costs[amount_neighbours] = 1;
+					costs[amount_neighbours] = calculate_cost(node, neighbour);
 					amount_neighbours++;
 					//	TODO: verbeter de geheugenallocatie van neighbours
 					//neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
@@ -75,12 +71,26 @@ DWGraph* makeGraph(Level *level) {
 		}
 	}
 
-	
 	DWGraph *graph = (DWGraph*)malloc(sizeof(DWGraph));
 	graph->nodes = nodes;
 	graph->amountOfNodes = n*m;
 	return graph;
 }
+
+/* Utility method to calculate the cost to move from 1 cell to another.
+If the celltype of cell is able to move to the celltype of neighbour, then the weight
+of the edge from cell to neighbour is 1. Else the weight is INFINITY.
+*/
+int calculate_cost(Cell *unit, Cell *target) {
+	if (level_can_walk_over(unit, target)) {
+		return 1;
+	}
+	else {
+		return INT_MAX;
+	}
+}
+
+
 
 Node* cellToNode(DWGraph *graph, Cell *cell) {
 	int row = &(cell->row);
@@ -89,6 +99,20 @@ Node* cellToNode(DWGraph *graph, Cell *cell) {
 }
 
 void updateGraph(DWGraph *graph, Cell *cell) {
+	Node *node = cellToNode(graph, cell);
+	node->cell = cell;
+	Node **neighbours = (node->neighbours);
+	int* costs = (node->costs);
+	for (int i = 0; i < node->amountOfNeighbours; i = i++) {
+		// de kost van de node naar zijn neighbours aanpassen
+		Node *neighbour = neighbours[i];
+		costs[i] = calculate_cost(node, neighbour);
+
+		// de kost van de neighbours naar de node aanpassen
+		// TODO!!!
+		// ?? = calculate_cost(neighbour, node);
+
+	}
 
 }
 
