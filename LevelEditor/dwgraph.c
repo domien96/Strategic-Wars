@@ -60,7 +60,7 @@ DWGraph* makeGraph(Level *level) {
 					costs[amount_neighbours] = calculate_cost(node, neighbour);
 					amount_neighbours++;
 					//	TODO: verbeter de geheugenallocatie van neighbours
-					//neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
+					// neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
 					//	}
 				}
 			}
@@ -98,8 +98,8 @@ int calculate_cost(Cell *unit, Cell *target) {
 
 
 Node* cellToNode(DWGraph *graph, Cell *cell) {
-	int row = &(cell->row);
-	int col = &(cell->col);
+	int row = cell->row;
+	int col = cell->col;
 	return &(graph->nodes[row][col]);
 }
 
@@ -108,17 +108,30 @@ void updateGraph(DWGraph *graph, Cell *cell) {
 	node->cell = cell;
 	Node **neighbours = (node->neighbours);
 	int* costs = (node->costs);
+
+	// the row and column index of the changed cell
+	int node_row = cell->row;
+	int node_col = cell->col;
 	for (int i = 0; i < node->amountOfNeighbours; i = i++) {
 		// de kost van de node naar zijn neighbours aanpassen
 		Node *neighbour = neighbours[i];
 		costs[i] = calculate_cost(node, neighbour);
 
 		// de kost van de neighbours naar de node aanpassen
-		// TODO!!!
-		// ?? = calculate_cost(neighbour, node);
-
+		Node **neighbours_of_neighbour = neighbour->neighbours;
+		// overloop de burenlijst van de neighbour totdat we de node tegenkomen. 
+		int j = 0;
+		bool found = false;
+		while ((j< neighbour->amountOfNeighbours) || !found) {
+			if (neighbour->pos.row == node_row  && neighbour->pos.col == node_col) {
+				// de node staat op de j-de plaats in de burenlijst van neighbour; 
+				int* costs_neighbour = neighbour->costs;
+				costs_neighbour[j] = calculate_cost(neighbour, node);
+				found = true;
+			}
+			j++;
+		}
 	}
-
 }
 
 void free_graph(DWGraph *graph) {
