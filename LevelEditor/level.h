@@ -106,7 +106,7 @@ int level_can_walk_over(Cell* unit, Cell* target);
  * This function returns true if the given position is a valid cell 
  * position within the given level.
  * A position is valid when it is within the dimensions of the level.
- * Note: Take negative row and coloumn values into account (they are always invalid)
+ * Note: Take negative row and column values into account (they are always invalid)
  */
 int level_is_valid_pos(Level* level, int row, int col);
 
@@ -117,7 +117,8 @@ int level_is_valid_pos(Level* level, int row, int col);
 Level* level_alloc_empty();
 /*
  * This functions returns pointer to an newly allocated level.
- * The level is initialised by reading and processing the given file.
+ * The level is initialized by reading and processing the given file.
+ * Returns NULL if file cannot be accessed or not enough memory.
  */
 Level* level_alloc_read_from_file(const char* filename);
 /*
@@ -129,6 +130,7 @@ void level_free(Level* level);
  * This functions stores the given level to file.
  * Returns 1 : when file cannot be found.
  *		   2 : when writing to file is not allowed
+ *		   3 : filename was null
  */
 int level_write_to_file(Level* level, const char* filename);
 

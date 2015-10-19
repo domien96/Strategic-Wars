@@ -124,19 +124,20 @@ int main()
 						}
 						case UI_LOAD:
 						{
-							gui_add_message("test: laden");
-							/* Free the previous level first*/
-							level_free(level);
 							char* filename = gui_show_load_file_dialog();
-							/* Assign new level to the level-pointer */
-							level = level_alloc_read_from_file(filename);
+							Level* new_level = level_alloc_read_from_file(filename);
 
-							/*fout bij inladen, level heeft dan ongeldig formaat*/
-							while (level->height <= 0 || level->width <= 0) {
+							/* Indien fout bij inladen, level heeft dan ongeldig formaat*/
+							if ( new_level == NULL) {
 								gui_add_message("Error: invalid file. Please choose another file");
-								char* filename = gui_show_load_file_dialog();
-								level = level_alloc_read_from_file(filename);
+								break;
+							} else {	/* Everything is fine from here */
+								/* Free the previous level first*/
+								level_free(level);
 							}
+
+							/* Assign new level to the level-pointer */
+							level = new_level;
 							/* Draw */
 							gui_set_level(level);
 							/*error messages nog wegdoen als er een geldige file gekozen is*/
