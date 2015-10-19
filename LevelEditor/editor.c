@@ -90,10 +90,17 @@ int main()
 								level->cells[row + 1][col + 1] = new_cell;
 							}
 							//TODO
-							/*ook nog vorige headquarter verwijderen*/
+							/*ook nog vorige headquarter verwijderen, best ergens apart bijhouden*/
 						}
 						else {
-							level->cells[row][col] = new_cell;
+							Cell current_cell = level->cells[row][col];
+							if (current_cell.type == HEADQUARTER) {
+								gui_add_message("Headquarter must remain size four");
+								//TODO headquarter moet verwijderd worden en unit moet geplaatst worden
+							}
+							else {
+								level->cells[row][col] = new_cell;
+							}
 						}
 						break;
 					}

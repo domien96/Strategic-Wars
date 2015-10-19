@@ -74,5 +74,6 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
     - Kunnen units door elkaar bewegen? met andere woorden: volstaat de level_can_walk_over() functie van level.h 
     - level.h nieuwe functie: updateCell(...), toegelaten? Er is anders te veel code in de game loop voor bv. de headquarters       bij te houden. 
     - level loaden dan annuleren -> crash, hoe oplossen?
+    - In case UI_LOAD kan werkt de methode gui_add_message niet
 
 ## Verslag:
