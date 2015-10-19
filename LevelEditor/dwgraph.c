@@ -1,5 +1,5 @@
 #include "dwgraph.h"
-
+#include <math.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -78,14 +78,19 @@ DWGraph* makeGraph(Level *level) {
 }
 
 /* Utility method to calculate the cost to move from 1 cell to another.
+Cells must be neighbours in order for this function to work correctly.
 If the celltype of cell is able to move to the celltype of neighbour, then the weight
 of the edge from cell to neighbour is 1. Else the weight is INFINITY.
 */
 int calculate_cost(Cell *unit, Cell *target) {
-	if (level_can_walk_over(unit, target)) {
-		return 1;
-	}
-	else {
+	if (level_can_walk_over(unit, target)) { /* Supposing they are neighbours */
+		if (abs(unit->row + unit->col - target->row - target->col == 1)) {
+			/* Verschil horizontale, verticale coordinaten is gelijk op een 1-term na.*/
+			return 12;
+		} else { /* diagonaal */
+			return 17;
+		}
+	} else {
 		return INT_MAX;
 	}
 }
