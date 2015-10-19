@@ -77,14 +77,23 @@ int main()
 						int row = event.level_event.row;
 						int col = event.level_event.col;
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
-						level->cells[row][col] = new_cell;
 						
 						/*headquarter is altijs 4 tegels groot*/
 						if (chosen_cell_type == HEADQUARTER) {
-							level->cells[row + 1][col] = new_cell;
-							level->cells[row][col + 1] = new_cell;
-							level->cells[row + 1][col + 1] = new_cell;
+							if (row >= level->height - 1 || col >= level->width - 1) {
+								gui_add_message("Headquarter has size 4, please try again.");
+							}
+							else {
+								level->cells[row][col] = new_cell;
+								level->cells[row + 1][col] = new_cell;
+								level->cells[row][col + 1] = new_cell;
+								level->cells[row + 1][col + 1] = new_cell;
+							}
+							//TODO
 							/*ook nog vorige headquarter verwijderen*/
+						}
+						else {
+							level->cells[row][col] = new_cell;
 						}
 						break;
 					}
@@ -108,16 +117,15 @@ int main()
 						}
 						case UI_LOAD:
 						{
+							gui_add_message("test: laden");
 							/* Free the previous level first*/
 							level_free(level);
 							char* filename = gui_show_load_file_dialog();
 							/* Assign new level to the level-pointer */
 							level = level_alloc_read_from_file(filename);
 
-							//TODO werkt nog niet: bij fout inladen is level niet 0
-							/*fout bij inladen*/
-							while (level == NULL) {
-								printf("error");
+							/*fout bij inladen, level heeft dan ongeldig formaat*/
+							while (level->height <= 0 || level->width <= 0) {
 								gui_add_message("Error: invalid file. Please choose another file");
 								char* filename = gui_show_load_file_dialog();
 								level = level_alloc_read_from_file(filename);
