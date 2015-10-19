@@ -67,7 +67,7 @@ DWGraph* makeGraph(Level *level) {
 
 			node->amountOfNeighbours = amount_neighbours;
 			node->neighbours = neighbours;
-
+			node->costs = costs;
 		}
 	}
 
@@ -138,6 +138,7 @@ void free_graph(DWGraph *graph) {
 	Node **nodes = graph->nodes;
 	for (int i = 0; i < graph->amountOfNodes; i++) {
 		free(nodes[i]->neighbours);
+		free(nodes[i]->costs);
 		free(nodes[i]);
 	}
 	free(nodes);
