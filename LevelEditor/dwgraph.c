@@ -67,13 +67,14 @@ DWGraph* makeGraph(Level *level) {
 
 			node->amountOfNeighbours = amount_neighbours;
 			node->neighbours = neighbours;
-
+			node->costs = costs;
 		}
 	}
 
 	DWGraph *graph = (DWGraph*)malloc(sizeof(DWGraph));
 	graph->nodes = nodes;
 	graph->amountOfNodes = n*m;
+	graph->amountOfColumns = m;
 	return graph;
 }
 
@@ -98,9 +99,10 @@ int calculate_cost(Cell *unit, Cell *target) {
 
 
 Node* cellToNode(DWGraph *graph, Cell *cell) {
-	int row = cell->row;
-	int col = cell->col;
-	return &(graph->nodes[row][col]);
+	int i = cell->row;
+	int j = cell->col;
+	int m = graph->amountOfColumns;
+	return graph->nodes[(i*m) + j];
 }
 
 void updateGraph(DWGraph *graph, Cell *cell) {
@@ -138,6 +140,7 @@ void free_graph(DWGraph *graph) {
 	Node **nodes = graph->nodes;
 	for (int i = 0; i < graph->amountOfNodes; i++) {
 		free(nodes[i]->neighbours);
+		free(nodes[i]->costs);
 		free(nodes[i]);
 	}
 	free(nodes);
