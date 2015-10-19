@@ -18,12 +18,12 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	Node* startNode = cellToNode(graph, start); 
 	Node* targetNode = cellToNode(graph, target);
 	Node* current = startNode;
-	int currentCost = 0;
 
 	PriorityQueue* queue = pqueue_alloc();
 	Node **neighbours = (startNode->neighbours);
 	for (int i = 0; i < startNode->amountOfNeighbours; i++) {
-		pqueue_update(queue, neighbours[i], *(startNode->costs + i));
+		int* costs = startNode->costs;
+		pqueue_update(queue, neighbours[i], costs[i]);
 	}
 	
 	
@@ -59,8 +59,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 			pathSize++;
 		}
 		current = targetNode;
-		Path* path = (Path*)calloc(1, sizeof(Path));
-		path->steps = (Pos*)calloc(pathSize, sizeof(Pos));
+		Path* path = path_alloc(pathLength, targetNode->cost);
 		for (int i = pathSize-1; i >= 0; i++) {
 			*(path->steps + i) = current->pos;
 			current = current->prev;
