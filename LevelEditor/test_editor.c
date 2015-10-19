@@ -148,6 +148,19 @@ static char* test_level_can_walk_over() {
 	mu_assert(level_can_walk_over(unit, target) == 1);
 }
 
+static char* test_cell_type_is_unit()
+{
+	mu_assert(!cell_type_is_unit(GROUND));
+	mu_assert(!cell_type_is_unit(WATER));
+	mu_assert(!cell_type_is_unit(ROCK));
+	mu_assert(!cell_type_is_unit(HEADQUARTER));
+	mu_assert(!cell_type_is_unit(BRIDGE));
+	mu_assert(cell_type_is_unit(UNIT_1));
+	mu_assert(cell_type_is_unit(UNIT_2));
+	mu_assert(cell_type_is_unit(UNIT_3));
+	return 0;
+}
+
 static char* test_cell_type_is_player_owned()
 {
     mu_assert(!cell_type_is_player_owned(GROUND));
@@ -164,9 +177,12 @@ static char* test_cell_type_is_player_owned()
 static char * all_tests() 
 {
     //Tests for common.h
+	mu_run_test(test_cell_type_is_unit);
     mu_run_test(test_cell_type_is_player_owned);
-    //TODO: add other common.h tests
-    //mu_run_test(test_cell_type_is_unit);
+	//TODO: mu_run_test(test_path_alloc);
+	//TODO: mu_run_test(test_path_free);
+    //TODO: add more common.h tests
+    
 
 	mu_run_test(test_path_start);
 	mu_run_test(test_path_short);

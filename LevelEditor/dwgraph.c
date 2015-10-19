@@ -48,7 +48,7 @@ DWGraph* makeGraph(Level *level) {
 			Node **neighbours = malloc(sizeof(Node*) * 8);
 			Node *node = nodes[(i*m) + j];
 			Cell *cell = node->cell;
-			int *costs;
+			int *costs = malloc(sizeof(int)*8);
 
 			for (int x = 0; x < 8; x++) {
 				int a = mask[x][0];
