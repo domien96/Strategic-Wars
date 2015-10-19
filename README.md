@@ -60,7 +60,7 @@ Opgave project SOI 2015 van onze groep. Dus hier pushen/mergen.
       Level.h OK
       Common.h OK
       pathfinder.h OK
-      Dwgraph
+      Dwgraph: enkel nog update graph methode
       Game loop/ Editor.c : Grootste deel af, wachten tot dwgraph-header klaar is zodat we weten welke functies er gebruikt kunnen worden.
       GUI functionaliteit OK
     
