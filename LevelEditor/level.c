@@ -286,8 +286,12 @@ int level_is_valid_pos(Level* level, int row, int col) {
 * This functions stores the given level to file.
 * Returns 1 : when file cannot be found.
 *		  2 : when writing to file is not allowed
+*		  3 : filename was null
 */
 int level_write_to_file(Level* level, const char* filename) {
+	if (!filename) {
+		return 3;
+	}
 	/* open() clears all the data if the file already exists*/
 	FILE* fp = fopen(filename, "w");
 	if (!fp) {
@@ -347,6 +351,9 @@ Level* level_alloc_empty()
 
 Level* level_alloc_read_from_file(const char* filename)
 {
+	if (!filename) {
+		return (Level*)NULL;
+	}
     // init empty level
 	Level* level = level_alloc_empty();
 
@@ -376,8 +383,13 @@ int init_level(Level* level, FILE* fp) {
 	/* Initializes dimensions*/
 	int height=0, width=0;
 	fscanf(fp, "%i|%i\n", &width, &height);
+	/* Check dimensions */
+	if (width <= 0 || height <= 0) {
+		return 1;
+	};
 	level->height = height;
 	level->width = width;
+
 
 	/* Initializes cells, opletten dat er juist 'width' characters gelezen worden per line*/
 	char* buffer = malloc((LEVEL_MAX_WIDTH+1)*sizeof(int));
