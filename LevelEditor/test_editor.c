@@ -186,23 +186,37 @@ static char* test_make_graph() {
 	mu_assert(sizeof(graph->nodes[25 + 1]->neighbours) == 2 * sizeof(Node));
 	mu_assert(sizeof(graph->nodes[5]->costs) == 3 * sizeof(Node));
 	mu_assert(max(graph->nodes[5]->costs[0], graph->nodes[5]->costs[1], graph->nodes[5]->costs[2]) > 10000);
+	mu_assert(min(graph->nodes[5]->costs[0], graph->nodes[5]->costs[1], graph->nodes[5]->costs[2]) == 12);
 	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
+	free_graph(graph);
+	level_free(level);
 }
 
-static char* test_calculate_cost() {
-	//TODO
-}
+/*static char* test_calculate_cost() {
+	
+}*/
 
 static char* test_cell_to_node() {
-	//TODO
+	Level* level = level_alloc_empty();
+	DWGraph* graph = make_graph(graph);
+	mu_assert(cell_to_node(graph, &((level->cells)[0][0])) == 0);
+	mu_assert(cell_to_node(graph, &((level->cells)[0][7])) == 7);
+	mu_assert(cell_to_node(graph, &((level->cells)[1][0])) == 25);
+	mu_assert(cell_to_node(graph, &((level->cells)[10][9])) == 25*10+9);
+	free_graph(graph);
+	level_free(level);
 }
 
 static char* test_update_graph() {
-	//TODO
-}
-
-static char* test_free_graph() {
-	//TODO
+	Level* level = level_alloc_empty();
+	DWGraph* graph = make_graph(graph);
+	mu_assert(max(graph->nodes[0]->costs[0], graph->nodes[0]->costs[1], graph->nodes[0]->costs[2]) == 17);
+	Cell* c = &(level->cells[1][0]);
+	c->type = ROCK;
+	update_graph(graph,c);
+	mu_assert(max(graph->nodes[0]->costs[0], graph->nodes[0]->costs[1], graph->nodes[0]->costs[2]) > 17);
+	free_graph(graph);
+	level_free(level);
 }
 
 static char * all_tests() 
@@ -227,7 +241,8 @@ static char * all_tests()
 
     //Tests for dwgraph.h
 	mu_run_test(test_make_graph);
-    //TODO
+	mu_run_test(test_cell_to_node);
+	mu_run_test(test_update_graph);
 
     //Tests for pqueue.h
     //TODO
