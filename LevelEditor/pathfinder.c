@@ -12,11 +12,10 @@
 
 Path* find_path(Level* level, Cell* start, Cell* target) {
     
-	DWGraph* graph = makeGraph(level);
-	int pathLength = 1;
+	DWGraph* graph = make_graph(level);
 
-	Node* startNode = cellToNode(graph, start); 
-	Node* targetNode = cellToNode(graph, target);
+	Node* startNode = cell_to_node(graph, start); 
+	Node* targetNode = cell_to_node(graph, target);
 	Node* current = startNode;
 
 	PriorityQueue* queue = pqueue_alloc();
@@ -59,8 +58,8 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 			pathSize++;
 		}
 		current = targetNode;
-		Path* path = path_alloc(pathLength, targetNode->cost);
-		for (int i = pathSize-1; i >= 0; i++) {
+		Path* path = path_alloc(pathSize, targetNode->cost);
+		for (int i = pathSize-1; i >= 0; i--) {
 			*(path->steps + i) = current->pos;
 			current = current->prev;
 		}

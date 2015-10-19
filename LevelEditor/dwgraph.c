@@ -4,7 +4,7 @@
 #include <assert.h>
 
 
-DWGraph* makeGraph(Level *level) {
+DWGraph* make_graph(Level *level) {
 	int n = level->height;
 	int m = level->width;
 	Node** nodes = malloc(sizeof(Node*) + (sizeof(Node*)*(n*m)));
@@ -98,15 +98,15 @@ int calculate_cost(Cell *unit, Cell *target) {
 
 
 
-Node* cellToNode(DWGraph *graph, Cell *cell) {
+Node* cell_to_node(DWGraph *graph, Cell *cell) {
 	int i = cell->row;
 	int j = cell->col;
 	int m = graph->amountOfColumns;
 	return graph->nodes[(i*m) + j];
 }
 
-void updateGraph(DWGraph *graph, Cell *cell) {
-	Node *node = cellToNode(graph, cell);
+void update_graph(DWGraph *graph, Cell *cell) {
+	Node *node = cell_to_node(graph, cell);
 	node->cell = cell;
 	Node **neighbours = (node->neighbours);
 	int* costs = (node->costs);

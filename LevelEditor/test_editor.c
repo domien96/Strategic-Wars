@@ -4,6 +4,7 @@
 #include "pqueue.h"
 #include "level.h"
 #include "pathfinder.h"
+#include "dwgraph.h"
 
 #include <stdlib.h>
 #include <stdio.h> 
@@ -174,6 +175,36 @@ static char* test_cell_type_is_player_owned()
     return 0;
 }
 
+static char* test_make_graph() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	DWGraph* graph = make_graph(graph);
+	mu_assert(graph->amountOfColumns == 25);
+	mu_assert(graph->amountOfNodes == 25 * 12);
+	mu_assert(graph->nodes[0]->cell->type == GROUND);
+	mu_assert(graph->nodes[25 + 6]->cell->type == WATER);
+	mu_assert(sizeof(graph->nodes[0]->neighbours) == 2 * sizeof(Node));
+	mu_assert(sizeof(graph->nodes[25 + 1]->neighbours) == 2 * sizeof(Node));
+	mu_assert(sizeof(graph->nodes[5]->costs) == 3 * sizeof(Node));
+	mu_assert(max(graph->nodes[5]->costs[0], graph->nodes[5]->costs[1], graph->nodes[5]->costs[2]) > 10000);
+	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
+}
+
+static char* test_calculate_cost() {
+	//TODO
+}
+
+static char* test_cell_to_node() {
+	//TODO
+}
+
+static char* test_update_graph() {
+	//TODO
+}
+
+static char* test_free_graph() {
+	//TODO
+}
+
 static char * all_tests() 
 {
     //Tests for common.h
@@ -193,7 +224,9 @@ static char * all_tests()
     //Tests for level.h
     //TODO
 	mu_run_test(test_level_can_walk_over);
+
     //Tests for dwgraph.h
+	mu_run_test(test_make_graph);
     //TODO
 
     //Tests for pqueue.h
