@@ -17,6 +17,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	Node* startNode = cell_to_node(graph, start); 
 	Node* targetNode = cell_to_node(graph, target);
 	Node* current = startNode;
+	startNode->cost = 0;
 
 	if (startNode->pos.col == targetNode->pos.col && startNode->pos.row == targetNode->pos.row) {
 		Path* path = path_alloc(1, 0);
