@@ -90,7 +90,7 @@ int main()
 								level->cells[row + 1][col + 1] = new_cell;
 							}
 							//TODO
-							/*ook nog vorige headquarter verwijderen*/
+							/*ook nog vorige headquarter verwijderen, best ergens apart bijhouden*/
 						}
 						else {
 							Cell current_cell = level->cells[row][col];
