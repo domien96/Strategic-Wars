@@ -21,6 +21,7 @@ typedef struct DWGraph
 {
 	Node **nodes; //The nodes of the graph. There is no need for an Edge struct, since the information is already contained in  the Node struct
 	int amountOfNodes; //to make it easer to iterate over the nodes of the graph
+	int amountOfColumns;
 } DWGraph;
 
 //Initialize graph given the level. All used nodes have standard cost +INFINITY and visited is false.
