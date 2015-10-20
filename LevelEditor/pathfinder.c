@@ -30,6 +30,8 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	Node **neighbours = (startNode->neighbours);
 	for (int i = 0; i < startNode->amountOfNeighbours; i++) {
 		int* costs = startNode->costs;
+		neighbours[i]->cost = costs[i];
+		neighbours[i]->prev = startNode;
 		pqueue_update(queue, neighbours[i], costs[i]);
 	}
 	
