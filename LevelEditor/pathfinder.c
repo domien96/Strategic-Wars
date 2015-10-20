@@ -45,7 +45,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 			Node *neighbour = neighbours[i];
 		
 			if (!neighbour->visited) {
-				int c = current->cost + *(current->costs + i);
+				int c = current->costs[i] == INT_MAX ? INT_MAX : current->cost + current->costs[i];
 				if (c < neighbour->cost) {
 					neighbour->cost = c;
 					neighbour->prev = current;
