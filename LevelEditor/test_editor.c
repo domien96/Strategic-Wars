@@ -99,10 +99,10 @@ static char* test_path_short_island() {
 	mu_assert(path->steps[path->step_count - 1].col == target_cell->col);
 
 	//test if all steps are over terrain that unit in start_cell can walk over
-	Cell* c0 = &path->steps[0];
-	Cell* c1 = &path->steps[1];
-	Cell* c2 = &path->steps[2];
-	Cell* c3 = &path->steps[3];
+	Cell* c0 = &(level->cells)[path->steps[0].row][path->steps[0].col];
+	Cell* c1 = &(level->cells)[path->steps[1].row][path->steps[1].col];
+	Cell* c2 = &(level->cells)[path->steps[2].row][path->steps[2].col];
+	Cell* c3 = &(level->cells)[path->steps[3].row][path->steps[3].col];
 	mu_assert(level_can_walk_over(c0, c1));
 	mu_assert(level_can_walk_over(c1, c2));
 	mu_assert(level_can_walk_over(c2, c3));
@@ -147,6 +147,7 @@ static char* test_level_can_walk_over() {
 	target->type = level_symbol_to_cell_type('7');
 	target->owner = level_symbol_to_owner('7');
 	mu_assert(level_can_walk_over(unit, target) == 1);
+	return 0;
 }
 
 static char* test_cell_type_is_unit()
@@ -182,19 +183,23 @@ static char* test_make_graph() {
 	mu_assert(graph->amountOfNodes == 25 * 12);
 	mu_assert(graph->nodes[0]->cell->type == GROUND);
 	mu_assert(graph->nodes[25 + 6]->cell->type == WATER);
-	mu_assert(sizeof(graph->nodes[0]->neighbours) == 2 * sizeof(Node));
-	mu_assert(sizeof(graph->nodes[25 + 1]->neighbours) == 2 * sizeof(Node));
-	mu_assert(sizeof(graph->nodes[5]->costs) == 3 * sizeof(Node));
-	mu_assert(max(graph->nodes[5]->costs[0], max(graph->nodes[5]->costs[1], graph->nodes[5]->costs[2])) > 10000);
-	mu_assert(min(graph->nodes[5]->costs[0], max(graph->nodes[5]->costs[1], graph->nodes[5]->costs[2])) == 12);
+	mu_assert(graph->nodes[0]->amountOfNeighbours == 3);
+	mu_assert(graph->nodes[25 + 1]->amountOfNeighbours == 8);
+	mu_assert(graph->nodes[5]->amountOfNeighbours == 5);
+	mu_assert(max(graph->nodes[5]->costs[0], max(graph->nodes[5]->costs[1], max(graph->nodes[5]->costs[2],
+		max(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) > 10000);
+	mu_assert(min(graph->nodes[5]->costs[0], min(graph->nodes[5]->costs[1], min(graph->nodes[5]->costs[2],
+		min(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) == 12);
 	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
 	free_graph(graph);
 	level_free(level);
+	return 0;
 }
 
-/*static char* test_calculate_cost() {
-	
-}*/
+static char* test_calculate_cost() {
+	//TODO
+	return 0;
+}
 
 static char* test_cell_to_node() {
 	Level* level = level_alloc_empty();
@@ -205,6 +210,7 @@ static char* test_cell_to_node() {
 	mu_assert(cell_to_node(graph, &((level->cells)[10][9])) == graph->nodes[25*10+9]);
 	free_graph(graph);
 	level_free(level);
+	return 0;
 }
 
 static char* test_update_graph() {
@@ -217,6 +223,7 @@ static char* test_update_graph() {
 	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) > 17);
 	free_graph(graph);
 	level_free(level);
+	return 0;
 }
 
 static char * all_tests() 
@@ -227,22 +234,24 @@ static char * all_tests()
 	//TODO: mu_run_test(test_path_alloc);
 	//TODO: mu_run_test(test_path_free);
     //TODO: add more common.h tests
-    
 
+
+	//Tests for dwgraph.h
+	mu_run_test(test_make_graph);
+	mu_run_test(test_calculate_cost);
+	mu_run_test(test_cell_to_node);
+	mu_run_test(test_update_graph);
+    
+    //Tests for pathfinder.h
 	mu_run_test(test_path_start);
 	mu_run_test(test_path_short);
 	mu_run_test(test_path_short_island);
-    //Tests for pathfinder.h
     //TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
     //Tests for level.h
     //TODO
 	mu_run_test(test_level_can_walk_over);
 
-    //Tests for dwgraph.h
-	mu_run_test(test_make_graph);
-	mu_run_test(test_cell_to_node);
-	mu_run_test(test_update_graph);
 
     //Tests for pqueue.h
     //TODO

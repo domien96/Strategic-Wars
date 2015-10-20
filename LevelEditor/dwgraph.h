@@ -27,6 +27,13 @@ typedef struct DWGraph
 //Initialize graph given the level. All used nodes have standard cost +INFINITY and visited is false.
 DWGraph* make_graph(Level *level);
 
+/* Utility method to calculate the cost to move from 1 cell to another.
+Cells must be neighbours in order for this function to work correctly.
+If the celltype of cell is able to move to the celltype of neighbour, then the weight
+of the edge from cell to neighbour is 1. Else the weight is INFINITY.
+*/
+int calculate_cost(Cell *unit, Cell *target);
+
 //Returns the node of the graph that corresponds with the given cell in the level grid
 Node* cell_to_node(DWGraph *graph, Cell* cell);
 

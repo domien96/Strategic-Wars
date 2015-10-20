@@ -34,7 +34,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	}
 	
 	
-	while (sizeof(queue) > 0) {
+	while (queue->item_count > 0) {
 		current = pqueue_remove_first(queue);
 
 		neighbours = (current->neighbours);

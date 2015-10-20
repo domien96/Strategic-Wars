@@ -54,10 +54,10 @@ DWGraph* make_graph(Level *level) {
 				int a = mask[x][0];
 				int b = mask[x][1];
 				if (level_is_valid_pos(level, a, b)) {
-					Cell *neighbour = &(level->cells[a, b]);
+					Cell *neighbour = &(level->cells[a][b]);
 					Node *neighbour_node = nodes[(a*m) + b];
 					neighbours[amount_neighbours] = neighbour_node;
-					costs[amount_neighbours] = calculate_cost(node, neighbour);
+					costs[amount_neighbours] = calculate_cost(node->cell, neighbour);
 					amount_neighbours++;
 					//	TODO: verbeter de geheugenallocatie van neighbours
 					// neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
