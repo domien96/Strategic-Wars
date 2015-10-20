@@ -80,7 +80,7 @@ int main()
 						int col = event.level_event.col;
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
 
-						/*indien er op (row, col) een headquarter staat moet deze verwijderd worden*/
+						/*indien er op een headquarter geplaatst moet deze verwijderd worden*/
 						if ((level->cells[row][col]).type == HEADQUARTER) {
 							remove_old_headquarter((level->cells[row][col]).owner, level);
 						}
@@ -88,7 +88,7 @@ int main()
 						/*headquarter is altijs 4 tegels groot*/
 						if (chosen_cell_type == HEADQUARTER) {
 							if (row >= level->height - 1 || col >= level->width - 1) {
-								gui_add_message("Headquarter has size 4, please try again.");
+								gui_add_message("Headquarter has size 4, please try placing it somewhere else.");
 							}
 							else {
 								remove_old_headquarter(new_cell.owner, level);
@@ -102,7 +102,6 @@ int main()
 							Cell current_cell = level->cells[row][col];
 							if (current_cell.type == HEADQUARTER) {
 								gui_add_message("Headquarter must remain size four");
-								//TODO headquarter moet verwijderd worden en unit moet geplaatst worden
 							}
 							else {
 								level->cells[row][col] = new_cell;
@@ -192,12 +191,11 @@ int main()
 /*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
 int remove_old_headquarter(Owner owner, Level* level) {
 	int i, j;
-
 	for (i = 0; i < level->height; i++) {
 		for (j = 0; j < level->width; j++) {
 			if ((level->cells[i][j]).type == HEADQUARTER) {
 				if ((level->cells[i][j]).owner == owner) {
-					/*oude headquarter wordt grond en eigenaar wordt OWNER_NONE*/
+					/*oude headquarter wordt GROUND en eigenaar wordt OWNER_NONE*/
 					(level->cells[i][j]).type = GROUND;
 					(level->cells[i+1][j]).type = GROUND;
 					(level->cells[i][j+1]).type = GROUND;
