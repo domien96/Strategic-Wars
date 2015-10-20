@@ -248,7 +248,7 @@ static char* test_cell_to_node() {
 
 static char* test_update_graph() {
 	Level* level = level_alloc_empty();
-	DWGraph* graph = make_graph(graph);
+	DWGraph* graph = make_graph(level);
 	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) == 17);
 	Cell* c = &(level->cells[1][0]);
 	c->type = ROCK;
