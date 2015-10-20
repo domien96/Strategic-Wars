@@ -113,6 +113,45 @@ static char* test_path_short_island() {
 	return 0;
 }
 
+static char* test_path_long_island() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[4][6];
+	Cell* target_cell = &level->cells[3][18];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 5 * 17 + 7 * 12);
+	mu_assert(path->step_count == 13);
+	mu_assert(path->steps != NULL);
+	mu_assert(path->steps[0].row == start_cell->row);
+	mu_assert(path->steps[0].col == start_cell->col);
+
+	for (int i = 1; i < 12; i++) {
+		mu_assert(path->steps[i].row >= start_cell->row);
+		mu_assert(path->steps[i].col >= start_cell->col);
+	}
+
+	for (int i = 1; i < 12; i++) {
+		mu_assert(path->steps[i].row <= target_cell->row);
+		mu_assert(path->steps[i].col <= target_cell->col);
+	}
+
+	mu_assert(path->steps[path->step_count - 1].row == target_cell->row);
+	mu_assert(path->steps[path->step_count - 1].col == target_cell->col);
+
+	//test if all steps are over terrain that unit in start_cell can walk over
+	for (int i = 0; i < 12; i++) {
+		Cell* from = &path->steps[i];
+		Cell* to = &path->steps[i + 1];
+		mu_assert(level_can_walk_over(from, to));
+	}
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
 static char* test_level_can_walk_over() {
 	Cell* unit = & (Cell){0,0,level_symbol_to_cell_type('2'), level_symbol_to_owner('2')};
 	Cell* target = &(Cell) { 0, 0, level_symbol_to_cell_type('R'), level_symbol_to_owner('R') };
@@ -246,6 +285,7 @@ static char * all_tests()
 	mu_run_test(test_path_start);
 	mu_run_test(test_path_short);
 	mu_run_test(test_path_short_island);
+	mu_run_test(test_path_long_island);
     //TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
     //Tests for level.h
