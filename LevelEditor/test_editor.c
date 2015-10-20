@@ -297,15 +297,15 @@ static char* test_impossible_paths() {
 	mu_assert(path == NULL);
 
 
-	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
 	mu_assert(level != NULL);
-	Cell* start_cell = &level->cells[1][5];
-	Cell* target_cell = &level->cells[11][0];
-	Path* path = find_path(level, start_cell, target_cell);
+	start_cell = &level->cells[1][5];
+	target_cell = &level->cells[11][0];
+	path = find_path(level, start_cell, target_cell);
 	mu_assert(path == NULL);
-	Cell* start_cell = &level->cells[1][5];
-	Cell* target_cell = &level->cells[11][1];
-	Path* path = find_path(level, start_cell, target_cell);
+	start_cell = &level->cells[1][5];
+	target_cell = &level->cells[11][1];
+	path = find_path(level, start_cell, target_cell);
 	mu_assert(path == NULL);
 	return 0;
 }
