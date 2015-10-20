@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 
+int remove_old_headquarter(Cell cell, Level* level);
+
 int main()
 {
     printf("Strategic War Level Editor\n");
@@ -84,6 +86,7 @@ int main()
 								gui_add_message("Headquarter has size 4, please try again.");
 							}
 							else {
+								remove_old_headquarter(new_cell, level);
 								level->cells[row][col] = new_cell;
 								level->cells[row + 1][col] = new_cell;
 								level->cells[row][col + 1] = new_cell;
@@ -179,5 +182,31 @@ int main()
     level_free(level);
 
     return 0;
+}
+
+/*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
+/*return 1 als er een headquarter verwijderd is, return 0 anders*/
+/*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
+int remove_old_headquarter(Cell cell, Level* level) {
+	int i, j;
+
+	for (i = 0; i < level->height; i++) {
+		for (j = 0; j < level->width; j++) {
+			if ((level->cells[i][j]).type == HEADQUARTER) {
+				if ((level->cells[i][j]).owner == cell.owner) {
+					/*oude headquarter wordt grond en eigenaar wordt OWNER_NONE*/
+					(level->cells[i][j]).type = GROUND;
+					(level->cells[i+1][j]).type = GROUND;
+					(level->cells[i][j+1]).type = GROUND;
+					(level->cells[i+1][j+1]).type = GROUND;
+					(level->cells[i][j]).owner = OWNER_NONE;
+					(level->cells[i + 1][j]).owner = OWNER_NONE;
+					(level->cells[i][j + 1]).owner = OWNER_NONE;
+					(level->cells[i + 1][j + 1]).owner = OWNER_NONE;
+					return 0;
+				}
+			}
+		}
+	}
 }
 
