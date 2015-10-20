@@ -396,7 +396,7 @@ static char * all_tests()
 	mu_run_test(test_path_long_island);
 	mu_run_test(test_path_long_testworld_1);
 	mu_run_test(test_impossible_paths);
-
+	mu_run_test(test_path_long_basic);
 	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
 	//Tests for level.h
