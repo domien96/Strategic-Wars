@@ -423,6 +423,116 @@ int init_level(Level* level, FILE* fp) {
 	return 0;
 }
 
+int init_level_binary(Level* level, FILE* fp) {
+	fscanf(fp, ".SOI");
+	/* Initializes dimensions*/
+	unsigned char version;
+	unsigned short d0, d1;
+	fscanf(fp, "%c%d%d", &version, &d0, &d1);
+	int width = (int) d0, height = (int) d1;
+
+	/* Check dimensions */
+	if (width <= 0 || height <= 0) {
+		return 1;
+	};
+	level->height = height;
+	level->width = width;
+
+
+	/* Initializes cells, opletten dat er juist 'width' characters gelezen worden per line*/
+	char* buffer = malloc((LEVEL_MAX_WIDTH + 1)*sizeof(int));
+	for (int r = 0; r < level->height; r++) {
+		if (!fgets(buffer, LEVEL_MAX_WIDTH + 2, fp)) {
+			return 1;
+		}
+		/*lijn omzetten*/
+		//Cell current_row[] = level->cells[r];
+		for (int c = 0; c < level->width; c++) {
+			char ch = *(buffer + c);
+			/* init cell */
+			Cell* cell = malloc(sizeof(Cell));
+			cell->row = r;
+			cell->col = c;
+
+			int type_number = (ch & 0b00111000) >> 3;
+			switch (type_number) {
+			default:
+				cell->type = GROUND;
+				break;
+			case 0:
+				cell->type = GROUND;
+				break;
+			case 1:
+				cell->type = WATER;
+				break;
+			case 2:
+				cell->type = ROCK;
+				break;
+			case 3:
+				cell->type = HEADQUARTER;
+				break;
+			case 4:
+				cell->type = BRIDGE;
+				break;
+			}
+
+			int owner_number = ch >> 6;
+			switch (owner_number) {
+			default:
+				cell->owner = OWNER_NONE;
+				break;
+			case 0:
+				cell->owner = OWNER_NONE;
+				break;
+			case 1:
+				if (cell->type == GROUND || cell->type == HEADQUARTER) {
+					cell->owner = OWNER_HUMAN;
+				}
+				else {
+					cell->owner = OWNER_NONE;
+					cell->type = GROUND;
+				}
+				break;
+			case 2:
+				if (cell->type == GROUND || cell->type == HEADQUARTER) {
+					cell->owner = OWNER_AI;
+				}
+				else {
+					cell->owner = OWNER_NONE;
+					cell->type = GROUND;
+				}
+				break;
+			}
+
+			int unit_number = ch & 0b00000011;
+			switch (unit_number) {
+			default:
+				cell->type = GROUND;
+				break;
+			case 0:
+				break;
+			case 1:
+				cell->type == GROUND && cell->owner != OWNER_NONE ? (cell->type = UNIT_1) : (cell->type = GROUND);
+				break;
+			case 2:
+				cell->type == GROUND && cell->owner != OWNER_NONE ? (cell->type = UNIT_2) : (cell->type = GROUND);
+				break;
+			case 3:
+				cell->type == GROUND && cell->owner != OWNER_NONE ? (cell->type = UNIT_3) : (cell->type = GROUND);
+				break;
+			}
+
+			/* place cell */
+			level->cells[r][c] = *cell;
+			free(cell);
+		}
+	}
+	fclose(fp);
+	free(buffer);
+
+	return 0;
+}
+
 
 void level_free(Level* level)
 {

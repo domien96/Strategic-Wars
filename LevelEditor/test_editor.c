@@ -13,6 +13,61 @@
 #include <process.h>
 #endif
 
+static char* test_calculate_cost() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1])) == 12);
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[1][1])) == 17);
+	mu_assert(calculate_cost(&(level->cells[0][5]), &(level->cells[0][6])) > 17);
+	level_free(level);
+	return 0;
+}
+
+static char* test_make_graph() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	DWGraph* graph = make_graph(level);
+	mu_assert(graph->amountOfColumns == 25);
+	mu_assert(graph->amountOfNodes == 25 * 12);
+	mu_assert(graph->nodes[0]->cell->type == GROUND);
+	mu_assert(graph->nodes[25 + 6]->cell->type == WATER);
+	mu_assert(graph->nodes[0]->amountOfNeighbours == 3);
+	mu_assert(graph->nodes[25 + 1]->amountOfNeighbours == 8);
+	mu_assert(graph->nodes[5]->amountOfNeighbours == 5);
+	mu_assert(max(graph->nodes[5]->costs[0], max(graph->nodes[5]->costs[1], max(graph->nodes[5]->costs[2],
+		max(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) > 10000);
+	mu_assert(min(graph->nodes[5]->costs[0], min(graph->nodes[5]->costs[1], min(graph->nodes[5]->costs[2],
+		min(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) == 12);
+	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
+	free_graph(graph);
+	level_free(level);
+	return 0;
+}
+
+
+static char* test_cell_to_node() {
+	Level* level = level_alloc_empty();
+	DWGraph* graph = make_graph(level);
+	mu_assert(cell_to_node(graph, &((level->cells)[0][0])) == graph->nodes[0]);
+	mu_assert(cell_to_node(graph, &((level->cells)[0][7])) == graph->nodes[7]);
+	mu_assert(cell_to_node(graph, &((level->cells)[1][0])) == graph->nodes[25]);
+	mu_assert(cell_to_node(graph, &((level->cells)[10][9])) == graph->nodes[25*10+9]);
+	free_graph(graph);
+	level_free(level);
+	return 0;
+}
+
+static char* test_update_graph() {
+	Level* level = level_alloc_empty();
+	DWGraph* graph = make_graph(level);
+	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) == 17);
+	Cell* c = &(level->cells[1][0]);
+	c->type = ROCK;
+	update_graph(graph,c);
+	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) > 17);
+	free_graph(graph);
+	level_free(level);
+	return 0;
+}
+
 static char * test_path_start() 
 {
     Level* level = level_alloc_empty();
@@ -176,55 +231,7 @@ static char* test_cell_type_is_player_owned()
     return 0;
 }
 
-static char* test_make_graph() {
-	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
-	DWGraph* graph = make_graph(level);
-	mu_assert(graph->amountOfColumns == 25);
-	mu_assert(graph->amountOfNodes == 25 * 12);
-	mu_assert(graph->nodes[0]->cell->type == GROUND);
-	mu_assert(graph->nodes[25 + 6]->cell->type == WATER);
-	mu_assert(graph->nodes[0]->amountOfNeighbours == 3);
-	mu_assert(graph->nodes[25 + 1]->amountOfNeighbours == 8);
-	mu_assert(graph->nodes[5]->amountOfNeighbours == 5);
-	mu_assert(max(graph->nodes[5]->costs[0], max(graph->nodes[5]->costs[1], max(graph->nodes[5]->costs[2],
-		max(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) > 10000);
-	mu_assert(min(graph->nodes[5]->costs[0], min(graph->nodes[5]->costs[1], min(graph->nodes[5]->costs[2],
-		min(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) == 12);
-	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
-	free_graph(graph);
-	level_free(level);
-	return 0;
-}
 
-static char* test_calculate_cost() {
-	//TODO
-	return 0;
-}
-
-static char* test_cell_to_node() {
-	Level* level = level_alloc_empty();
-	DWGraph* graph = make_graph(level);
-	mu_assert(cell_to_node(graph, &((level->cells)[0][0])) == graph->nodes[0]);
-	mu_assert(cell_to_node(graph, &((level->cells)[0][7])) == graph->nodes[7]);
-	mu_assert(cell_to_node(graph, &((level->cells)[1][0])) == graph->nodes[25]);
-	mu_assert(cell_to_node(graph, &((level->cells)[10][9])) == graph->nodes[25*10+9]);
-	free_graph(graph);
-	level_free(level);
-	return 0;
-}
-
-static char* test_update_graph() {
-	Level* level = level_alloc_empty();
-	DWGraph* graph = make_graph(level);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) == 17);
-	Cell* c = &(level->cells[1][0]);
-	c->type = ROCK;
-	update_graph(graph,c);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) > 17);
-	free_graph(graph);
-	level_free(level);
-	return 0;
-}
 
 static char * all_tests() 
 {
@@ -237,8 +244,8 @@ static char * all_tests()
 
 
 	//Tests for dwgraph.h
-	mu_run_test(test_make_graph);
 	mu_run_test(test_calculate_cost);
+	mu_run_test(test_make_graph);
 	mu_run_test(test_cell_to_node);
 	mu_run_test(test_update_graph);
     
