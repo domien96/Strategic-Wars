@@ -34,16 +34,16 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 		neighbours[i]->prev = startNode;
 		pqueue_update(queue, neighbours[i], costs[i]);
 	}
-	
+	startNode->visited = true;
 	
 	while (queue->item_count > 0) {
+
 		current = pqueue_remove_first(queue);
 
 		neighbours = (current->neighbours);
 		for (int i = 0; i < current->amountOfNeighbours; i++) {
 			Node *neighbour = neighbours[i];
 		
-	
 			if (!neighbour->visited) {
 				int c = current->cost + *(current->costs + i);
 				if (c < neighbour->cost) {
