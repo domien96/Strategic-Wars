@@ -35,12 +35,13 @@ int main()
 	gui_initialize(theme);
 
     gui_set_level(level);
+	updatePath(level);
     
     gui_draw_frame();
 
 	/* Build_selector chosen type and owner (By default: GROUND and OWNER_NONE) */
-	CellType chosen_cell_type = GROUND;
-	Owner chosen_owner = OWNER_NONE;
+	CellType chosen_cell_type = DEFAULT_CELLTYPE;
+	Owner chosen_owner = DEFAULT_OWNER;
 	gui_set_build_highlight(chosen_cell_type, chosen_owner);
 
 	/* GAME LOOP */
@@ -78,15 +79,17 @@ int main()
 					{
 						int row = event.level_event.row;
 						int col = event.level_event.col;
+						Cell clicked_cell = level->cells[row][col];
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
 
 						/*indien er op een headquarter geplaatst moet deze verwijderd worden*/
-						if ((level->cells[row][col]).type == HEADQUARTER) {
+						if (clicked_cell.type == HEADQUARTER) {
 							remove_old_headquarter((level->cells[row][col]).owner, level);
 						}
 						
-						/*headquarter is altijs 4 tegels groot*/
+						
 						if (chosen_cell_type == HEADQUARTER) {
+							/*headquarter is altijs 4 tegels groot*/
 							if (row >= level->height - 1 || col >= level->width - 1) {
 								gui_add_message("Headquarter has size 4, please try placing it somewhere else.");
 							}
@@ -97,16 +100,15 @@ int main()
 								level->cells[row][col + 1] = new_cell;
 								level->cells[row + 1][col + 1] = new_cell;
 							}
+						} else {
+							/* Normale geval */
+							level->cells[row][col] = new_cell;
 						}
-						else {
-							Cell current_cell = level->cells[row][col];
-							if (current_cell.type == HEADQUARTER) {
-								gui_add_message("Headquarter must remain size four");
-							}
-							else {
-								level->cells[row][col] = new_cell;
-							}
-						}
+
+						/* Pad opnieuw berekenen */
+						if (updatePath(level) == 2) {
+							gui_add_message("Path between headquarters is unexistent. Please try placing somewhere else.");
+						};
 						break;
 					}
 				}
@@ -145,6 +147,7 @@ int main()
 							level = new_level;
 							/* Draw */
 							gui_set_level(level);
+							updatePath(level);
 							/*error messages nog wegdoen als er een geldige file gekozen is*/
 							gui_clear_messages();
 							break;
@@ -195,15 +198,15 @@ int remove_old_headquarter(Owner owner, Level* level) {
 		for (j = 0; j < level->width; j++) {
 			if ((level->cells[i][j]).type == HEADQUARTER) {
 				if ((level->cells[i][j]).owner == owner) {
-					/*oude headquarter wordt GROUND en eigenaar wordt OWNER_NONE*/
-					(level->cells[i][j]).type = GROUND;
-					(level->cells[i+1][j]).type = GROUND;
-					(level->cells[i][j+1]).type = GROUND;
-					(level->cells[i+1][j+1]).type = GROUND;
-					(level->cells[i][j]).owner = OWNER_NONE;
-					(level->cells[i + 1][j]).owner = OWNER_NONE;
-					(level->cells[i][j + 1]).owner = OWNER_NONE;
-					(level->cells[i + 1][j + 1]).owner = OWNER_NONE;
+					/*oude headquarter wordt naar DEFAULT waarden gezet. */
+					(level->cells[i][j]).type = DEFAULT_CELLTYPE;
+					(level->cells[i+1][j]).type = DEFAULT_CELLTYPE;
+					(level->cells[i][j+1]).type = DEFAULT_CELLTYPE;
+					(level->cells[i+1][j+1]).type = DEFAULT_CELLTYPE;
+					(level->cells[i][j]).owner = DEFAULT_OWNER;
+					(level->cells[i + 1][j]).owner = DEFAULT_OWNER;
+					(level->cells[i][j + 1]).owner = DEFAULT_OWNER;
+					(level->cells[i + 1][j + 1]).owner = DEFAULT_OWNER;
 					return 0;
 				}
 			}
@@ -211,3 +214,48 @@ int remove_old_headquarter(Owner owner, Level* level) {
 	}
 }
 
+/* Indien er 2 HeadQuarters (van de verschillende teams) geplaatst zijn en er dus 
+ * een pad zou kunnen bestaan tussen de 2 hoofdkwartieren, wordt dit pad berekend.
+ * Indien een pad bestaat, wordt dit getekend op de editor. Zoniet wordt er het
+ * vorige pad weggehaald. 
+ *
+ * Returns 0 : Everything is OK.
+ *		   1 : There aren't 2 headquarters.
+ *		   2 : There are 2 headquarters, but there is no possible path.
+ *
+ * @author : Domien
+ */
+int updatePath(Level* level) {
+	/* Linksboven cells van HQ */
+	Cell *humanHQ = (Cell*) NULL, *aiHQ = (Cell*) NULL;
+	
+	/* Zijn er 2 verschillende HQ's? */
+	for (int i = 0; i < level->height; i++) {
+		for (int j = 0; j < level->width; j++) {
+			Cell* current = &level->cells[i][j];
+			if (current->type == HEADQUARTER) {
+				if (current->owner == OWNER_HUMAN) {
+					humanHQ = current;
+				}
+				else if (current->owner == OWNER_AI) {
+					aiHQ = current;
+				}
+			}
+		}
+	}
+	
+	if (humanHQ == NULL || aiHQ == NULL) {
+		gui_show_path(NULL);
+		return 1;
+	}
+
+	/* Check if path between HQ's exists. */
+	Path* path = find_path(level, humanHQ, aiHQ);
+	if (path) {
+		gui_show_path(path);
+		return 0;
+	} else {
+		gui_show_path(NULL);
+		return 2;
+	}
+}

@@ -246,11 +246,8 @@ int level_can_walk_over(Cell* unit, Cell* target) {
 	/* Units cannot cross other units.
 	 * "A special exception is made if the unit is a HEADQUARTER. ..." 
 	 * This "exception" is implied by the next section. */
-	if (cell_type_is_unit(target->type) || target->type == HEADQUARTER) {
-		if (unit->type == HEADQUARTER)
-			return 1;
-		else 
-			return 0;
+	if (target->type == HEADQUARTER) {
+		return 1;
 	}
 
 	/* Unable to cross water or rocks*/
