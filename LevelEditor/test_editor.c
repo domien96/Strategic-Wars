@@ -349,7 +349,7 @@ static char * all_tests()
 	mu_run_test(test_calculate_cost);
 	mu_run_test(test_make_graph);
 	mu_run_test(test_cell_to_node);
-	//mu_run_test(test_update_graph);
+	mu_run_test(test_update_graph);
     
     //Tests for pathfinder.h
 	mu_run_test(test_path_start);

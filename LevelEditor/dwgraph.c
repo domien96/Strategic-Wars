@@ -125,7 +125,8 @@ void update_graph(DWGraph *graph, Cell *cell) {
 		int j = 0;
 		bool found = false;
 		while ((j< neighbour->amountOfNeighbours) || !found) {
-			if (neighbour->pos.row == node_row  && neighbour->pos.col == node_col) {
+			Node* neighbour_of_neighbour = neighbours_of_neighbour[j];
+			if (neighbour_of_neighbour->pos.row == node_row  && neighbour_of_neighbour->pos.col == node_col) {
 				// de node staat op de j-de plaats in de burenlijst van neighbour; 
 				int* costs_neighbour = neighbour->costs;
 				costs_neighbour[j] = calculate_cost(neighbour->cell, cell);
