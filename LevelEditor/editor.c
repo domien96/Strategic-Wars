@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-int remove_old_headquarter(Cell cell, Level* level);
+int remove_old_headquarter(Owner owner, Level* level);
 
 int main()
 {
@@ -79,6 +79,11 @@ int main()
 						int row = event.level_event.row;
 						int col = event.level_event.col;
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
+
+						/*indien er op (row, col) een headquarter staat moet deze verwijderd worden*/
+						if ((level->cells[row][col]).type == HEADQUARTER) {
+							remove_old_headquarter((level->cells[row][col]).owner, level);
+						}
 						
 						/*headquarter is altijs 4 tegels groot*/
 						if (chosen_cell_type == HEADQUARTER) {
@@ -86,14 +91,12 @@ int main()
 								gui_add_message("Headquarter has size 4, please try again.");
 							}
 							else {
-								remove_old_headquarter(new_cell, level);
+								remove_old_headquarter(new_cell.owner, level);
 								level->cells[row][col] = new_cell;
 								level->cells[row + 1][col] = new_cell;
 								level->cells[row][col + 1] = new_cell;
 								level->cells[row + 1][col + 1] = new_cell;
 							}
-							//TODO
-							/*ook nog vorige headquarter verwijderen, best ergens apart bijhouden*/
 						}
 						else {
 							Cell current_cell = level->cells[row][col];
@@ -187,13 +190,13 @@ int main()
 /*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
 /*return 1 als er een headquarter verwijderd is, return 0 anders*/
 /*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
-int remove_old_headquarter(Cell cell, Level* level) {
+int remove_old_headquarter(Owner owner, Level* level) {
 	int i, j;
 
 	for (i = 0; i < level->height; i++) {
 		for (j = 0; j < level->width; j++) {
 			if ((level->cells[i][j]).type == HEADQUARTER) {
-				if ((level->cells[i][j]).owner == cell.owner) {
+				if ((level->cells[i][j]).owner == owner) {
 					/*oude headquarter wordt grond en eigenaar wordt OWNER_NONE*/
 					(level->cells[i][j]).type = GROUND;
 					(level->cells[i+1][j]).type = GROUND;
