@@ -36,7 +36,7 @@ static char* test_make_graph() {
 		max(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) > 10000);
 	mu_assert(min(graph->nodes[5]->costs[0], min(graph->nodes[5]->costs[1], min(graph->nodes[5]->costs[2],
 		min(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) == 12);
-	mu_assert(sizeof(graph->nodes) == 25 * 12 * sizeof(Node));
+	mu_assert(graph->amountOfNodes == 25 * 12);
 	free_graph(graph);
 	level_free(level);
 	return 0;
