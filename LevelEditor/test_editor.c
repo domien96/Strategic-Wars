@@ -13,45 +13,6 @@
 #include <process.h>
 #endif
 
-static char * all_tests()
-{
-	//Tests for common.h
-	mu_run_test(test_cell_type_is_unit);
-	mu_run_test(test_cell_type_is_player_owned);
-	//TODO: mu_run_test(test_path_alloc);
-	//TODO: mu_run_test(test_path_free);
-	//TODO: add more common.h tests
-
-
-	//Tests for dwgraph.h
-	mu_run_test(test_calculate_cost);
-	mu_run_test(test_make_graph);
-	mu_run_test(test_cell_to_node);
-	mu_run_test(test_update_graph);
-
-	//Tests for pathfinder.h
-	mu_run_test(test_path_start);
-	mu_run_test(test_path_short);
-	mu_run_test(test_path_short_island);
-	mu_run_test(test_path_long_island);
-	mu_run_test(test_path_long_testworld_1);
-	mu_run_test(test_impossible_paths);
-	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
-
-	//Tests for level.h
-	//TODO
-	mu_run_test(test_level_can_walk_over);
-
-
-	//Tests for pqueue.h
-	//TODO
-
-	//TODO: add any other tests
-
-	return 0;
-}
-
-
 static char* test_calculate_cost() {
 	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
 	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1])) == 12);
@@ -309,6 +270,24 @@ static char* test_path_long_testworld_1() {
 	return 0;
 }
 
+static char* test_path_long_basic() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[3][2];
+	Cell* target_cell = &level->cells[8][22];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 265);
+	mu_assert(path->step_count == 21); /* extra 1, first tile telt ook mee! */
+
+	/* TODO: test afschryven na pathfinder gefixt is.*/
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
 static char* test_impossible_paths() {
 	Level* level = level_alloc_read_from_file("..\\assets\\levels\\used_for_test_1.world");
 	mu_assert(level != NULL);
@@ -328,6 +307,7 @@ static char* test_impossible_paths() {
 	Cell* target_cell = &level->cells[11][1];
 	Path* path = find_path(level, start_cell, target_cell);
 	mu_assert(path == NULL);
+	return 0;
 }
 
 static char* test_level_can_walk_over() {
@@ -391,6 +371,45 @@ static char* test_cell_type_is_player_owned()
     mu_assert(cell_type_is_player_owned(UNIT_2));
     mu_assert(cell_type_is_player_owned(UNIT_3));
     return 0;
+}
+
+static char * all_tests()
+{
+	//Tests for common.h
+	mu_run_test(test_cell_type_is_unit);
+	mu_run_test(test_cell_type_is_player_owned);
+	//TODO: mu_run_test(test_path_alloc);
+	//TODO: mu_run_test(test_path_free);
+	//TODO: add more common.h tests
+
+
+	//Tests for dwgraph.h
+	mu_run_test(test_calculate_cost);
+	mu_run_test(test_make_graph);
+	mu_run_test(test_cell_to_node);
+	mu_run_test(test_update_graph);
+
+	//Tests for pathfinder.h
+	mu_run_test(test_path_start);
+	mu_run_test(test_path_short);
+	mu_run_test(test_path_short_island);
+	mu_run_test(test_path_long_island);
+	mu_run_test(test_path_long_testworld_1);
+	mu_run_test(test_impossible_paths);
+
+	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
+
+	//Tests for level.h
+	//TODO
+	mu_run_test(test_level_can_walk_over);
+
+
+	//Tests for pqueue.h
+	//TODO
+
+	//TODO: add any other tests
+
+	return 0;
 }
 
 
