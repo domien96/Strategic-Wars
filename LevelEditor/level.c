@@ -243,19 +243,14 @@ char cell_type_and_owner_to_symbol(CellType cell_type, Owner owner) {
 *     1    |   HEADQUARTER |     UNIT_1
 */
 int level_can_walk_over(Cell* unit, Cell* target) {
-	/*"When a non ownable "unit" is passed, the output of this function is undefined."*/
-	if (! cell_type_is_player_owned(unit->type)) {
-		return 0;
-	}
-
 	/* Units cannot cross other units.
 	 * "A special exception is made if the unit is a HEADQUARTER. ..." 
 	 * This "exception" is implied by the next section. */
-	if (cell_type_is_unit(target->type)) {
-		if (cell_type_is_unit(unit->type))
-			return 0;
-		else if (unit->type == HEADQUARTER)
+	if (cell_type_is_unit(target->type) || target->type == HEADQUARTER) {
+		if (unit->type == HEADQUARTER)
 			return 1;
+		else 
+			return 0;
 	}
 
 	/* Unable to cross water or rocks*/
