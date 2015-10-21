@@ -178,6 +178,7 @@ int main(int argc, char** argv)
 							}
 							/* Draw */
 							gui_set_level(level);
+							updatePath(level);
 							break;
 						}
 						case UI_THEME:
