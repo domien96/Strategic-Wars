@@ -15,9 +15,9 @@
 
 static char* test_calculate_cost() {
 	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
-	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1])) == 12);
-	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[1][1])) == 17);
-	mu_assert(calculate_cost(&(level->cells[0][5]), &(level->cells[0][6])) > 17);
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1]), (level->cells[0][0]).type) == 12);
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[1][1]), (level->cells[0][0]).type) == 17);
+	mu_assert(calculate_cost(&(level->cells[0][5]), &(level->cells[0][6]), (level->cells[0][5]).type) > 17);
 	level_free(level);
 	return 0;
 }

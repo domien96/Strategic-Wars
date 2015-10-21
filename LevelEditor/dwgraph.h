@@ -31,7 +31,10 @@ typedef struct DWGraph
  * cross a certain set of cells, when other celltypes cannot cross this set of cells.
  * For example: Headquarters may cross units, but units may not cross units.
  */
-DWGraph* make_graph(Level *level, CellType graph_type);
+DWGraph* make_graph_with_type(Level *level, CellType graph_type);
+
+/* Equivalent to make_graph_with_type where Default celltype (from level.h) is used*/
+DWGraph* make_graph(Level *level);
 
 /* Utility method to calculate the cost to move from 1 cell to another.
  * Cells must be neighbours in order for this function to work correctly.

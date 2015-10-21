@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <assert.h>
 
+DWGraph* make_graph(Level *level) {
+	return make_graph_with_type(level, DEFAULT_CELLTYPE);
+}
 
-DWGraph* make_graph(Level *level, CellType graph_type) {
+DWGraph* make_graph_with_type(Level *level, CellType graph_type) {
 	int n = level->height;
 	int m = level->width;
 	Node** nodes = malloc(sizeof(Node*) + (sizeof(Node*)*(n*m)));
