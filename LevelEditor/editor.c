@@ -250,13 +250,24 @@ int updatePath(Level* level) {
 	
 	/* Zijn er 2 verschillende HQ's? */
 	for (int i = 0; i < level->height; i++) {
+
+		if (humanHQ && aiHQ) {
+			/* If both found, we don't need to look further.*/
+			break;
+		}
+
 		for (int j = 0; j < level->width; j++) {
+			if (humanHQ && aiHQ) {
+				/* If both found, we don't need to look further.*/
+				break;
+			}
+
 			Cell* current = &level->cells[i][j];
 			if (current->type == HEADQUARTER) {
-				if (current->owner == OWNER_HUMAN) {
+				if (humanHQ == NULL && current->owner == OWNER_HUMAN) {
 					humanHQ = current;
 				}
-				else if (current->owner == OWNER_AI) {
+				else if (aiHQ == NULL && current->owner == OWNER_AI) {
 					aiHQ = current;
 				}
 			}
