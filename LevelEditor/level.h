@@ -116,6 +116,12 @@ int level_is_valid_pos(Level* level, int row, int col);
  */
 Level* level_alloc_empty();
 /*
+* This function returns a pointer to an empty newly allocated level with the
+* given width and the given height.
+* Each cell will be set to DEFAULT.
+*/
+Level* level_alloc_empty_with_dim(int width, int height);
+/*
  * This functions returns pointer to an newly allocated level.
  * The level is initialized by reading and processing the given file.
  * Returns NULL if file cannot be accessed or not enough memory.

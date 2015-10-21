@@ -328,11 +328,21 @@ int level_write_to_file(Level* level, const char* filename) {
 */
 Level* level_alloc_empty()
 {
-	/* Allocate struct*/
-	Level* lvlP = (Level*) malloc(sizeof(Level));
-
 	/* Init width and height*/
 	int width = LEVEL_MAX_WIDTH, height = LEVEL_MAX_HEIGHT; /* Always max*/
+	return level_alloc_empty_with_dim(width, height);
+}
+
+
+/*
+* This function returns a pointer to an empty newly allocated level with the
+* given width and the given height.
+* Each cell will be set to DEFAULT.
+*/
+Level* level_alloc_empty_with_dim(int width, int height) {
+	/* Allocate struct*/
+	Level* lvlP = (Level*)malloc(sizeof(Level));
+
 	lvlP->height = height;
 	lvlP->width = width;
 
@@ -346,8 +356,8 @@ Level* level_alloc_empty()
 		}
 	}
 	return lvlP;
-		
 }
+
 
 Level* level_alloc_read_from_file(const char* filename)
 {
