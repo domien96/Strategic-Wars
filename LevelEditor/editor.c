@@ -14,9 +14,14 @@
 int remove_old_headquarter(Owner owner, Level* level);
 int updatePath(Level* level);
 
-int main()
+int main(int argc, char** argv)
 {
     printf("Strategic War Level Editor\n");
+
+	// Check if a command line argument is given and if it has a legitimate form "width height".
+	int arg_w = 0;
+	int arg_h = 0;
+	bool arg_given = (argc == 2) && (sscanf(argv[0], "%i", &arg_w) == 1) && (sscanf(argv[1], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w<=LEVEL_MAX_WIDTH) && (arg_h<=LEVEL_MAX_HEIGHT);
 
     ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
     al_append_path_component(path, FILES_LEVELS_SUBDIRNAME);
@@ -157,8 +162,20 @@ int main()
 						{
 							/* Free the current level first*/
 							level_free(level);
-							/* Set net empty level*/
-							level = level_alloc_empty();
+							/* Set net empty level.
+							 * If a command line argument is given of the form "width height", then
+							 * a level of dimension width x height will be made when clear is pressed.
+							 * If an invalid argument is given, or there is none, a level of the default dimensions
+							 * is set. We have already checked this in the boolean arg_given and we have saved the dimensions in the
+							¨* variables arg_w and arg_h, so this is not checked each time the clear button is pressed.
+							 */
+							if (arg_given) {
+								printf("Dimensions set to:  %i x %i", arg_w, arg_h);
+								level = level_alloc_empty_with_dim(arg_w, arg_h);
+							}
+							else {
+								level = level_alloc_empty();
+							}
 							/* Draw */
 							gui_set_level(level);
 							break;
@@ -191,7 +208,7 @@ int main()
 }
 
 /*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
-/*return 1 als er een headquarter verwijderd is, return 0 anders*/
+/*return 0 als er een headquarter verwijderd is, return 1 anders*/
 /*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
 int remove_old_headquarter(Owner owner, Level* level) {
 	int i, j;
@@ -212,6 +229,7 @@ int remove_old_headquarter(Owner owner, Level* level) {
 				}
 			}
 		}
+		return 1;
 	}
 }
 
