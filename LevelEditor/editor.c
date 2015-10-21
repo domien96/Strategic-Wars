@@ -207,7 +207,7 @@ int main(int argc, char** argv)
 }
 
 /*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
-/*return 1 als er een headquarter verwijderd is, return 0 anders*/
+/*return 0 als er een headquarter verwijderd is, return 1 anders*/
 /*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
 int remove_old_headquarter(Owner owner, Level* level) {
 	int i, j;
@@ -228,6 +228,7 @@ int remove_old_headquarter(Owner owner, Level* level) {
 				}
 			}
 		}
+		return 1;
 	}
 }
 
