@@ -229,8 +229,8 @@ int remove_old_headquarter(Owner owner, Level* level) {
 				}
 			}
 		}
-		return 1;
 	}
+	return 1;
 }
 
 /* Indien er 2 HeadQuarters (van de verschillende teams) geplaatst zijn en er dus 
