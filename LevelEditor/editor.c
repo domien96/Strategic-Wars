@@ -101,6 +101,18 @@ int main(int argc, char** argv)
 							}
 							else {
 								remove_old_headquarter(new_cell.owner, level);
+								/*alle tegels controleren of er geen andere headquarter staat
+								* tegel linksboven wordt sowieso gecontroleerd
+								*/
+								if ((level->cells[row + 1][col]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row + 1][col].owner, level);
+								}
+								else if ((level->cells[row][col + 1]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row][col + 1].owner, level);
+								}
+								else if ((level->cells[row + 1][col + 1]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row + 1][col + 1].owner, level);
+								}
 								level->cells[row][col] = new_cell;
 								level->cells[row + 1][col] = new_cell;
 								level->cells[row][col + 1] = new_cell;
