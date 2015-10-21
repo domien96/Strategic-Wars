@@ -373,6 +373,30 @@ static char* test_cell_type_is_player_owned()
     return 0;
 }
 
+static char* test_level_symbol_to_cell_type()
+{
+	mu_assert(level_symbol_to_cell_type('*') == GROUND);
+	mu_assert(level_symbol_to_cell_type('W') == WATER);
+	mu_assert(level_symbol_to_cell_type('B') == BRIDGE);
+	mu_assert(level_symbol_to_cell_type('R') == ROCK);
+	mu_assert(level_symbol_to_cell_type('h') == HEADQUARTER);
+	mu_assert(level_symbol_to_cell_type('H') == HEADQUARTER);
+	mu_assert(level_symbol_to_cell_type('1') == UNIT_1);
+	mu_assert(level_symbol_to_cell_type('2') == UNIT_2);
+	mu_assert(level_symbol_to_cell_type('3') == UNIT_3);
+	mu_assert(level_symbol_to_cell_type('7') == UNIT_1);
+	mu_assert(level_symbol_to_cell_type('8') == UNIT_2);
+	mu_assert(level_symbol_to_cell_type('9') == UNIT_3);
+	mu_assert(level_symbol_to_cell_type('r') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(' ') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type('0') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(NULL) == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(0) == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type("a") == DEFAULT_CELLTYPE);
+
+	return 0;
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -400,7 +424,7 @@ static char * all_tests()
 	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
 	//Tests for level.h
-	//TODO
+	mu_run_test(test_level_symbol_to_cell_type);
 	mu_run_test(test_level_can_walk_over);
 
 
