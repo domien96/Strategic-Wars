@@ -295,6 +295,10 @@ int updatePath(Level* level) {
 	/* Check if path between HQ's exists. */
 	Path* path = find_path(level, humanHQ, aiHQ);
 	if (path) {
+		/*error message als path kleiner is dan 100*/
+		if (path->distance < 100) {
+			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
+		}
 		gui_show_path(path);
 		return 0;
 	} else {
