@@ -397,6 +397,30 @@ static char* test_level_symbol_to_cell_type()
 	return 0;
 }
 
+static char* test_level_symbol_to_owner() 
+{
+	mu_assert(level_symbol_to_owner('*') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('W') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('B') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('R') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('h') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('H') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('1') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('2') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('3') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('7') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('8') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('9') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('r') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(' ') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner('0') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(NULL) == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(0) == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner("a") == DEFAULT_OWNER);
+
+	return 0;
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -425,6 +449,7 @@ static char * all_tests()
 
 	//Tests for level.h
 	mu_run_test(test_level_symbol_to_cell_type);
+	mu_run_test(test_level_symbol_to_owner);
 	mu_run_test(test_level_can_walk_over);
 
 
