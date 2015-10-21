@@ -289,9 +289,31 @@ int level_is_valid_pos(Level* level, int row, int col) {
 *		  3 : filename was null
 */
 int level_write_to_file(Level* level, const char* filename) {
+
 	if (!filename) {
 		return 3;
 	}
+	else if (strlen(filename) < 6) {
+		return 2;
+	}
+
+	// Check the extension
+	char* extension = (char*)malloc(8, sizeof(char));
+	memcpy(extension, &filename[strlen(filename) - 4], 5);
+	if (extension == ".wld") {
+		level_write_to_file_binary(level, filename);
+	}
+	else {
+		if (strlen(filename) < 8) {
+			return 2;
+		}
+		memcpy(extension, &filename[strlen(filename) - 6], 7);
+		if (extension != ".world") {
+			return 2;
+		}
+	}
+	free(extension);
+
 	/* open() clears all the data if the file already exists*/
 	FILE* fp = fopen(filename, "w");
 	if (!fp) {
@@ -319,6 +341,106 @@ int level_write_to_file(Level* level, const char* filename) {
 	/*Close file*/
 	fclose(fp);
 
+	return 0;
+}
+
+/*
+* This functions stores the given level to file.
+* Returns 1 : when file cannot be found.
+*		  2 : when writing to file is not allowed
+*		  3 : filename was null
+*/
+int level_write_to_file_binary(Level* level, const char* filename) {
+	if (!filename) {
+		return 3;
+	}
+	/* open() clears all the data if the file already exists*/
+	FILE* fp = fopen(filename, "w");
+	if (!fp) {
+		return 1;
+	}
+
+	fprintf(fp, ".SOI");
+
+	/* Write version */
+	fprintf(fp, "%c", (unsigned char) 1);
+
+	/* Write dimensions*/
+	unsigned short width = (unsigned short) level->width;
+	unsigned char w0 = (unsigned char)width >> 8;
+	unsigned char w1 = (unsigned char)width;
+	unsigned short height = (unsigned short) level->height;
+	unsigned char h0 = (unsigned char)height >> 8;
+	unsigned char h1 = (char)height;
+
+	if (fprintf(fp, "%c%c%c%c", w0, w1, h0, h1) < 0) {
+		return 2;
+	}
+
+	/* Write each row (as symbols)*/
+	for (int r = 0; r < level->height; r++) {
+		for (int c = 0; c < level->width; c++) {
+			Cell cell = level->cells[r][c];
+			
+			char ch = 0;
+			switch (cell.owner) {
+			case OWNER_NONE:
+				break;
+			case OWNER_HUMAN:
+				ch = 1;
+				break;
+			case OWNER_AI:
+				ch = 2;
+				break;
+			default:
+				break;
+			}
+
+			ch <<= 3;
+			switch (cell.type) {
+			case GROUND:
+				break;
+			case WATER:
+				ch += 1;
+				break;
+			case ROCK:
+				ch += 2;
+				break;
+			case HEADQUARTER:
+				ch += 3;
+				break;
+			case BRIDGE:
+				ch += 4;
+				break;
+			default:
+				break;
+			}
+
+			ch <<= 1;
+			//There are no roads, so do nothing
+
+			ch <<= 2;
+			switch (cell.type) {
+			case UNIT_1:
+				ch += 1;
+				break;
+			case UNIT_2:
+				ch += 2;
+				break;
+			case UNIT_3:
+				ch += 3;
+				break;
+			default:
+				break;
+			}
+
+			if (fprintf(fp, "%c", ch) < 0) {
+				return 2;
+			}
+		}
+	}
+	/*Close file*/
+	fclose(fp);
 	return 0;
 }
 
@@ -361,9 +483,10 @@ Level* level_alloc_empty_with_dim(int width, int height) {
 
 Level* level_alloc_read_from_file(const char* filename)
 {
-	if (!filename) {
+	if (!filename || strlen(filename) < 6) {
 		return (Level*)NULL;
 	}
+
     // init empty level
 	Level* level = level_alloc_empty();
 
@@ -374,9 +497,26 @@ Level* level_alloc_read_from_file(const char* filename)
 	}
 
 	/*init level*/
-	if (init_level(level, fp)) {
-		return (Level*)NULL;
-	}	
+	char extension[5];
+	memcpy(extension, &filename[strlen(filename) - 4], 5);
+	if (extension == ".wld") {
+		if (init_level_binary(level, fp)) {
+			return (Level*)NULL;
+		}
+	}
+	else {
+		if (strlen(filename) < 8) {
+			return (Level*)NULL;
+		}
+		char extension0[7];
+		memcpy(extension0, &filename[strlen(filename) - 6], 7);
+		if (strcmp(extension0, ".world")) {
+			return (Level*)NULL;
+		}
+		if(init_level(level, fp)) {
+			return (Level*)NULL;
+		}
+	}
 	
 	/*Close file*/
 	fclose(fp);
@@ -390,6 +530,7 @@ Level* level_alloc_read_from_file(const char* filename)
  * File needs the minimal length for each line, otherwise this function will return 1.
  */
 int init_level(Level* level, FILE* fp) {
+
 	/* Initializes dimensions*/
 	int height=0, width=0;
 	fscanf(fp, "%i|%i\n", &width, &height);
