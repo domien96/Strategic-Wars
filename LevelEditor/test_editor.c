@@ -448,6 +448,25 @@ static char* test_cell_to_symbol()
 	return 0;
 }
 
+static char* test_cell_type_and_owner_to_symbol() 
+{
+	mu_assert(cell_type_and_owner_to_symbol(GROUND, OWNER_NONE) == '*');
+	mu_assert(cell_type_and_owner_to_symbol(WATER, OWNER_NONE) == 'W');
+	mu_assert(cell_type_and_owner_to_symbol(BRIDGE, OWNER_NONE) == 'B');
+	mu_assert(cell_type_and_owner_to_symbol(ROCK, OWNER_NONE) == 'R');
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_HUMAN) == 'h');
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_AI) == 'H');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_1, OWNER_HUMAN) == '1');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_HUMAN) == '2');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_3, OWNER_HUMAN) == '3');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_1, OWNER_AI) == '7');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_AI) == '8');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_3, OWNER_AI) == '9');
+	mu_assert(cell_type_and_owner_to_symbol(WATER, OWNER_HUMAN) == DEFAULT_SYMBOL);
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_NONE) == DEFAULT_SYMBOL);
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_NONE) == DEFAULT_SYMBOL);
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -478,6 +497,7 @@ static char * all_tests()
 	mu_run_test(test_level_symbol_to_cell_type);
 	mu_run_test(test_level_symbol_to_owner);
 	mu_run_test(test_cell_to_symbol);
+	mu_run_test(test_cell_type_and_owner_to_symbol);
 	mu_run_test(test_level_can_walk_over);
 
 
