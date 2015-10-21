@@ -344,6 +344,7 @@ static char* test_level_can_walk_over() {
 	target->type = level_symbol_to_cell_type('7');
 	target->owner = level_symbol_to_owner('7');
 	mu_assert(level_can_walk_over(unit, target) == 1);
+
 	return 0;
 }
 
@@ -421,6 +422,32 @@ static char* test_level_symbol_to_owner()
 	return 0;
 }
 
+static char* test_cell_to_symbol() 
+{
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	mu_assert(cell_to_symbol(&level->cells[0][0]) == '1');
+	mu_assert(cell_to_symbol(&level->cells[0][1]) == '2');
+	mu_assert(cell_to_symbol(&level->cells[0][2]) == '3');
+	mu_assert(cell_to_symbol(&level->cells[3][2]) == 'h');
+	mu_assert(cell_to_symbol(&level->cells[9][1]) == 'R');
+	mu_assert(cell_to_symbol(&level->cells[11][7]) == 'W');
+	mu_assert(cell_to_symbol(&level->cells[11][24]) == '9');
+	mu_assert(cell_to_symbol(&level->cells[11][23]) == '8');
+	mu_assert(cell_to_symbol(&level->cells[11][22]) == '7');
+	mu_assert(cell_to_symbol(&level->cells[9][22]) == 'H');
+	mu_assert(cell_to_symbol(&level->cells[5][5]) == '*');
+	level_free(level);
+
+	level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(cell_to_symbol(&level->cells[0][0]) == '*');
+	mu_assert(cell_to_symbol(&level->cells[11][0]) == '1');
+	mu_assert(cell_to_symbol(&level->cells[11][24]) == '7');
+	mu_assert(cell_to_symbol(&level->cells[3][8]) == 'B');
+	level_free(level);
+
+	return 0;
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -450,6 +477,7 @@ static char * all_tests()
 	//Tests for level.h
 	mu_run_test(test_level_symbol_to_cell_type);
 	mu_run_test(test_level_symbol_to_owner);
+	mu_run_test(test_cell_to_symbol);
 	mu_run_test(test_level_can_walk_over);
 
 
