@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	// Check if a command line argument is given and if it has a legitimate form "width height".
 	int arg_w = 0;
 	int arg_h = 0;
-	bool arg_given = (argc == 2) && (sscanf(argv[0], "%i", &arg_w) == 1) && (sscanf(argv[1], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0);
+	bool arg_given = (argc == 2) && (sscanf(argv[0], "%i", &arg_w) == 1) && (sscanf(argv[1], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w<=LEVEL_MAX_WIDTH) && (arg_h<=LEVEL_MAX_HEIGHT);
 
     ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
     al_append_path_component(path, FILES_LEVELS_SUBDIRNAME);
