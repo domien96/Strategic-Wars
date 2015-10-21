@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 int remove_old_headquarter(Owner owner, Level* level);
+int updatePath(Level* level);
 
 int main()
 {
