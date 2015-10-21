@@ -4,7 +4,7 @@
 #include <assert.h>
 
 
-DWGraph* make_graph(Level *level) {
+DWGraph* make_graph(Level *level, CellType graph_type) {
 	int n = level->height;
 	int m = level->width;
 	Node** nodes = malloc(sizeof(Node*) + (sizeof(Node*)*(n*m)));
@@ -57,7 +57,7 @@ DWGraph* make_graph(Level *level) {
 					Cell *neighbour = &(level->cells[a][b]);
 					Node *neighbour_node = nodes[(a*m) + b];
 					neighbours[amount_neighbours] = neighbour_node;
-					costs[amount_neighbours] = calculate_cost(node->cell, neighbour);
+					costs[amount_neighbours] = calculate_cost(node->cell, neighbour,graph_type);
 					amount_neighbours++;
 					//	TODO: verbeter de geheugenallocatie van neighbours
 					// neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
@@ -72,6 +72,7 @@ DWGraph* make_graph(Level *level) {
 	}
 
 	DWGraph *graph = (DWGraph*)malloc(sizeof(DWGraph));
+	graph->graph_type = graph_type;
 	graph->nodes = nodes;
 	graph->amountOfNodes = n*m;
 	graph->amountOfColumns = m;
@@ -79,12 +80,18 @@ DWGraph* make_graph(Level *level) {
 }
 
 /* Utility method to calculate the cost to move from 1 cell to another.
-Cells must be neighbours in order for this function to work correctly.
-If the celltype of cell is able to move to the celltype of neighbour, then the weight
-of the edge from cell to neighbour is 1. Else the weight is INFINITY.
+* Cells must be neighbours in order for this function to work correctly.
+* If the celltype of cell is able to move to the celltype of neighbour, then the weight
+* of the edge from cell to neighbour is 12,17 if cells positions are respectively horizontal/vertical , diagonal
+* (Else the weight is INFINITY.).
+* The graph_type needs to be given because the cost does not depend on the level its cells, but the graph itself.
 */
-int calculate_cost(Cell *unit, Cell *target) {
-	if (level_can_walk_over(unit, target)) { /* Supposing they are neighbours */
+int calculate_cost(Cell *unit, Cell *target,CellType graph_type) {
+	/* walk_over only accepts cell-pointers. So we need to make a dummy cell that contains the graph type */
+	Cell dummy = *(unit); /*copy, level may not be changed*/
+	(&dummy)->type = graph_type;
+
+	if (level_can_walk_over(&dummy, target)) { /* Supposing they are neighbours */
 		if (abs(unit->row + unit->col - target->row - target->col) == 1) {
 			/* Verschil horizontale, verticale coordinaten is gelijk op een 1-term na.*/
 			return 12;
@@ -117,7 +124,7 @@ void update_graph(DWGraph *graph, Cell *cell) {
 	for (int i = 0; i < node->amountOfNeighbours; i = i++) {
 		// de kost van de node naar zijn neighbours aanpassen
 		Node *neighbour = neighbours[i];
-		costs[i] = calculate_cost(cell, neighbour->cell);
+		costs[i] = calculate_cost(cell, neighbour->cell,graph->graph_type);
 
 		// de kost van de neighbours naar de node aanpassen
 		Node **neighbours_of_neighbour = neighbour->neighbours;
@@ -129,7 +136,7 @@ void update_graph(DWGraph *graph, Cell *cell) {
 			if (neighbour_of_neighbour->pos.row == node_row  && neighbour_of_neighbour->pos.col == node_col) {
 				// de node staat op de j-de plaats in de burenlijst van neighbour; 
 				int* costs_neighbour = neighbour->costs;
-				costs_neighbour[j] = calculate_cost(neighbour->cell, cell);
+				costs_neighbour[j] = calculate_cost(neighbour->cell, cell,graph->graph_type);
 				found = true;
 			}
 			j++;
