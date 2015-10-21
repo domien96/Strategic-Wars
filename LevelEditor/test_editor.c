@@ -345,6 +345,42 @@ static char* test_level_can_walk_over() {
 	target->owner = level_symbol_to_owner('7');
 	mu_assert(level_can_walk_over(unit, target) == 1);
 
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('*');
+	target->owner = level_symbol_to_owner('*');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('B');
+	target->owner = level_symbol_to_owner('B');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('W');
+	target->owner = level_symbol_to_owner('W');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('R');
+	target->owner = level_symbol_to_owner('R');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('3');
+	target->owner = level_symbol_to_owner('3');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('9');
+	target->owner = level_symbol_to_owner('9');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
 	return 0;
 }
 
@@ -465,6 +501,8 @@ static char* test_cell_type_and_owner_to_symbol()
 	mu_assert(cell_type_and_owner_to_symbol(WATER, OWNER_HUMAN) == DEFAULT_SYMBOL);
 	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_NONE) == DEFAULT_SYMBOL);
 	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_NONE) == DEFAULT_SYMBOL);
+
+	return 0;
 }
 
 static char * all_tests()
