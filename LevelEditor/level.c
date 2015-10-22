@@ -300,7 +300,7 @@ int level_write_to_file(Level* level, const char* filename) {
 	// Check the extension
 	char* extension = (char*)malloc(8, sizeof(char));
 	memcpy(extension, &filename[strlen(filename) - 4], 5);
-	if (extension == ".wld") {
+	if (!strcmp(extension,".wld")) {
 		level_write_to_file_binary(level, filename);
 	}
 	else {
@@ -308,7 +308,7 @@ int level_write_to_file(Level* level, const char* filename) {
 			return 2;
 		}
 		memcpy(extension, &filename[strlen(filename) - 6], 7);
-		if (extension != ".world") {
+		if (strcmp(extension,".world")) {
 			return 2;
 		}
 	}
@@ -499,7 +499,7 @@ Level* level_alloc_read_from_file(const char* filename)
 	/*init level*/
 	char extension[5];
 	memcpy(extension, &filename[strlen(filename) - 4], 5);
-	if (extension == ".wld") {
+	if (!strcmp(extension,".wld")) {
 		if (init_level_binary(level, fp)) {
 			return (Level*)NULL;
 		}
