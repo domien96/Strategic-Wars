@@ -54,18 +54,6 @@ static char* test_cell_to_node() {
 	return 0;
 }
 
-static char* test_update_graph() {
-	Level* level = level_alloc_empty();
-	DWGraph* graph = make_graph(level);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) == 17);
-	Cell* c = &(level->cells[1][0]);
-	c->type = ROCK;
-	update_graph(graph,c);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) > 17);
-	free_graph(graph);
-	level_free(level);
-	return 0;
-}
 
 static char * test_path_start() 
 {
@@ -563,16 +551,12 @@ static char * all_tests()
 	//Tests for common.h
 	mu_run_test(test_cell_type_is_unit);
 	mu_run_test(test_cell_type_is_player_owned);
-	//TODO: mu_run_test(test_path_alloc);
-	//TODO: mu_run_test(test_path_free);
-	//TODO: add more common.h tests
 
 
 	//Tests for dwgraph.h
 	mu_run_test(test_calculate_cost);
 	mu_run_test(test_make_graph);
 	mu_run_test(test_cell_to_node);
-	mu_run_test(test_update_graph);
 
 	//Tests for pathfinder.h
 	mu_run_test(test_path_start);

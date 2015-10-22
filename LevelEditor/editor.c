@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 		dimarg_given = (sscanf(argv[1], "%i", &arg_w) == 1) && (sscanf(argv[2], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
 	} 
 
-	/* Set the new level */
+	/* Create a new level */
 	Level* level = make_new_level(dimarg_given, arg_w, arg_h);
 
 	/* Theme */
@@ -163,6 +163,8 @@ int main(int argc, char** argv)
 						{
 							/* Free the current level first*/
 							level_free(level);
+
+							/* Create a new level */
 							level = make_new_level(dimarg_given, arg_w, arg_h);
 
 							/* Draw */
