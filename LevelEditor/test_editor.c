@@ -505,6 +505,34 @@ static char* test_cell_type_and_owner_to_symbol()
 	return 0;
 }
 
+static char* test_level_is_valid_pos() 
+{
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(!level_is_valid_pos(level, -1, -1));
+	mu_assert(!level_is_valid_pos(level, -1, 4));
+	mu_assert(!level_is_valid_pos(level, 4, -1));
+	mu_assert(!level_is_valid_pos(level, 4, 25));
+	mu_assert(!level_is_valid_pos(level, 12, 4));
+	mu_assert(level_is_valid_pos(level, 11, 23));
+	mu_assert(level_is_valid_pos(level, 7, 7));
+	mu_assert(level_is_valid_pos(level, 0, 0));
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(2, 2);
+	mu_assert(!level_is_valid_pos(level, 2, 2));
+	mu_assert(!level_is_valid_pos(level, -1, 0));
+	mu_assert(!level_is_valid_pos(level, 0, -1));
+	mu_assert(level_is_valid_pos(level, 1, 1));
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(1, 7);
+	mu_assert(!level_is_valid_pos(level, 2, 2));
+	mu_assert(!level_is_valid_pos(level, -1, 0));
+	mu_assert(!level_is_valid_pos(level, 0, -1));
+	mu_assert(level_is_valid_pos(level, 6, 0));
+	mu_assert(!level_is_valid_pos(level, 0, 2));
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -537,6 +565,7 @@ static char * all_tests()
 	mu_run_test(test_cell_to_symbol);
 	mu_run_test(test_cell_type_and_owner_to_symbol);
 	mu_run_test(test_level_can_walk_over);
+	mu_run_test(test_level_is_valid_pos);
 
 
 	//Tests for pqueue.h
