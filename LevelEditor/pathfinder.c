@@ -47,6 +47,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 			if (!neighbour->visited) {
 				int c = current->costs[i] == INT_MAX || current->costs[i] == INT_MAX ?
 					INT_MAX : current->cost + current->costs[i];
+				if (c < 0) c = INT_MAX;
 				if (c < neighbour->cost) {
 					neighbour->cost = c;
 					neighbour->prev = current;
