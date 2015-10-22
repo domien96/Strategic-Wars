@@ -544,6 +544,7 @@ static char* test_level_alloc_empty_with_dim() {
 
 	level = level_alloc_empty_with_dim(-1, -1);
 	//vraag: hoe moeten onzinnige waarden hier behandeld worden
+	//maak issue want programma crasht
 	level_free(level);
 
 	level = level_alloc_empty_with_dim(10, 10);
@@ -559,6 +560,7 @@ static char* test_level_alloc_empty_with_dim() {
 
 static char * all_tests()
 {
+	mu_run_test(test_level_alloc_empty_with_dim);
 	//Tests for common.h
 	mu_run_test(test_cell_type_is_unit);
 	mu_run_test(test_cell_type_is_player_owned);
