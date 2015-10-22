@@ -12,7 +12,7 @@
 
 Path* find_path(Level* level, Cell* start, Cell* target) {
     
-	DWGraph* graph = make_graph(level);
+	DWGraph* graph = make_graph_with_type(level, start->type);
 
 	Node* startNode = cell_to_node(graph, start); 
 	Node* targetNode = cell_to_node(graph, target);

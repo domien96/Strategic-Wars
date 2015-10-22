@@ -15,9 +15,9 @@
 
 static char* test_calculate_cost() {
 	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
-	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1])) == 12);
-	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[1][1])) == 17);
-	mu_assert(calculate_cost(&(level->cells[0][5]), &(level->cells[0][6])) > 17);
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[0][1]), (level->cells[0][0]).type) == 12);
+	mu_assert(calculate_cost(&(level->cells[0][0]), &(level->cells[1][1]), (level->cells[0][0]).type) == 17);
+	mu_assert(calculate_cost(&(level->cells[0][5]), &(level->cells[0][6]), (level->cells[0][5]).type) > 17);
 	level_free(level);
 	return 0;
 }
@@ -344,6 +344,43 @@ static char* test_level_can_walk_over() {
 	target->type = level_symbol_to_cell_type('7');
 	target->owner = level_symbol_to_owner('7');
 	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('*');
+	target->owner = level_symbol_to_owner('*');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('B');
+	target->owner = level_symbol_to_owner('B');
+	mu_assert(level_can_walk_over(unit, target) == 1);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('W');
+	target->owner = level_symbol_to_owner('W');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('R');
+	target->owner = level_symbol_to_owner('R');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('3');
+	target->owner = level_symbol_to_owner('3');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
+	unit->type = level_symbol_to_cell_type('1');
+	unit->owner = level_symbol_to_owner('1');
+	target->type = level_symbol_to_cell_type('9');
+	target->owner = level_symbol_to_owner('9');
+	mu_assert(level_can_walk_over(unit, target) == 0);
+
 	return 0;
 }
 
@@ -373,6 +410,153 @@ static char* test_cell_type_is_player_owned()
     return 0;
 }
 
+static char* test_level_symbol_to_cell_type()
+{
+	mu_assert(level_symbol_to_cell_type('*') == GROUND);
+	mu_assert(level_symbol_to_cell_type('W') == WATER);
+	mu_assert(level_symbol_to_cell_type('B') == BRIDGE);
+	mu_assert(level_symbol_to_cell_type('R') == ROCK);
+	mu_assert(level_symbol_to_cell_type('h') == HEADQUARTER);
+	mu_assert(level_symbol_to_cell_type('H') == HEADQUARTER);
+	mu_assert(level_symbol_to_cell_type('1') == UNIT_1);
+	mu_assert(level_symbol_to_cell_type('2') == UNIT_2);
+	mu_assert(level_symbol_to_cell_type('3') == UNIT_3);
+	mu_assert(level_symbol_to_cell_type('7') == UNIT_1);
+	mu_assert(level_symbol_to_cell_type('8') == UNIT_2);
+	mu_assert(level_symbol_to_cell_type('9') == UNIT_3);
+	mu_assert(level_symbol_to_cell_type('r') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(' ') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type('0') == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(NULL) == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type(0) == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type("a") == DEFAULT_CELLTYPE);
+
+	return 0;
+}
+
+static char* test_level_symbol_to_owner() 
+{
+	mu_assert(level_symbol_to_owner('*') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('W') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('B') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('R') == OWNER_NONE);
+	mu_assert(level_symbol_to_owner('h') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('H') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('1') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('2') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('3') == OWNER_HUMAN);
+	mu_assert(level_symbol_to_owner('7') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('8') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('9') == OWNER_AI);
+	mu_assert(level_symbol_to_owner('r') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(' ') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner('0') == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(NULL) == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner(0) == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner("a") == DEFAULT_OWNER);
+
+	return 0;
+}
+
+static char* test_cell_to_symbol() 
+{
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	mu_assert(cell_to_symbol(&level->cells[0][0]) == '1');
+	mu_assert(cell_to_symbol(&level->cells[0][1]) == '2');
+	mu_assert(cell_to_symbol(&level->cells[0][2]) == '3');
+	mu_assert(cell_to_symbol(&level->cells[3][2]) == 'h');
+	mu_assert(cell_to_symbol(&level->cells[9][1]) == 'R');
+	mu_assert(cell_to_symbol(&level->cells[11][7]) == 'W');
+	mu_assert(cell_to_symbol(&level->cells[11][24]) == '9');
+	mu_assert(cell_to_symbol(&level->cells[11][23]) == '8');
+	mu_assert(cell_to_symbol(&level->cells[11][22]) == '7');
+	mu_assert(cell_to_symbol(&level->cells[9][22]) == 'H');
+	mu_assert(cell_to_symbol(&level->cells[5][5]) == '*');
+	level_free(level);
+
+	level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(cell_to_symbol(&level->cells[0][0]) == '*');
+	mu_assert(cell_to_symbol(&level->cells[11][0]) == '1');
+	mu_assert(cell_to_symbol(&level->cells[11][24]) == '7');
+	mu_assert(cell_to_symbol(&level->cells[3][8]) == 'B');
+	level_free(level);
+
+	return 0;
+}
+
+static char* test_cell_type_and_owner_to_symbol() 
+{
+	mu_assert(cell_type_and_owner_to_symbol(GROUND, OWNER_NONE) == '*');
+	mu_assert(cell_type_and_owner_to_symbol(WATER, OWNER_NONE) == 'W');
+	mu_assert(cell_type_and_owner_to_symbol(BRIDGE, OWNER_NONE) == 'B');
+	mu_assert(cell_type_and_owner_to_symbol(ROCK, OWNER_NONE) == 'R');
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_HUMAN) == 'h');
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_AI) == 'H');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_1, OWNER_HUMAN) == '1');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_HUMAN) == '2');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_3, OWNER_HUMAN) == '3');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_1, OWNER_AI) == '7');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_AI) == '8');
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_3, OWNER_AI) == '9');
+	mu_assert(cell_type_and_owner_to_symbol(WATER, OWNER_HUMAN) == DEFAULT_SYMBOL);
+	mu_assert(cell_type_and_owner_to_symbol(HEADQUARTER, OWNER_NONE) == DEFAULT_SYMBOL);
+	mu_assert(cell_type_and_owner_to_symbol(UNIT_2, OWNER_NONE) == DEFAULT_SYMBOL);
+
+	return 0;
+}
+
+static char* test_level_is_valid_pos() 
+{
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
+	mu_assert(!level_is_valid_pos(level, -1, -1));
+	mu_assert(!level_is_valid_pos(level, -1, 4));
+	mu_assert(!level_is_valid_pos(level, 4, -1));
+	mu_assert(!level_is_valid_pos(level, 4, 25));
+	mu_assert(!level_is_valid_pos(level, 12, 4));
+	mu_assert(level_is_valid_pos(level, 11, 23));
+	mu_assert(level_is_valid_pos(level, 7, 7));
+	mu_assert(level_is_valid_pos(level, 0, 0));
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(2, 2);
+	mu_assert(!level_is_valid_pos(level, 2, 2));
+	mu_assert(!level_is_valid_pos(level, -1, 0));
+	mu_assert(!level_is_valid_pos(level, 0, -1));
+	mu_assert(level_is_valid_pos(level, 1, 1));
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(1, 7);
+	mu_assert(!level_is_valid_pos(level, 2, 2));
+	mu_assert(!level_is_valid_pos(level, -1, 0));
+	mu_assert(!level_is_valid_pos(level, 0, -1));
+	mu_assert(level_is_valid_pos(level, 6, 0));
+	mu_assert(!level_is_valid_pos(level, 0, 2));
+	level_free(level);
+
+	return 0;
+}
+
+static char* test_level_alloc_empty_with_dim() {
+
+	Level* level = level_alloc_empty_with_dim(0, 0);
+	mu_assert(level->width == 0 && level->height == 0);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(-1, -1);
+	//vraag: hoe moeten onzinnige waarden hier behandeld worden
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(10, 10);
+	mu_assert(level->width == 10 && level->height == 10);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(100, 100);
+	mu_assert(level->width == 100 && level->height == 100);
+	level_free(level);
+
+	return 0;
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -400,9 +584,15 @@ static char * all_tests()
 	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
 	//Tests for level.h
-	//TODO
+	mu_run_test(test_level_symbol_to_cell_type);
+	mu_run_test(test_level_symbol_to_owner);
+	mu_run_test(test_cell_to_symbol);
+	mu_run_test(test_cell_type_and_owner_to_symbol);
 	mu_run_test(test_level_can_walk_over);
-
+	mu_run_test(test_level_is_valid_pos);
+	//TODO
+	//mu_run_test(test_level_alloc_empty_with_dim);
+	//mu_run_test(test_level_write_to_file);
 
 	//Tests for pqueue.h
 	//TODO

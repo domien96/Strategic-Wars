@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 int remove_old_headquarter(Owner owner, Level* level);
+int updatePath(Level* level);
 
 int main(int argc, char** argv)
 {
@@ -100,6 +101,18 @@ int main(int argc, char** argv)
 							}
 							else {
 								remove_old_headquarter(new_cell.owner, level);
+								/*alle tegels controleren of er geen andere headquarter staat
+								* tegel linksboven wordt sowieso gecontroleerd
+								*/
+								if ((level->cells[row + 1][col]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row + 1][col].owner, level);
+								}
+								else if ((level->cells[row][col + 1]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row][col + 1].owner, level);
+								}
+								else if ((level->cells[row + 1][col + 1]).type == HEADQUARTER) {
+									remove_old_headquarter(level->cells[row + 1][col + 1].owner, level);
+								}
 								level->cells[row][col] = new_cell;
 								level->cells[row + 1][col] = new_cell;
 								level->cells[row][col + 1] = new_cell;
@@ -177,6 +190,7 @@ int main(int argc, char** argv)
 							}
 							/* Draw */
 							gui_set_level(level);
+							updatePath(level);
 							break;
 						}
 						case UI_THEME:
@@ -228,8 +242,8 @@ int remove_old_headquarter(Owner owner, Level* level) {
 				}
 			}
 		}
-		return 1;
 	}
+	return 1;
 }
 
 /* Indien er 2 HeadQuarters (van de verschillende teams) geplaatst zijn en er dus 
@@ -249,13 +263,24 @@ int updatePath(Level* level) {
 	
 	/* Zijn er 2 verschillende HQ's? */
 	for (int i = 0; i < level->height; i++) {
+
+		if (humanHQ && aiHQ) {
+			/* If both found, we don't need to look further.*/
+			break;
+		}
+
 		for (int j = 0; j < level->width; j++) {
+			if (humanHQ && aiHQ) {
+				/* If both found, we don't need to look further.*/
+				break;
+			}
+
 			Cell* current = &level->cells[i][j];
 			if (current->type == HEADQUARTER) {
-				if (current->owner == OWNER_HUMAN) {
+				if (humanHQ == NULL && current->owner == OWNER_HUMAN) {
 					humanHQ = current;
 				}
-				else if (current->owner == OWNER_AI) {
+				else if (aiHQ == NULL && current->owner == OWNER_AI) {
 					aiHQ = current;
 				}
 			}
@@ -270,6 +295,10 @@ int updatePath(Level* level) {
 	/* Check if path between HQ's exists. */
 	Path* path = find_path(level, humanHQ, aiHQ);
 	if (path) {
+		/*error message als path kleiner is dan 100*/
+		if (path->distance < 100) {
+			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
+		}
 		gui_show_path(path);
 		return 0;
 	} else {
