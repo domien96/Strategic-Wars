@@ -531,6 +531,9 @@ static char* test_level_is_valid_pos()
 	mu_assert(!level_is_valid_pos(level, 0, -1));
 	mu_assert(level_is_valid_pos(level, 6, 0));
 	mu_assert(!level_is_valid_pos(level, 0, 2));
+	level_free(level);
+
+	return 0;
 }
 
 static char * all_tests()
