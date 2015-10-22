@@ -16,16 +16,33 @@ int updatePath(Level* level);
 
 int main(int argc, char** argv)
 {
-    printf("Strategic War Level Editor\n");
+	printf("Strategic War Level Editor\n");
 
-	// Check if a command line argument is given and if it has a legitimate form "width height".
-	int arg_w = 0;
-	int arg_h = 0;
-	bool arg_given = (argc == 2) && (sscanf(argv[0], "%i", &arg_w) == 1) && (sscanf(argv[1], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w<=LEVEL_MAX_WIDTH) && (arg_h<=LEVEL_MAX_HEIGHT);
+	// Check if a command line argument and determine its form. 
+	// If no filename of a level is given or the arguments given are invalid, then the default world(basic.world) is used.
+	char* arg_filename="basic.world";
+	int arg_w;
+	int arg_h;
+	bool dimarg_given = false;
+
+	//argument is of the form "filename"
+	if (argc == 2) {
+		arg_filename = argv[1];
+	}
+	// argument is of the form "width height"
+	// We also check if these dimensions are valid. If they aren't, we will use the default dimensions to construct the level.
+	else if (argc == 3) {
+		dimarg_given = (sscanf(argv[1], "%i", &arg_w) == 1) && (sscanf(argv[2], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
+	}
+	// argument is of the form "filename width height"
+	else if(argc==4){
+		arg_filename = argv[1]; 
+		dimarg_given = (sscanf(argv[2], "%i", &arg_w) == 1) && (sscanf(argv[3], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
+	}
 
     ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
     al_append_path_component(path, FILES_LEVELS_SUBDIRNAME);
-    al_set_path_filename(path, "basic.world");
+    al_set_path_filename(path, arg_filename);
 
     const char* filename = al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP);
     Level* level = level_alloc_read_from_file(filename);
@@ -181,8 +198,8 @@ int main(int argc, char** argv)
 							 * is set. We have already checked this in the boolean arg_given and we have saved the dimensions in the
 							¨* variables arg_w and arg_h, so this is not checked each time the clear button is pressed.
 							 */
-							if (arg_given) {
-								printf("Dimensions set to:  %i x %i", arg_w, arg_h);
+							if (dimarg_given) {
+								printf("Dimensions set to:  %i x %i \n", arg_w, arg_h);
 								level = level_alloc_empty_with_dim(arg_w, arg_h);
 							}
 							else {
