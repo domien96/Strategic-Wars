@@ -570,12 +570,21 @@ int init_level(Level* level, FILE* fp) {
 }
 
 int init_level_binary(Level* level, FILE* fp) {
-	fscanf(fp, ".SOI");
+	if (fscanf(fp, ".SOI")) {
+		return 1;
+	}
 	/* Initializes dimensions*/
 	unsigned char version;
-	unsigned short d0, d1;
-	fscanf(fp, "%c%d%d", &version, &d0, &d1);
-	int width = (int) d0, height = (int) d1;
+	unsigned char d00, d01, d10, d11;
+	if (fscanf(fp, "%c", &version) != 1) {
+		return 1;
+	}
+	if (fscanf(fp, "%c%c%c%c", &d00, &d01, &d10, &d11) != 4) {
+		return 1;
+	}
+
+	int width = (int) (((short)d00) << 8) | d01;
+	int height = (int) (((short)d10) << 8) | d11;
 
 	/* Check dimensions */
 	if (width <= 0 || height <= 0) {
@@ -584,11 +593,10 @@ int init_level_binary(Level* level, FILE* fp) {
 	level->height = height;
 	level->width = width;
 
-
 	/* Initializes cells, opletten dat er juist 'width' characters gelezen worden per line*/
 	char* buffer = malloc((LEVEL_MAX_WIDTH + 1)*sizeof(int));
 	for (int r = 0; r < level->height; r++) {
-		if (!fgets(buffer, LEVEL_MAX_WIDTH + 2, fp)) {
+		if (!fgets(buffer, LEVEL_MAX_WIDTH + 1, fp)) {
 			return 1;
 		}
 		/*lijn omzetten*/
@@ -673,7 +681,6 @@ int init_level_binary(Level* level, FILE* fp) {
 			free(cell);
 		}
 	}
-	fclose(fp);
 	free(buffer);
 
 	return 0;
