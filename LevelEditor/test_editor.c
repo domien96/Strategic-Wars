@@ -536,6 +536,27 @@ static char* test_level_is_valid_pos()
 	return 0;
 }
 
+static char* test_level_alloc_empty_with_dim() {
+
+	Level* level = level_alloc_empty_with_dim(0, 0);
+	mu_assert(level->width == 0 && level->height == 0);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(-1, -1);
+	//vraag: hoe moeten onzinnige waarden hier behandeld worden
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(10, 10);
+	mu_assert(level->width == 10 && level->height == 10);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(100, 100);
+	mu_assert(level->width == 100 && level->height == 100);
+	level_free(level);
+
+	return 0;
+}
+
 static char * all_tests()
 {
 	//Tests for common.h
@@ -569,7 +590,9 @@ static char * all_tests()
 	mu_run_test(test_cell_type_and_owner_to_symbol);
 	mu_run_test(test_level_can_walk_over);
 	mu_run_test(test_level_is_valid_pos);
-
+	//TODO
+	//mu_run_test(test_level_alloc_empty_with_dim);
+	//mu_run_test(test_level_write_to_file);
 
 	//Tests for pqueue.h
 	//TODO
