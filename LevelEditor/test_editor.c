@@ -209,7 +209,7 @@ static char* test_path_long_testworld_1() {
 	Cell* target_cell = &level->cells[1][7];
 	Path* path = find_path(level, start_cell, target_cell);
 	mu_assert(path != NULL);
-	mu_assert(path->distance == 9*12+17+12+17+9*12+17+2*12+17+12);
+	mu_assert(path->distance == 10*12+17+12+17+9*12+17+2*12+17);
 	mu_assert(path->step_count == 10+1+1+1+9+1+2+1+1); /* extra 1, first tile telt ook mee! */
 	mu_assert(path->steps != NULL);
 	mu_assert(path->steps[0].row == start_cell->row);
@@ -245,6 +245,135 @@ static char* test_path_long_testworld_1() {
 
 	//test if all steps are over terrain that unit in start_cell can walk over
 	for (int i = 0; i < 25; i++) {
+		Pos* from = &path->steps[i];
+		Pos* to = &path->steps[i + 1];
+		Cell* cell_from = &level->cells[from->row][from->col];
+		Cell* cell_to = &level->cells[to->row][to->col];
+		mu_assert(level_can_walk_over(cell_from, cell_to));
+	}
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
+static char* test_path_long_testworld_1_AsHQ() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\used_for_test_1.world");
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[0][0];
+	start_cell->type = HEADQUARTER;
+	start_cell->owner = OWNER_HUMAN;
+	Cell* target_cell = &level->cells[1][7];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 7 * 12 + 17 + 12 + 17 + 6 * 12 + 17 + 2 * 12 + 17);
+	mu_assert(path->step_count == 21); /* extra 1, first tile telt ook mee! */
+	mu_assert(path->steps != NULL);
+	mu_assert(path->steps[0].row == start_cell->row);
+	mu_assert(path->steps[0].col == start_cell->col);
+
+	for (int i = 1; i < 8; i++) {
+		mu_assert(path->steps[i].row = i);
+		mu_assert(path->steps[i].col == 0);
+	}
+	mu_assert(path->steps[8].row == 8);
+	mu_assert(path->steps[8].col == 1);
+	mu_assert(path->steps[9].row == 8);
+	mu_assert(path->steps[9].col == 2);
+
+	for (int i = 10; i < 17; i++) {
+		mu_assert(path->steps[i].row = 8 - (i - 10));
+		mu_assert(path->steps[i].col == 3);
+	}
+
+	for (int i = 17; i < 20; i++) {
+		mu_assert(path->steps[i].row == 0);
+		mu_assert(path->steps[i].col == 4 + (i - 17));
+	}
+
+
+	mu_assert(path->steps[20].row == 1);
+	mu_assert(path->steps[20].col == 7);
+
+	mu_assert(path->step_count - 1 == 20);
+	mu_assert(path->steps[path->step_count - 1].row == target_cell->row);
+	mu_assert(path->steps[path->step_count - 1].col == target_cell->col);
+
+
+	//test if all steps are over terrain that unit in start_cell can walk over
+	for (int i = 0; i < 19; i++) {
+		Pos* from = &path->steps[i];
+		Pos* to = &path->steps[i + 1];
+		Cell* cell_from = &level->cells[from->row][from->col];
+		cell_from->type = HEADQUARTER;
+		cell_from->owner = OWNER_HUMAN;
+
+		Cell* cell_to = &level->cells[to->row][to->col];
+		mu_assert(level_can_walk_over(cell_from, cell_to));
+	}
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
+static char * test_path__shortest_diagonal()
+{
+	Level* level = level_alloc_empty();
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[3][3];
+	Cell* target_cell = &level->cells[4][4];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 17);
+	mu_assert(path->step_count == 2);
+	mu_assert(path->steps != NULL);
+	mu_assert(path->steps[0].row == start_cell->row);
+	mu_assert(path->steps[0].col == start_cell->col);
+
+	mu_assert(path->steps[1].row == target_cell->row);
+	mu_assert(path->steps[1].col == target_cell->col);
+
+	mu_assert(path->steps[path->step_count - 1].row == target_cell->row);
+	mu_assert(path->steps[path->step_count - 1].col == target_cell->col);
+
+	level_can_walk_over(start_cell, target_cell);
+
+	/* Try impossible path */
+
+	start_cell->type = UNIT_2;
+	target_cell->type = UNIT_1;
+	path = find_path(level, start_cell, target_cell);
+	mu_assert(path == NULL);
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
+	return 0;
+}
+
+static char* test_path_long_bomberman() {
+	Level* level = level_alloc_read_from_file("..\\assets\\levels\\bomberman.world");
+	mu_assert(level != NULL);
+	Cell* start_cell = &level->cells[3][6];
+	Cell* target_cell = &level->cells[9][22];
+	Path* path = find_path(level, start_cell, target_cell);
+	mu_assert(path != NULL);
+	mu_assert(path->distance == 6*17 + 10*12); /* Per schuin = 7 vakjes voordeel, er kunnen max 6 schuin. dus 16*12 + 6*12 - 6 * 7 == 222*/
+	mu_assert(path->step_count == 17); /* extra 1, first tile telt ook mee! */
+	mu_assert(path->steps != NULL);
+	mu_assert(path->steps[0].row == start_cell->row);
+	mu_assert(path->steps[0].col == start_cell->col);
+
+	for (int i = 1; i < 17; i++) {
+		mu_assert(path->steps[i].col >= path->steps[i-1].col);
+		mu_assert(path->steps[i].row >= start_cell->row);
+	}
+
+	//test if all steps are over terrain that unit in start_cell can walk over
+	for (int i = 0; i < 16; i++) {
 		Pos* from = &path->steps[i];
 		Pos* to = &path->steps[i + 1];
 		Cell* cell_from = &level->cells[from->row][from->col];
@@ -684,11 +813,14 @@ static char * all_tests()
 	//Tests for pathfinder.h
 	mu_run_test(test_path_start);
 	mu_run_test(test_path_short);
+	mu_run_test(test_path__shortest_diagonal);
 	mu_run_test(test_path_short_island);
 	mu_run_test(test_path_long_island);
 	mu_run_test(test_path_long_testworld_1);
+	mu_run_test(test_path_long_testworld_1_AsHQ);
 	mu_run_test(test_impossible_paths);
 	mu_run_test(test_path_long_basic);
+	mu_run_test(test_path_long_bomberman);
 	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
 
 	//Tests for level.h
