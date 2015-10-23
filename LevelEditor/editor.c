@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	Level* level = make_new_level(dimarg_given, arg_w, arg_h);
 
 	/* Theme */
-	const char* theme = "civ";
+	const char* theme = THEME;
 	gui_initialize(theme);
 
     gui_set_level(level);

@@ -4,6 +4,8 @@
 #include "common.h"
 #include "event.h"
 
+#define THEME "civ";
+
 int main(int argc, char** argv);
 
 /*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
