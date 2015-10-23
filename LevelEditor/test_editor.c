@@ -529,12 +529,11 @@ static char* test_level_is_valid_pos()
 static char* test_level_alloc_empty_with_dim() {
 
 	Level* level = level_alloc_empty_with_dim(0, 0);
-	mu_assert(level->width == 0 && level->height == 0);
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == LEVEL_MAX_HEIGHT);
 	level_free(level);
 
 	level = level_alloc_empty_with_dim(-1, -1);
-	//vraag: hoe moeten onzinnige waarden hier behandeld worden
-	//maak issue want programma crasht
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == LEVEL_MAX_HEIGHT);
 	level_free(level);
 
 	level = level_alloc_empty_with_dim(10, 10);
@@ -542,7 +541,47 @@ static char* test_level_alloc_empty_with_dim() {
 	level_free(level);
 
 	level = level_alloc_empty_with_dim(100, 100);
-	mu_assert(level->width == 25 && level->height == 12);
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == LEVEL_MAX_HEIGHT);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(100, 10);
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == 10);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(10, 100);
+	mu_assert(level->width == 10 && level->height == LEVEL_MAX_HEIGHT);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(0, 5);
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == 5);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(5, 0);
+	mu_assert(level->width == 5 && level->height == LEVEL_MAX_HEIGHT);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(-1, 5);
+	mu_assert(level->width == LEVEL_MAX_WIDTH && level->height == 5);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(5, -1);
+	mu_assert(level->width == 5 && level->height == LEVEL_MAX_HEIGHT);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(24, 11);
+	mu_assert(level->width == 24 && level->height == 11);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(1, 1);
+	mu_assert(level->width == 1 && level->height == 1);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(11, 24);
+	mu_assert(level->width == 11 && level->height == LEVEL_MAX_HEIGHT);
+	level_free(level);
+
+	level = level_alloc_empty_with_dim(7, 4);
+	mu_assert(level->width == 7 && level->height == 4);
 	level_free(level);
 
 	return 0;
