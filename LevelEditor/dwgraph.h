@@ -48,9 +48,6 @@ int calculate_cost(Cell* from, Cell* to, CellType graph_type);
 //Returns the node of the graph that corresponds with the given cell in the level grid
 Node* cell_to_node(DWGraph *graph, Cell* cell);
 
-//Updates the graph after a cell on the level grid has changed
-void update_graph(DWGraph *graph, Cell *cell);
-
 //Free the allocated space of the given graph
 void free_graph(DWGraph *graph);
 

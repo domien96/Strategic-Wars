@@ -1,8 +1,5 @@
-#include "level.h"
-#include "pathfinder.h"
-#include "gui.h"
-#include "common.h"
-#include "event.h"
+
+#include "editor.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -11,47 +8,22 @@
 
 #include <stdio.h>
 
-int remove_old_headquarter(Owner owner, Level* level);
-int updatePath(Level* level);
 
 int main(int argc, char** argv)
 {
 	printf("Strategic War Level Editor\n");
 
-	// Check if a command line argument and determine its form. 
-	// If no filename of a level is given or the arguments given are invalid, then the default world(basic.world) is used.
-	char* arg_filename="basic.world";
-	int arg_w;
-	int arg_h;
+	// Check if the command line argument is of the form "GuilLevelEditor.exe width height"
+	int arg_w=0;
+	int arg_h=0;
 	bool dimarg_given = false;
-
-	//argument is of the form "filename"
-	if (argc == 2) {
-		arg_filename = argv[1];
-	}
-	// argument is of the form "width height"
-	// We also check if these dimensions are valid. If they aren't, we will use the default dimensions to construct the level.
-	else if (argc == 3) {
+	// We also check if these dimensions are valid. If they aren't or there are none given, we will use the default dimensions to construct the level.
+	if (argc == 3) {
 		dimarg_given = (sscanf(argv[1], "%i", &arg_w) == 1) && (sscanf(argv[2], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
-	}
-	// argument is of the form "filename width height"
-	else if(argc==4){
-		arg_filename = argv[1]; 
-		dimarg_given = (sscanf(argv[2], "%i", &arg_w) == 1) && (sscanf(argv[3], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
-	}
+	} 
 
-    ALLEGRO_PATH * path = al_create_path(FILES_ASSETS_PATH);
-    al_append_path_component(path, FILES_LEVELS_SUBDIRNAME);
-    al_set_path_filename(path, arg_filename);
-
-    const char* filename = al_path_cstr(path, ALLEGRO_NATIVE_PATH_SEP);
-    Level* level = level_alloc_read_from_file(filename);
-    if (level == NULL) {
-        fprintf(stdout, "Reading level from \"%s\" failed.\n", filename);
-        al_destroy_path(path);
-        return 1;
-    }
-    al_destroy_path(path);
+	/* Create a new level */
+	Level* level = make_new_level(dimarg_given, arg_w, arg_h);
 
 	/* Theme */
 	const char* theme = "civ";
@@ -198,20 +170,10 @@ int main(int argc, char** argv)
 						{
 							/* Free the current level first*/
 							level_free(level);
-							/* Set net empty level.
-							 * If a command line argument is given of the form "width height", then
-							 * a level of dimension width x height will be made when clear is pressed.
-							 * If an invalid argument is given, or there is none, a level of the default dimensions
-							 * is set. We have already checked this in the boolean arg_given and we have saved the dimensions in the
-							¨* variables arg_w and arg_h, so this is not checked each time the clear button is pressed.
-							 */
-							if (dimarg_given) {
-								printf("Dimensions set to:  %i x %i \n", arg_w, arg_h);
-								level = level_alloc_empty_with_dim(arg_w, arg_h);
-							}
-							else {
-								level = level_alloc_empty();
-							}
+
+							/* Create a new level */
+							level = make_new_level(dimarg_given, arg_w, arg_h);
+
 							/* Draw */
 							gui_set_level(level);
 							updatePath(level);
@@ -244,89 +206,3 @@ int main(int argc, char** argv)
     return 0;
 }
 
-/*zoek in level de oude headquarter (van zelfde speler) en verwijder die als die er is*/
-/*return 0 als er een headquarter verwijderd is, return 1 anders*/
-/*deze functie moet dus voor het plaatsen van de nieuwe headquarter opgeroepen worden*/
-int remove_old_headquarter(Owner owner, Level* level) {
-	int i, j;
-	for (i = 0; i < level->height; i++) {
-		for (j = 0; j < level->width; j++) {
-			if ((level->cells[i][j]).type == HEADQUARTER) {
-				if ((level->cells[i][j]).owner == owner) {
-					/*oude headquarter wordt naar DEFAULT waarden gezet. */
-					(level->cells[i][j]).type = DEFAULT_CELLTYPE;
-					(level->cells[i+1][j]).type = DEFAULT_CELLTYPE;
-					(level->cells[i][j+1]).type = DEFAULT_CELLTYPE;
-					(level->cells[i+1][j+1]).type = DEFAULT_CELLTYPE;
-					(level->cells[i][j]).owner = DEFAULT_OWNER;
-					(level->cells[i + 1][j]).owner = DEFAULT_OWNER;
-					(level->cells[i][j + 1]).owner = DEFAULT_OWNER;
-					(level->cells[i + 1][j + 1]).owner = DEFAULT_OWNER;
-					return 0;
-				}
-			}
-		}
-	}
-	return 1;
-}
-
-/* Indien er 2 HeadQuarters (van de verschillende teams) geplaatst zijn en er dus 
- * een pad zou kunnen bestaan tussen de 2 hoofdkwartieren, wordt dit pad berekend.
- * Indien een pad bestaat, wordt dit getekend op de editor. Zoniet wordt er het
- * vorige pad weggehaald. 
- *
- * Returns 0 : Everything is OK.
- *		   1 : There aren't 2 headquarters.
- *		   2 : There are 2 headquarters, but there is no possible path.
- *
- * @author : Domien
- */
-int updatePath(Level* level) {
-	/* Linksboven cells van HQ */
-	Cell *humanHQ = (Cell*) NULL, *aiHQ = (Cell*) NULL;
-	
-	/* Zijn er 2 verschillende HQ's? */
-	for (int i = 0; i < level->height; i++) {
-
-		if (humanHQ && aiHQ) {
-			/* If both found, we don't need to look further.*/
-			break;
-		}
-
-		for (int j = 0; j < level->width; j++) {
-			if (humanHQ && aiHQ) {
-				/* If both found, we don't need to look further.*/
-				break;
-			}
-
-			Cell* current = &level->cells[i][j];
-			if (current->type == HEADQUARTER) {
-				if (humanHQ == NULL && current->owner == OWNER_HUMAN) {
-					humanHQ = current;
-				}
-				else if (aiHQ == NULL && current->owner == OWNER_AI) {
-					aiHQ = current;
-				}
-			}
-		}
-	}
-	
-	if (humanHQ == NULL || aiHQ == NULL) {
-		gui_show_path(NULL);
-		return 1;
-	}
-
-	/* Check if path between HQ's exists. */
-	Path* path = find_path(level, humanHQ, aiHQ);
-	if (path) {
-		/*error message als path kleiner is dan 100*/
-		if (path->distance < 100) {
-			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
-		}
-		gui_show_path(path);
-		return 0;
-	} else {
-		gui_show_path(NULL);
-		return 2;
-	}
-}
