@@ -284,7 +284,7 @@ int level_is_valid_pos(Level* level, int row, int col) {
 
 /*
 * This functions stores the given level to file.
-* Returns 1 : when file cannot be found.
+* Returns 
 *		  2 : when writing to file is not allowed
 *		  3 : filename was null
 */
@@ -317,7 +317,7 @@ int level_write_to_file(Level* level, const char* filename) {
 	/* open() clears all the data if the file already exists*/
 	FILE* fp = fopen(filename, "w");
 	if (!fp) {
-		return 1;
+		return 2;
 	}
 
 	/* Write dimensions*/
@@ -460,17 +460,19 @@ Level* level_alloc_empty()
 * This function returns a pointer to an empty newly allocated level with the
 * given width and the given height.
 * Each cell will be set to DEFAULT.
-* Invalid parameters (not between 1 and MAX) will result into default parameters.
+* Invalid parameters (not between 1 and MAX) will result into their maximal values.
 */
 Level* level_alloc_empty_with_dim(int width, int height) {
 	/* Allocate struct*/
 	Level* lvlP = (Level*)malloc(sizeof(Level));
 
-	/* Ondergens */
-	height = max(1, height);
-	width = max(1, width);
+	/* kleiner dan 1 corrigeren */
+	if (height < 1) {
+		height = LEVEL_MAX_HEIGHT;}
+	if (width < 1) {
+		width = LEVEL_MAX_WIDTH;}
 
-	/* Bovengrens */
+	/* groter dan max corrigeren */
 	lvlP->height = min(LEVEL_MAX_HEIGHT,height);
 	lvlP->width = min(LEVEL_MAX_WIDTH,width);
 
