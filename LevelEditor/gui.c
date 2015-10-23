@@ -531,6 +531,8 @@ void gui_free()
 	free(gui->tiles_by_cell_type);
 	gui->tiles_by_cell_type = NULL;
 
+	free(gui->path.steps);
+	free(gui->buttons);
     free(gui->messages);
 	
 	al_stop_timer(gui->timer);
