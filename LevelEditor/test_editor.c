@@ -699,6 +699,7 @@ static char * all_tests()
 	mu_run_test(test_level_can_walk_over);
 	mu_run_test(test_level_is_valid_pos);
 	mu_run_test(test_level_alloc_empty_with_dim);
+	//dit test ook level_alloc_read_from_file
 	mu_run_test(test_level_write_to_file);
 
 	//Tests for pqueue.h
