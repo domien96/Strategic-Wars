@@ -542,7 +542,7 @@ static char* test_level_alloc_empty_with_dim() {
 	level_free(level);
 
 	level = level_alloc_empty_with_dim(100, 100);
-	mu_assert(level->width == 100 && level->height == 100);
+	mu_assert(level->width == 25 && level->height == 12);
 	level_free(level);
 
 	return 0;

@@ -465,14 +465,14 @@ Level* level_alloc_empty_with_dim(int width, int height) {
 	/* Allocate struct*/
 	Level* lvlP = (Level*)malloc(sizeof(Level));
 
-	lvlP->height = height;
-	lvlP->width = width;
+	lvlP->height = min(LEVEL_MAX_HEIGHT,height);
+	lvlP->width = min(LEVEL_MAX_WIDTH,width);
 
 	/* Init cells : Fill up with cells*/
 	Cell cell = { 0 , 0 , DEFAULT_CELLTYPE, DEFAULT_OWNER };/* Sample cell */
-	for (int r = 0; r < height; r++) {
+	for (int r = 0; r < lvlP->height; r++) {
 		cell.row = r;
-		for (int c = 0; c < width; c++) {
+		for (int c = 0; c < lvlP->width; c++) {
 			cell.col = c;
 			lvlP->cells[r][c] = cell;
 		}
