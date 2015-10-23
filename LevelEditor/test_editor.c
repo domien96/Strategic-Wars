@@ -638,6 +638,22 @@ static char* test_remove_first_pqueue() {
 	return 0;
 }
 
+static char* test_level_write_to_file() {
+
+	//level openen en nadien opslaan, vervolgens controleren of alles hetzelfde is gebleven
+	Level* level1 = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	level_write_to_file(level1, "..\\assets\\levels\\basic.world");
+	Level* level2 = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	mu_assert(level1->height == level2->height && level1->width == level2->width);
+	for (int i = 0; i < level1->height; i++) {
+		for (int j = 0; j < level1->width; j++) {
+			//elke cel moet hetzelfde zijn
+			mu_assert(cell_to_symbol(&level1->cells[i][j]) == cell_to_symbol(&level2->cells[i][j]));
+		}
+	}
+
+	return 0;
+}
 
 static char * all_tests()
 {
@@ -669,8 +685,7 @@ static char * all_tests()
 	mu_run_test(test_level_can_walk_over);
 	mu_run_test(test_level_is_valid_pos);
 	mu_run_test(test_level_alloc_empty_with_dim);
-	//TODO
-	//mu_run_test(test_level_write_to_file);
+	mu_run_test(test_level_write_to_file);
 
 	//Tests for pqueue.h
 	mu_run_test(test_update_pqueue);
