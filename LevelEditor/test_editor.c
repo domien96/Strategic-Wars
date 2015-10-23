@@ -651,6 +651,8 @@ static char* test_level_write_to_file() {
 			mu_assert(cell_to_symbol(&level1->cells[i][j]) == cell_to_symbol(&level2->cells[i][j]));
 		}
 	}
+	level_free(level1);
+	level_free(level2);
 
 	return 0;
 }
