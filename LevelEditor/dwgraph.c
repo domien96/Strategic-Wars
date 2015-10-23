@@ -27,6 +27,10 @@ DWGraph* make_graph_with_type(Level *level, CellType graph_type) {
 			node->prev = NULL;
 
 			nodes[(i*m) + j] = node;
+
+			if (node->cell->col != node->pos.col || node->cell->row != node->pos.row) {
+				return 1;
+			}
 		}
 	}
 
@@ -95,7 +99,7 @@ int calculate_cost(Cell *unit, Cell *target,CellType graph_type) {
 	(&dummy)->type = graph_type;
 
 	if (level_can_walk_over(&dummy, target)) { /* Supposing they are neighbours */
-		if (abs(unit->row + unit->col - target->row - target->col) == 1) {
+		if (abs(unit->row - target->row) + abs(unit->col - target->col) == 1) {
 			/* Verschil horizontale, verticale coordinaten is gelijk op een 1-term na.*/
 			return 12;
 		} else { /* diagonaal */

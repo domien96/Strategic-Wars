@@ -51,8 +51,9 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 				if (c < neighbour->cost) {
 					neighbour->cost = c;
 					neighbour->prev = current;
+
+					pqueue_update(queue, neighbours[i], c);
 				}
-				pqueue_update(queue, neighbours[i], c);
 			}
 		}
 		current->visited = true;

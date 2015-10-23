@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 						
 						
 						if (chosen_cell_type == HEADQUARTER) {
-							/*headquarter is altijs 4 tegels groot*/
+							/*headquarter is altijd 4 tegels groot*/
 							if (row >= level->height - 1 || col >= level->width - 1) {
 								gui_add_message("Headquarter has size 4, please try placing it somewhere else.");
 							}
