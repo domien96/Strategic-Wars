@@ -140,7 +140,16 @@ int main(int argc, char** argv)
 						case UI_SAVE:
 						{
 							char* filename = gui_show_save_file_dialog();
-							level_write_to_file(level,filename);
+							int status = level_write_to_file(level, filename);
+							if (status == 0) {
+								gui_add_message("Level has been succesfully saved.");
+							}
+							else if (status == 2) {
+								gui_add_message("Error: Cannot access the chosen file");
+							}
+							else if (status == 3) {
+								gui_add_message("No file is chosen. Nothing has been done.");
+							}
 							break;
 						}
 						case UI_LOAD:
@@ -148,11 +157,12 @@ int main(int argc, char** argv)
 							char* filename = gui_show_load_file_dialog();
 							Level* new_level = level_alloc_read_from_file(filename);
 
-							/* Indien fout bij inladen, level heeft dan ongeldig formaat*/
 							if ( new_level == NULL) {
+								/* Indien een fout bij inladen optreedt, heeft level een ongeldig formaat */
 								gui_add_message("Error: invalid file. Please choose another file");
 								break;
-							} else {	/* Everything is fine from here */
+							} else {	
+								/* Everything is fine from here */
 								/* Free the previous level first*/
 								level_free(level);
 							}
