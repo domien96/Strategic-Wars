@@ -119,6 +119,7 @@ Level* level_alloc_empty();
 * This function returns a pointer to an empty newly allocated level with the
 * given width and the given height.
 * Each cell will be set to DEFAULT.
+* Negative parameters will be interpreted as their absolute values.
 */
 Level* level_alloc_empty_with_dim(int width, int height);
 /*

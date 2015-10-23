@@ -460,11 +460,17 @@ Level* level_alloc_empty()
 * This function returns a pointer to an empty newly allocated level with the
 * given width and the given height.
 * Each cell will be set to DEFAULT.
+* Invalid parameters (not between 1 and MAX) will result into default parameters.
 */
 Level* level_alloc_empty_with_dim(int width, int height) {
 	/* Allocate struct*/
 	Level* lvlP = (Level*)malloc(sizeof(Level));
 
+	/* Ondergens */
+	height = max(1, height);
+	width = max(1, width);
+
+	/* Bovengrens */
 	lvlP->height = min(LEVEL_MAX_HEIGHT,height);
 	lvlP->width = min(LEVEL_MAX_WIDTH,width);
 
