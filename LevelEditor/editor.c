@@ -105,18 +105,17 @@ int main(int argc, char** argv)
 						Cell clicked_cell = level->cells[row][col];
 						Cell new_cell = { row, col, chosen_cell_type,chosen_owner };
 
-						/*indien er op een headquarter geplaatst moet deze verwijderd worden*/
+						/* verwijder eventueel onderliggende HQ*/
 						if (clicked_cell.type == HEADQUARTER) {
 							remove_old_headquarter((level->cells[row][col]).owner, level);
 						}
 						
-						
+						/* verwijder andere HQ van hetzelfde team (indien er een was) */
 						if (chosen_cell_type == HEADQUARTER) {
 							/*headquarter is altijs 4 tegels groot*/
 							if (row >= level->height - 1 || col >= level->width - 1) {
 								gui_add_message("Headquarter has size 4, please try placing it somewhere else.");
-							}
-							else {
+							} else {
 								remove_old_headquarter(new_cell.owner, level);
 								/*alle tegels controleren of er geen andere headquarter staat
 								* tegel linksboven wordt sowieso gecontroleerd
@@ -130,10 +129,18 @@ int main(int argc, char** argv)
 								else if ((level->cells[row + 1][col + 1]).type == HEADQUARTER) {
 									remove_old_headquarter(level->cells[row + 1][col + 1].owner, level);
 								}
+								/* Change to new cells and updating coordinates also (see previous bug)*/
 								level->cells[row][col] = new_cell;
-								level->cells[row + 1][col] = new_cell;
+
+								level->cells[row + 1][col]=new_cell;
+								level->cells[row + 1][col].row += 1;
+
 								level->cells[row][col + 1] = new_cell;
+								level->cells[row][col + 1].col += 1;
+
 								level->cells[row + 1][col + 1] = new_cell;
+								level->cells[row + 1][col + 1].row += 1;
+								level->cells[row + 1][col + 1].col += 1;
 							}
 						} else {
 							/* Normale geval */
