@@ -4,6 +4,8 @@
 #include "common.h"
 #include "event.h"
 
+#include "stdbool.h"
+
 #define THEME "civ";
 
 int main(int argc, char** argv);
