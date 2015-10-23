@@ -301,7 +301,7 @@ int level_write_to_file(Level* level, const char* filename) {
 	char* extension = (char*)malloc(8, sizeof(char));
 	memcpy(extension, &filename[strlen(filename) - 4], 5);
 	if (!strcmp(extension,".wld")) {
-		level_write_to_file_binary(level, filename);
+		return level_write_to_file_binary(level, filename);
 	}
 	else {
 		if (strlen(filename) < 8) {
@@ -618,9 +618,7 @@ int init_level_binary(Level* level, FILE* fp) {
 
 			int type_number = (ch & 0b00111000) >> 3;
 			switch (type_number) {
-			default:
-				cell->type = GROUND;
-				break;
+
 			case 0:
 				cell->type = GROUND;
 				break;
@@ -636,13 +634,14 @@ int init_level_binary(Level* level, FILE* fp) {
 			case 4:
 				cell->type = BRIDGE;
 				break;
+			default:
+				cell->type = GROUND;
+				break;
 			}
 
 			int owner_number = ch >> 6;
 			switch (owner_number) {
-			default:
-				cell->owner = OWNER_NONE;
-				break;
+
 			case 0:
 				cell->owner = OWNER_NONE;
 				break;
@@ -655,7 +654,7 @@ int init_level_binary(Level* level, FILE* fp) {
 					cell->type = GROUND;
 				}
 				break;
-			case 2:
+			default:
 				if (cell->type == GROUND || cell->type == HEADQUARTER) {
 					cell->owner = OWNER_AI;
 				}
@@ -668,9 +667,7 @@ int init_level_binary(Level* level, FILE* fp) {
 
 			int unit_number = ch & 0b00000011;
 			switch (unit_number) {
-			default:
-				cell->type = GROUND;
-				break;
+
 			case 0:
 				break;
 			case 1:
@@ -681,6 +678,9 @@ int init_level_binary(Level* level, FILE* fp) {
 				break;
 			case 3:
 				cell->type == GROUND && cell->owner != OWNER_NONE ? (cell->type = UNIT_3) : (cell->type = GROUND);
+				break;
+			default:
+				cell->type = GROUND;
 				break;
 			}
 
