@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	int arg_h=0;
 	bool dimarg_given = false;
 	// We also check if these dimensions are valid. If they aren't or there are none given, we will use the default dimensions to construct the level.
-	if (argc == 3) {
+	if (argc >= 3) {
 		dimarg_given = (sscanf(argv[1], "%i", &arg_w) == 1) && (sscanf(argv[2], "%i", &arg_h) == 1) && (arg_w>0) && (arg_h>0) && (arg_w <= LEVEL_MAX_WIDTH) && (arg_h <= LEVEL_MAX_HEIGHT);
 	} 
 
