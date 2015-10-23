@@ -642,8 +642,8 @@ static char* test_level_write_to_file() {
 
 	//level openen en nadien opslaan, vervolgens controleren of alles hetzelfde is gebleven
 	Level* level1 = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
-	level_write_to_file(level1, "..\\assets\\levels\\basic.world");
-	Level* level2 = level_alloc_read_from_file("..\\assets\\levels\\basic.world");
+	level_write_to_file(level1, "..\\assets\\levels\\basicTest.world");
+	Level* level2 = level_alloc_read_from_file("..\\assets\\levels\\basicTest.world");
 	mu_assert(level1->height == level2->height && level1->width == level2->width);
 	for (int i = 0; i < level1->height; i++) {
 		for (int j = 0; j < level1->width; j++) {
@@ -655,8 +655,8 @@ static char* test_level_write_to_file() {
 	level_free(level2);
 	
 	level1 = level_alloc_read_from_file("..\\assets\\levels\\2rivers.world");
-	level_write_to_file(level1, "..\\assets\\levels\\basic.world");
-	level2 = level_alloc_read_from_file("..\\assets\\levels\\2rivers.world");
+	level_write_to_file(level1, "..\\assets\\levels\\2riversTest.world");
+	level2 = level_alloc_read_from_file("..\\assets\\levels\\2riversTest.world");
 	mu_assert(level1->height == level2->height && level1->width == level2->width);
 	for (int i = 0; i < level1->height; i++) {
 		for (int j = 0; j < level1->width; j++) {
