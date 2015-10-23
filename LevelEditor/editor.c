@@ -206,3 +206,86 @@ int main(int argc, char** argv)
     return 0;
 }
 
+
+int remove_old_headquarter(Owner owner, Level* level) {
+	int i, j;
+	for (i = 0; i < level->height; i++) {
+		for (j = 0; j < level->width; j++) {
+			if ((level->cells[i][j]).type == HEADQUARTER) {
+				if ((level->cells[i][j]).owner == owner) {
+					/*oude headquarter wordt naar DEFAULT waarden gezet. */
+					(level->cells[i][j]).type = DEFAULT_CELLTYPE;
+					(level->cells[i + 1][j]).type = DEFAULT_CELLTYPE;
+					(level->cells[i][j + 1]).type = DEFAULT_CELLTYPE;
+					(level->cells[i + 1][j + 1]).type = DEFAULT_CELLTYPE;
+					(level->cells[i][j]).owner = DEFAULT_OWNER;
+					(level->cells[i + 1][j]).owner = DEFAULT_OWNER;
+					(level->cells[i][j + 1]).owner = DEFAULT_OWNER;
+					(level->cells[i + 1][j + 1]).owner = DEFAULT_OWNER;
+					return 0;
+				}
+			}
+		}
+	}
+	return 1;
+}
+
+
+int updatePath(Level* level) {
+	/* Linksboven cells van HQ */
+	Cell *humanHQ = (Cell*)NULL, *aiHQ = (Cell*)NULL;
+
+	/* Zijn er 2 verschillende HQ's? */
+	for (int i = 0; i < level->height; i++) {
+
+		if (humanHQ && aiHQ) {
+			/* If both found, we don't need to look further.*/
+			break;
+		}
+
+		for (int j = 0; j < level->width; j++) {
+			if (humanHQ && aiHQ) {
+				/* If both found, we don't need to look further.*/
+				break;
+			}
+
+			Cell* current = &level->cells[i][j];
+			if (current->type == HEADQUARTER) {
+				if (humanHQ == NULL && current->owner == OWNER_HUMAN) {
+					humanHQ = current;
+				}
+				else if (aiHQ == NULL && current->owner == OWNER_AI) {
+					aiHQ = current;
+				}
+			}
+		}
+	}
+
+	if (humanHQ == NULL || aiHQ == NULL) {
+		gui_show_path(NULL);
+		return 1;
+	}
+
+	/* Check if path between HQ's exists. */
+	Path* path = find_path(level, humanHQ, aiHQ);
+	if (path) {
+		/*error message als path kleiner is dan 100*/
+		if (path->distance < 100) {
+			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
+		}
+		gui_show_path(path);
+		return 0;
+	}
+	else {
+		gui_show_path(NULL);
+		return 2;
+	}
+}
+
+
+Level* make_new_level(bool dimarg_given, int arg_w, int arg_h) {
+	if (dimarg_given) {
+		return level_alloc_empty_with_dim(arg_w, arg_h);
+	}
+	return level_alloc_empty();
+}
