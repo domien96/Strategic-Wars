@@ -38,9 +38,6 @@
     <ClInclude Include="dwgraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="level.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -54,18 +54,6 @@ static char* test_cell_to_node() {
 	return 0;
 }
 
-static char* test_update_graph() {
-	Level* level = level_alloc_empty();
-	DWGraph* graph = make_graph(level);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) == 17);
-	Cell* c = &(level->cells[1][0]);
-	c->type = ROCK;
-	update_graph(graph,c);
-	mu_assert(max(graph->nodes[0]->costs[0], max(graph->nodes[0]->costs[1], graph->nodes[0]->costs[2])) > 17);
-	free_graph(graph);
-	level_free(level);
-	return 0;
-}
 
 static char * test_path_start() 
 {
@@ -394,6 +382,7 @@ static char* test_cell_type_is_unit()
 	mu_assert(cell_type_is_unit(UNIT_1));
 	mu_assert(cell_type_is_unit(UNIT_2));
 	mu_assert(cell_type_is_unit(UNIT_3));
+	mu_assert(!cell_type_is_player_owned(DEFAULT_CELLTYPE));
 	return 0;
 }
 
@@ -407,6 +396,7 @@ static char* test_cell_type_is_player_owned()
     mu_assert(cell_type_is_player_owned(UNIT_1));
     mu_assert(cell_type_is_player_owned(UNIT_2));
     mu_assert(cell_type_is_player_owned(UNIT_3));
+	mu_assert(!cell_type_is_player_owned(DEFAULT_CELLTYPE));
     return 0;
 }
 
@@ -558,21 +548,69 @@ static char* test_level_alloc_empty_with_dim() {
 	return 0;
 }
 
+
+static char* test_update_pqueue() {
+	PriorityQueue* pqueue = pqueue_alloc();
+
+	pqueue_update(pqueue, "abc", 5);
+	mu_assert(pqueue->item_count == 1 && pqueue->items[0].cost == 5);
+	pqueue_update(pqueue, "def", 7);
+	mu_assert(pqueue->item_count == 2 && pqueue->items[1].cost == 7);
+	pqueue_update(pqueue, "ghi", 3);
+	mu_assert(pqueue->item_count == 3 && pqueue->items[2].cost == 3);
+	pqueue_update(pqueue, "ghi", 3);
+	mu_assert(pqueue->item_count == 3 && pqueue->items[2].cost == 3);
+
+	pqueue_free(pqueue);
+	return 0;
+}
+
+static char* test_remove_first_pqueue() {
+	PriorityQueue* pqueue = pqueue_alloc();
+
+	pqueue_remove_first(pqueue);
+	mu_assert(pqueue->item_count == 0);
+	mu_assert(pqueue->items[0].cost == NULL);
+	mu_assert(pqueue->items[1].cost == NULL);
+	mu_assert(pqueue->items[3].cost == NULL);
+
+	pqueue_update(pqueue, "midden", 5);
+	pqueue_update(pqueue, "groot", 7);
+	pqueue_update(pqueue, "klein", 3);
+
+	pqueue_remove_first(pqueue);
+	mu_assert(pqueue->item_count == 2);
+	mu_assert(pqueue->items[0].cost == 5);
+	mu_assert(pqueue->items[1].cost == 7);
+	mu_assert(pqueue->items[3].cost == NULL);
+
+	pqueue_remove_first(pqueue);
+	mu_assert(pqueue->item_count == 1);
+	mu_assert(pqueue->items[0].cost == NULL);
+	mu_assert(pqueue->items[1].cost == 7);
+
+	pqueue_remove_first(pqueue);
+	mu_assert(pqueue->item_count == 0);
+	mu_assert(pqueue->items[0].cost == NULL);
+	mu_assert(pqueue->items[1].cost == NULL);
+	mu_assert(pqueue->items[3].cost == NULL);
+
+	pqueue_free(pqueue);
+	return 0;
+}
+
+
 static char * all_tests()
 {
 	//Tests for common.h
 	mu_run_test(test_cell_type_is_unit);
 	mu_run_test(test_cell_type_is_player_owned);
-	//TODO: mu_run_test(test_path_alloc);
-	//TODO: mu_run_test(test_path_free);
-	//TODO: add more common.h tests
 
 
 	//Tests for dwgraph.h
 	mu_run_test(test_calculate_cost);
 	mu_run_test(test_make_graph);
 	mu_run_test(test_cell_to_node);
-	mu_run_test(test_update_graph);
 
 	//Tests for pathfinder.h
 	mu_run_test(test_path_start);
@@ -596,7 +634,8 @@ static char * all_tests()
 	//mu_run_test(test_level_write_to_file);
 
 	//Tests for pqueue.h
-	//TODO
+	mu_run_test(test_update_pqueue);
+	mu_run_test(test_remove_first_pqueue);
 
 	//TODO: add any other tests
 
