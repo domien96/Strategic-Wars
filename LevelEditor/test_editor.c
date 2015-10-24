@@ -36,6 +36,12 @@ static char* test_make_graph() {
 		max(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) > 10000);
 	mu_assert(min(graph->nodes[5]->costs[0], min(graph->nodes[5]->costs[1], min(graph->nodes[5]->costs[2],
 		min(graph->nodes[5]->costs[3], graph->nodes[5]->costs[4])))) == 12);
+	mu_assert(graph->graph_type == DEFAULT_CELLTYPE);
+	mu_assert(graph->nodes[4 * 25 + 1]->cell->type == HEADQUARTER);
+	mu_assert(graph->nodes[4 * 25 + 1]->cell->owner == OWNER_HUMAN);
+	mu_assert(graph->nodes[graph->amountOfNodes-1]->amountOfNeighbours == 3);
+	mu_assert(graph->nodes[graph->amountOfNodes - 1]->cell->owner == OWNER_AI);
+	mu_assert(graph->nodes[25 + 11]->cell->type == BRIDGE);
 	free_graph(graph);
 	level_free(level);
 	return 0;
