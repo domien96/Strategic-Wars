@@ -9,19 +9,8 @@
 #include <stdlib.h>
 #include <stdio.h> 
 #include <assert.h>
+#include <string.h>
 
-/////////////////////////////////////////////////////////////
-
-// (PRIVATE) METHODS
-/*
-* Initialises the given level with the data inside the given file.
-* Returns 0 when everything went fine.
-* File needs the minimal length for each line, otherwise this function will return 1.
-*/
-int init_level(Level* level, FILE* fp);
-
-
-/////////////////////////////////////////////////////////////
 
 /*
 * This function converts the textual representation of a Cell,
@@ -298,7 +287,7 @@ int level_write_to_file(Level* level, const char* filename) {
 	}
 
 	// Check the extension
-	char* extension = (char*)malloc(8, sizeof(char));
+	char* extension = (char*)calloc(8, sizeof(char));
 	memcpy(extension, &filename[strlen(filename) - 4], 5);
 	if (!strcmp(extension,".wld")) {
 		return level_write_to_file_binary(level, filename);
@@ -367,10 +356,10 @@ int level_write_to_file_binary(Level* level, const char* filename) {
 
 	/* Write dimensions*/
 	unsigned short width = (unsigned short) level->width;
-	unsigned char w0 = (unsigned char)width >> 8;
+	unsigned char w0 = (unsigned char)(width >> 8);
 	unsigned char w1 = (unsigned char)width;
 	unsigned short height = (unsigned short) level->height;
-	unsigned char h0 = (unsigned char)height >> 8;
+	unsigned char h0 = (unsigned char)(height >> 8);
 	unsigned char h1 = (char)height;
 
 	if (fprintf(fp, "%c%c%c%c", w0, w1, h0, h1) < 0) {

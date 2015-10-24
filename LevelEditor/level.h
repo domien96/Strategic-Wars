@@ -3,6 +3,7 @@
 
 #include "common.h"
 
+#include <stdio.h> 
 
 // MACROS
 
@@ -128,6 +129,23 @@ Level* level_alloc_empty_with_dim(int width, int height);
  * Returns NULL if file cannot be accessed or not enough memory.
  */
 Level* level_alloc_read_from_file(const char* filename);
+
+
+
+/////////////////////////////////////////////////////////////
+
+// (PRIVATE) METHODS
+/*
+* Initialises the given level with the data inside the given file.
+* Returns 0 when everything went fine.
+* File needs the minimal length for each line, otherwise this function will return 1.
+*/
+
+int init_level(Level* level, FILE* fp);
+int init_level_binary(Level* level, FILE* fp);
+
+/////////////////////////////////////////////////////////////
+
 /*
  * Free the memory used by a level.
  */
@@ -140,6 +158,7 @@ void level_free(Level* level);
  *		   3 : filename was null
  */
 int level_write_to_file(Level* level, const char* filename);
+int level_write_to_file_binary(Level* level, const char* filename);
 
 #endif
 

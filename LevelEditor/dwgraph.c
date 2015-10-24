@@ -29,7 +29,7 @@ DWGraph* make_graph_with_type(Level *level, CellType graph_type) {
 			nodes[(i*m) + j] = node;
 
 			if (node->cell->col != node->pos.col || node->cell->row != node->pos.row) {
-				return 1;
+				return NULL;
 			}
 		}
 	}
