@@ -28,20 +28,13 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 	}
 
 	PriorityQueue* queue = pqueue_alloc();
-	Node **neighbours = (startNode->neighbours);
-	for (int i = 0; i < startNode->amountOfNeighbours; i++) {
-		int* costs = startNode->costs;
-		neighbours[i]->cost = costs[i];
-		neighbours[i]->prev = startNode;
-		pqueue_update(queue, neighbours[i], costs[i]);
-	}
-	startNode->visited = true;
+	pqueue_update(queue, startNode, 0);
 	
 	while (queue->item_count > 0) {
 
 		current = pqueue_remove_first(queue);
 
-		neighbours = (current->neighbours);
+		Node** neighbours = (current->neighbours);
 		for (int i = 0; i < current->amountOfNeighbours; i++) {
 			Node *neighbour = neighbours[i];
 		
