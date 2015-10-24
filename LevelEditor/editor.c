@@ -38,7 +38,10 @@ int main(int argc, char** argv)
 	Owner chosen_owner = DEFAULT_OWNER;
 	gui_set_build_highlight(chosen_cell_type, chosen_owner);
 
+
+
 	/* GAME LOOP */
+	
     int stop = 0;
 	while(!stop) {
         Event event;
@@ -283,6 +286,7 @@ int updatePath(Level* level) {
 			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
 		}
 		gui_show_path(path);
+		path_free(path);
 		return 0;
 	}
 	else {

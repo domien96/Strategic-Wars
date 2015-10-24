@@ -717,7 +717,7 @@ static char * all_tests()
 
 int main(int argc, char **argv) 
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    printf("Running tests:\n\n");
 	
 	char *result = all_tests();
     if (result != 0) {
