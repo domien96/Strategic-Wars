@@ -122,9 +122,7 @@ int main(int argc, char** argv)
 						}
 
 						/* Pad opnieuw berekenen */
-						if (updatePath(level) == 2) {
-							gui_add_message("Path between headquarters is unexistent. Please try placing somewhere else.");
-						};
+						updatePath(level);
 						break;
 					}
 				}
@@ -281,15 +279,18 @@ int updatePath(Level* level) {
 	/* Check if path between HQ's exists. */
 	Path* path = find_path(level, humanHQ, aiHQ);
 	if (path) {
+		gui_show_path(path);
+		path_free(path);
 		/*error message als path kleiner is dan 100*/
 		if (path->distance < 100) {
 			gui_add_message("ERROR: Headquarters are too close: minimum distance is 100");
+			return 3;
+		} else {
+			return 0;
 		}
-		gui_show_path(path);
-		path_free(path);
-		return 0;
 	}
 	else {
+		gui_add_message("Path between headquarters is unexistent. Please try placing somewhere else.");
 		gui_show_path(NULL);
 		return 2;
 	}

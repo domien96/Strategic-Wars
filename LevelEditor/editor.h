@@ -23,6 +23,7 @@ int remove_old_headquarter(Owner owner, Level* level);
 * Returns 0 : Everything is OK.
 *		   1 : There aren't 2 headquarters.
 *		   2 : There are 2 headquarters, but there is no possible path.
+*          3 : Path distance is not longer than 100.
 *
 * @author : Domien
 */
