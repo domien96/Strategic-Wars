@@ -635,11 +635,11 @@ int init_level_binary(Level* level, FILE* fp) {
 				cell->type = BRIDGE;
 				break;
 			default:
-				cell->type = GROUND;
+				cell->type = DEFAULT_CELLTYPE;
 				break;
 			}
 
-			int owner_number = ch >> 6;
+			int owner_number = (ch & 0b11000000) >> 6;
 			switch (owner_number) {
 
 			case 0:
@@ -654,7 +654,7 @@ int init_level_binary(Level* level, FILE* fp) {
 					cell->type = GROUND;
 				}
 				break;
-			default:
+			case 2:
 				if (cell->type == GROUND || cell->type == HEADQUARTER) {
 					cell->owner = OWNER_AI;
 				}
@@ -662,6 +662,10 @@ int init_level_binary(Level* level, FILE* fp) {
 					cell->owner = OWNER_NONE;
 					cell->type = GROUND;
 				}
+				break;
+			default:
+				cell->owner = DEFAULT_OWNER;
+				cell->type = DEFAULT_CELLTYPE;
 				break;
 			}
 
@@ -680,7 +684,7 @@ int init_level_binary(Level* level, FILE* fp) {
 				cell->type == GROUND && cell->owner != OWNER_NONE ? (cell->type = UNIT_3) : (cell->type = GROUND);
 				break;
 			default:
-				cell->type = GROUND;
+				cell->type = DEFAULT_CELLTYPE;
 				break;
 			}
 
