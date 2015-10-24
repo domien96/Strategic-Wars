@@ -550,9 +550,9 @@ static char* test_level_symbol_to_cell_type()
 	mu_assert(level_symbol_to_cell_type('r') == DEFAULT_CELLTYPE);
 	mu_assert(level_symbol_to_cell_type(' ') == DEFAULT_CELLTYPE);
 	mu_assert(level_symbol_to_cell_type('0') == DEFAULT_CELLTYPE);
-	mu_assert(level_symbol_to_cell_type(NULL) == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type((char)NULL) == DEFAULT_CELLTYPE);
 	mu_assert(level_symbol_to_cell_type(0) == DEFAULT_CELLTYPE);
-	mu_assert(level_symbol_to_cell_type("a") == DEFAULT_CELLTYPE);
+	mu_assert(level_symbol_to_cell_type('a') == DEFAULT_CELLTYPE);
 
 	return 0;
 }
@@ -574,9 +574,9 @@ static char* test_level_symbol_to_owner()
 	mu_assert(level_symbol_to_owner('r') == DEFAULT_OWNER);
 	mu_assert(level_symbol_to_owner(' ') == DEFAULT_OWNER);
 	mu_assert(level_symbol_to_owner('0') == DEFAULT_OWNER);
-	mu_assert(level_symbol_to_owner(NULL) == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner((char)NULL) == DEFAULT_OWNER);
 	mu_assert(level_symbol_to_owner(0) == DEFAULT_OWNER);
-	mu_assert(level_symbol_to_owner("a") == DEFAULT_OWNER);
+	mu_assert(level_symbol_to_owner('a') == DEFAULT_OWNER);
 
 	return 0;
 }
@@ -742,9 +742,9 @@ static char* test_remove_first_pqueue() {
 
 	pqueue_remove_first(pqueue);
 	mu_assert(pqueue->item_count == 0);
-	mu_assert(pqueue->items[0].cost == NULL);
-	mu_assert(pqueue->items[1].cost == NULL);
-	mu_assert(pqueue->items[3].cost == NULL);
+	mu_assert(pqueue->items[0].cost == 0);
+	mu_assert(pqueue->items[1].cost == 0);
+	mu_assert(pqueue->items[3].cost == 0);
 
 	pqueue_update(pqueue, "midden", 5);
 	pqueue_update(pqueue, "groot", 7);
@@ -754,18 +754,18 @@ static char* test_remove_first_pqueue() {
 	mu_assert(pqueue->item_count == 2);
 	mu_assert(pqueue->items[0].cost == 5);
 	mu_assert(pqueue->items[1].cost == 7);
-	mu_assert(pqueue->items[3].cost == NULL);
+	mu_assert(pqueue->items[3].cost == 0);
 
 	pqueue_remove_first(pqueue);
 	mu_assert(pqueue->item_count == 1);
-	mu_assert(pqueue->items[0].cost == NULL);
+	mu_assert(pqueue->items[0].cost == 0);
 	mu_assert(pqueue->items[1].cost == 7);
 
 	pqueue_remove_first(pqueue);
 	mu_assert(pqueue->item_count == 0);
-	mu_assert(pqueue->items[0].cost == NULL);
-	mu_assert(pqueue->items[1].cost == NULL);
-	mu_assert(pqueue->items[3].cost == NULL);
+	mu_assert(pqueue->items[0].cost == 0);
+	mu_assert(pqueue->items[1].cost == 0);
+	mu_assert(pqueue->items[3].cost == 0);
 
 	pqueue_free(pqueue);
 	return 0;
