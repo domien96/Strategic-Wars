@@ -66,9 +66,6 @@ DWGraph* make_graph_with_type(Level *level, CellType graph_type) {
 					neighbours[amount_neighbours] = neighbour_node;
 					costs[amount_neighbours] = calculate_cost(node->cell, neighbour,graph_type);
 					amount_neighbours++;
-					//	TODO: verbeter de geheugenallocatie van neighbours
-					// neighbours = realloc(neighbours, (sizeof(Node*)*amount_neighbours) + sizeof(Node**));
-					//	}
 				}
 			}
 
