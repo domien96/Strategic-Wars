@@ -23,6 +23,7 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 		Path* path = path_alloc(1, 0);
 		path->steps->col = startNode->pos.col;
 		path->steps->row = startNode->pos.row;
+		free_graph(graph);
 		return path;
 	}
 
@@ -61,6 +62,8 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 
 	if (targetNode->cost == INT_MAX) {
 		//There is no path
+		pqueue_free(queue);
+		free_graph(graph);
 		return NULL;
 	}
 	else {
@@ -76,6 +79,8 @@ Path* find_path(Level* level, Cell* start, Cell* target) {
 			*(path->steps + i) = current->pos;
 			current = current->prev;
 		}
+		pqueue_free(queue);
+		free_graph(graph);
 		return path;
 	}
 }

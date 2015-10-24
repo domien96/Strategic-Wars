@@ -283,7 +283,7 @@ static char* test_impossible_paths() {
 	Cell* target_cell = &level->cells[5][15];
 	Path* path = find_path(level, start_cell, target_cell);
 	mu_assert(path == NULL);
-
+	level_free(level);
 
 	level = level_alloc_read_from_file("..\\assets\\levels\\island.world");
 	mu_assert(level != NULL);
@@ -295,6 +295,10 @@ static char* test_impossible_paths() {
 	target_cell = &level->cells[11][1];
 	path = find_path(level, start_cell, target_cell);
 	mu_assert(path == NULL);
+
+	if (path != NULL)
+		path_free(path);
+	level_free(level);
 	return 0;
 }
 
@@ -675,12 +679,12 @@ static char * all_tests()
 	mu_run_test(test_cell_type_is_unit);
 	mu_run_test(test_cell_type_is_player_owned);
 
-
+	
 	//Tests for dwgraph.h
 	mu_run_test(test_calculate_cost);
 	mu_run_test(test_make_graph);
 	mu_run_test(test_cell_to_node);
-
+	
 	//Tests for pathfinder.h
 	mu_run_test(test_path_start);
 	mu_run_test(test_path_short);
@@ -690,7 +694,7 @@ static char * all_tests()
 	mu_run_test(test_impossible_paths);
 	mu_run_test(test_path_long_basic);
 	//TODO: add more pathfinder tests: longer path, non empty levels, special cases, ...
-
+	
 	//Tests for level.h
 	mu_run_test(test_level_symbol_to_cell_type);
 	mu_run_test(test_level_symbol_to_owner);
@@ -707,15 +711,15 @@ static char * all_tests()
 	mu_run_test(test_remove_first_pqueue);
 
 	//TODO: add any other tests
-
 	return 0;
 }
 
 
 int main(int argc, char **argv) 
 {
-    printf("Running tests:\n\n");
-    char *result = all_tests();
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
+	char *result = all_tests();
     if (result != 0) {
         printf("%s\n", result);
 		printf("\nAT LEAST ONE TEST FAILED\n");

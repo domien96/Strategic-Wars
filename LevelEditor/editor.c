@@ -30,7 +30,6 @@ int main(int argc, char** argv)
 	gui_initialize(theme);
 
     gui_set_level(level);
-	updatePath(level);
     
     gui_draw_frame();
 
