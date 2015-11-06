@@ -2,4 +2,6 @@
 *.sdf
 LevelEditor/Debug/
 LevelEditor/Release/
+StrategicWar/Debug/
+StrategicWar/Release/
 *~
