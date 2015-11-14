@@ -64,7 +64,11 @@ void EntityStream::EntityChanged(Entity* entity) {
 
 void EntityStream::AddEntityWithTag(Entity* entity, Component::Tag tag)
 {
-	// TODO: Add this Entity to the set stored under the given tag.
+	if (index.find(tag) == index.end()) {
+		index[tag] = {entity};
+	} else {
+		index[tag].insert(entity);
+	}
 }
 
 /* Call this whenever an Entity is added to the Engine */
@@ -80,5 +84,7 @@ void EntityStream::EntityRemoved(Entity* entity)
 
 void EntityStream::RemoveEntityWithTag(Entity* entity, Component::Tag tag)
 {
-	// TODO: Remove this Entity from the set stored under the given tag.
+	if (index.find(tag) != index.end()) {
+		index[tag].erase(entity);
+	}
 }
