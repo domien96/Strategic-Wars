@@ -13,14 +13,36 @@ EntityStream::~EntityStream() {}
 
 set<Entity*> EntityStream::WithTag(Component::Tag tag)
 {
-	// TODO: return a set of Entities that match the tag
-	return set<Entity*>();
+	return index[tag];
 }
 
 set<Entity*> EntityStream::WithTags(set<Component::Tag> tags)
 {
-	// TODO: return a set of Entities that match all tags
-	return set<Entity*>();
+	set<Entity*> result_set;
+
+	if (tags.empty()) {
+		for (map<Component::Tag, std::set<Entity*>>::iterator it = index.begin(); it != index.end(); it++) {
+			set<Entity*> s = it->second;
+			result_set.insert(s.begin(), s.end());
+		}
+		return result_set;
+	}
+
+	set<Entity*> begin_set = index[*(tags.begin())];
+
+	for (set<Entity*>::iterator it = begin_set.begin(); it != begin_set.end(); it++) {
+		bool add = true;
+		for (set<Component::Tag>::iterator it2 = ++tags.begin(); it2 != tags.end(); it2++) {
+			vector<Component::Tag> t = (**it).GetTags();
+			if(find(t.begin(), t.end(), *it2) == t.end()) {
+				add = false;
+			}
+		}
+		if (add) {
+			result_set.insert(*it);
+		}
+	}
+	return result_set;
 }
 
 /* Call this whenever an Entity is added to the Engine */
