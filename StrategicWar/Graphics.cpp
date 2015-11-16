@@ -81,11 +81,14 @@ void Graphics::DrawBitmap(Sprite sprite, float dx, float dy)
 
 void Graphics::DrawString(string str, float dx, float dy, Color c, Align align, bool hugeFont)
 {
-	// TODO: draw a string
+	if (!hugeFont) { //geen hugefont
+		al_draw_text(font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), str.c_str());
+	} else { //wel hugefont
+		al_draw_text(big_font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), str.c_str);
+	}
 }
 
 void Graphics::DrawRectangle(float dx, float dy, float width, float height, Color c, float thickness)
 {
-	//al_map_rgba geeft een ALLEGRO_COLOR terug
-	al_draw_rectangle(dx, dy, dx + width, dy + height, al_map_rgba(c.a, c.g, c.b, c.a), thickness);
+	al_draw_rectangle(dx, dy, dx + width, dy + height, al_map_rgba(c.r, c.g, c.b, c.a), thickness);
 }
