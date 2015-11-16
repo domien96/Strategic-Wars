@@ -86,5 +86,6 @@ void Graphics::DrawString(string str, float dx, float dy, Color c, Align align, 
 
 void Graphics::DrawRectangle(float dx, float dy, float width, float height, Color c, float thickness)
 {
-	// TODO: draw a rectangle
+	//al_map_rgba geeft een ALLEGRO_COLOR terug
+	al_draw_rectangle(dx, dy, dx + width, dy + height, al_map_rgba(c.a, c.g, c.b, c.a), thickness);
 }
