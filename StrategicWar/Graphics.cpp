@@ -81,10 +81,11 @@ void Graphics::DrawBitmap(Sprite sprite, float dx, float dy)
 
 void Graphics::DrawString(string str, float dx, float dy, Color c, Align align, bool hugeFont)
 {
+	char const *text = str.c_str();
 	if (!hugeFont) { //geen hugefont
-		al_draw_text(font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), str.c_str());
+		al_draw_text(font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), text);
 	} else { //wel hugefont
-		al_draw_text(big_font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), str.c_str);
+		al_draw_text(big_font, al_map_rgba(c.r, c.g, c.b, c.a), dx, dy, getAlign(align), text);
 	}
 }
 
