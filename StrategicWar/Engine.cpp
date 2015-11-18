@@ -71,25 +71,28 @@ void Engine::Update()
 	}
 }
 
+/* Warns the EntityStream that an entity was added */
 void Engine::EntityAdded(Entity* entity)
 {
-	// TODO: Warn EntityStream
+	GetEntityStream()->EntityAdded(entity);
 }
 
+/* Warns the EntityStream that an entity was changed */
 void Engine::EntityChanged(Entity* entity)
 {
-	// TODO: Warn EntityStream
+	GetEntityStream()->EntityChanged(entity);
 }
 
+/* Warns the EntityStream that an entity was removed */
 void Engine::EntityRemoved(Entity* entity)
 {
-	// TODO: Warn EntityStream
+	GetEntityStream()->EntityRemoved(entity);
 }
 
+/* Returns a pointer to the Context object */
 Context* Engine::GetContext()
 {
-	// TODO: Return context pointer
-	return NULL;
+	return context;
 }
 
 System* Engine::GetSystem(System::Type type)
@@ -98,8 +101,8 @@ System* Engine::GetSystem(System::Type type)
 	return NULL;
 }
 
+/* Returns a pointer to the EntityStream object of this Entity */
 EntityStream* Engine::GetEntityStream()
 {
-	// TODO: Return EntityStream
-	return NULL;
+	return &es;
 }
