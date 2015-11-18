@@ -5,15 +5,21 @@
 
 using namespace std;
 
+/* If the Enitity is not yet attached to the Engine, then it will be added and the EntityStream will be warned. */
 void Engine::AddEntity(Entity* entity)
 {
-	// TODO: Add entity to engine
-	// TODO: Warn EntityStream
+	std::vector<Entity*>::iterator it;
+	it = find(entities.begin(), entities.end(), entity);
+	if (it == entities.end()) {
+		entities.push_back(entity);
+		EntityAdded(entity);
+	}
 }
 
+/* Update an Entity added to the Engine, warning the EntityStream. */
 void Engine::UpdateEntity(Entity* entity)
 {
-	// TODO: Warn EntityStream
+	EntityChanged(entity);
 }
 
 void Engine::AddSystem(System* system)
@@ -22,10 +28,15 @@ void Engine::AddSystem(System* system)
 	// TODO: Set engine pointer of system to this engine
 }
 
+/* In case the given Entity is attached to the Engine, it is removed and the EntityStream is warned. */
 void Engine::RemoveEntity(Entity* entity)
 {
-	// TODO: Remove entity from engine
-	// TODO: Warn EntityStream
+	std::vector<Entity*>::iterator it;
+	it = find(entities.begin(), entities.end(), entity);
+	if (it != entities.end()) {
+		entities.erase(it);
+		EntityRemoved(entity);
+	}
 }
 
 void Engine::RemoveSystem(System* system)
@@ -34,10 +45,10 @@ void Engine::RemoveSystem(System* system)
 	// TODO: Reset engine pointer of system to NULL
 }
 
+/* Returns all Entities currently attached to the Engine. */
 vector<Entity*> Engine::GetEntities()
 {
-	// TODO: Return all assigned entities.
-	return vector<Entity*>();
+	return entities;
 }
 
 void Engine::Update()
