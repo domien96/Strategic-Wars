@@ -95,10 +95,15 @@ Context* Engine::GetContext()
 	return context;
 }
 
+/* Returns a System associated with the given type */
 System* Engine::GetSystem(System::Type type)
 {
-	// TODO: Return requested System
-	return NULL;
+	std::vector<System*>::iterator it;
+	it = systems.begin();
+	while (((*it)->GetType() != type) && (it < systems.end())) {
+		++it;
+	}
+	return *it;
 }
 
 /* Returns a pointer to the EntityStream object of this Entity */
