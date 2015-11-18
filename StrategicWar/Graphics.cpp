@@ -16,6 +16,9 @@ int Graphics::GetGridSize() {
 void Graphics::LoadFonts()
 {
 	// TODO
+	// inladen met ALLEGRO_FONT *al_load_ttf_font(char const *filename, int size, int flags)
+	// vraag moeten alleen font en big_font ingeladen worden (met een te kiezen font)
+	// of moeten we elke font in de assets folder inladen
 }
 
 void Graphics::LoadSpriteCache() {
