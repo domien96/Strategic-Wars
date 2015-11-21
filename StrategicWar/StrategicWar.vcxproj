@@ -164,6 +164,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="AllegroLib.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="PositionComponent.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Tags.h" />
