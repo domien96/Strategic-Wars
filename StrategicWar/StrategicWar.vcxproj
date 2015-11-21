@@ -169,6 +169,7 @@
     <ClInclude Include="System.h" />
     <ClInclude Include="Tags.h" />
     <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="UnitComponent.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
