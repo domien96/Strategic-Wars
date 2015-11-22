@@ -13,7 +13,7 @@ public:
 	Entity();
 	~Entity();
 
-	/* Add a component to the entity*/
+	/* Add a component to the entity, nothing happens if component is a nullpointer or points to a non-accessable location*/
 	Entity* Add(Component * component);
 
 	/* Return the Component associated with the given tag */

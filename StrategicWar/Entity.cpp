@@ -4,39 +4,56 @@ using namespace std;
 
 Entity::Entity()
 {
+	//components = componentmap(); //niet nodig
 }
 
 Entity::~Entity()
 {
+	//ok
 }
 
 Entity* Entity::Add(Component * component) {
-	// TODO: Add this component to the set stored under the Component's key.
-	// TOOD: Return a pointer to this Entity to allow a builder pattern.
-	return NULL;
+	// Add this component to the set stored under the Component's key.
+	if (!(component == nullptr))
+		components[component->GetTag()] = component;
+	// Return a pointer to this Entity to allow a builder pattern.
+	return this;
 }
 
 Component* Entity::GetComponent(Component::Tag tag)
 {
-	// TODO: Return the Component associated with the given tag.
-	return NULL;
+	// Return the Component associated with the given tag.
+	return components[tag];
 }
 
 Component* Entity::Remove(Component * component)
 {
-	// TODO: Remove this component entry form the componentmap.
-	// TODO: Return a pointer to this component.
-	return NULL;
+	// Remove this component entry form the componentmap.
+	components.erase(component->GetTag());
+	// Return a pointer to this component.
+	return component;
 }
 
 vector<Component::Tag> Entity::GetTags()
 {
-	// TODO: Return a vector with all assigned tags 
-	return vector<Component::Tag>();
+	vector<Component::Tag> list;
+	componentmap::iterator it = components.begin();
+	while (it != components.end()) {
+		list.push_back(it->first);
+		it++;
+	}
+	// Return a vector with all assigned tags 
+ return list;
 }
 
 vector<Component*> Entity::GetComponents()
 {
-	// TODO: Return a vector with all assigend components
-	return vector<Component*>();
+	vector<Component*> list;
+	componentmap::iterator it = components.begin();
+	while (it != components.end()) {
+		list.push_back(it->second);
+		it++;
+	}
+	// Return a vector with all assigned components
+	return list;
 }
