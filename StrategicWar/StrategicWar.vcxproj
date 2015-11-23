@@ -164,6 +164,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="AllegroLib.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="PositionComponent.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="System.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="AllegroLib.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Pathfinder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
