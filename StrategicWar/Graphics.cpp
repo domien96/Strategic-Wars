@@ -93,7 +93,8 @@ void Graphics::LoadSpriteCache() {
 
 void Graphics::UnLoadFonts()
 {
-	//TODO UnLoadFonts
+	al_destroy_font(font);
+	al_destroy_font(big_font);
 }
 
 void Graphics::UnLoadSpriteCache() {
