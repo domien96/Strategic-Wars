@@ -145,7 +145,7 @@ void Graphics::GenerateBackgroundSprite(World * world)
 
 void Graphics::DrawBitmap(Sprite sprite, float dx, float dy)
 {
-	// TODO: draw a bitmap by using the Sprite enum as index.
+	al_draw_bitmap(sprites[sprite], dx, dy, 0);
 }
 
 void Graphics::DrawString(string str, float dx, float dy, Color c, Align align, bool hugeFont)
