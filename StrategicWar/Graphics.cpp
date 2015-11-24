@@ -93,15 +93,15 @@ void Graphics::LoadSpriteCache() {
 
 void Graphics::UnLoadFonts()
 {
+	//TODO UnLoadFonts
+}
+
+void Graphics::UnLoadSpriteCache() {
 	// we gaan ervan uit dat de enum Sprites geen vreemde waarden toegekend krijgt, dus geen SPRITE_WORLD = 100
 	// zodat we kunnen itereren
 	for (int i = 0; i < SPRITE_LENGTH; i++) {
 		al_destroy_bitmap(sprites[i]);
 	}
-}
-
-void Graphics::UnLoadSpriteCache() {
-	// TODO: destroy all the loaded bitmaps
 }
 
 /* Small function that converts our own Graphics::Align enum to allegro enums */
