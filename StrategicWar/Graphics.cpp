@@ -4,18 +4,16 @@
 using namespace std;
 
 Vector2 Graphics::ToPx(Grid gridloc) {
-	// TODO
-	return Vector2();
+	return Vector2(gridloc.col, gridloc.row);
 }
 
 int Graphics::GetGridSize() {
-	// TODO
+	//TODO
 	return 0;
 }
 
 void Graphics::LoadFonts()
 {
-	// inladen met ALLEGRO_FONT *al_load_ttf_font(char const *filename, int size, int flags)
 	font = al_load_ttf_font("../assets/fonts/arialn.ttf", 12, 0);
 	big_font = al_load_ttf_font("../assets/fonts/arialn.ttf", 15, 0);
 }
