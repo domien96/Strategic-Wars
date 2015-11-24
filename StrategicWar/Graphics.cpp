@@ -8,7 +8,9 @@ Vector2 Graphics::ToPx(Grid gridloc) {
 }
 
 int Graphics::GetGridSize() {
-	//TODO
+	// de grootte, is dat de hoogte, de breedte of de oppervlakte?
+	al_get_bitmap_height(sprites[SPRITE_NONE]);
+	al_get_bitmap_width(sprites[SPRITE_NONE]);
 	return 0;
 }
 
