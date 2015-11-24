@@ -92,7 +92,11 @@ void Game::CaptureInput()
 
 void Game::DestroyEntities()
 {
-	// TODO: Destroy all Entities still attached to the Engine.
+	// remove all entities
+	std::vector<Entity*>::iterator it;
+	for (it = engine.GetEntities.begin(); it < engine.GetEntities.end(); ++it) {
+		engine.RemoveEntity(*it);
+	}
 }
 
 /* Destroys everything else */
