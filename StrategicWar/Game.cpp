@@ -92,9 +92,10 @@ void Game::CaptureInput()
 
 void Game::DestroyEntities()
 {
+	std::vector<Entity*> v = engine.GetEntities();
 	// remove all entities
 	std::vector<Entity*>::iterator it;
-	for (it = engine.GetEntities.begin(); it < engine.GetEntities.end(); ++it) {
+	for (it = v.begin(); it < v.end(); ++it) {
 		engine.RemoveEntity(*it);
 	}
 }
