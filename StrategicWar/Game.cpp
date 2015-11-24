@@ -65,12 +65,28 @@ void Game::CaptureInput()
 	// Mark changes in keymap
 	if (al->IsKeyboardEvent()) {
 		ALLEGRO_EVENT ev = al->GetCurrentEvent();
-		// TODO: Register which keys were pressed
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+			switch (ev.keyboard.keycode) {
+				//TODO opzoeken op welke keys er allemaal gereageerd moet worden
+				case ALLEGRO_KEY_ESCAPE:
+					break;
+			}
+		}
 	}
 
 	if (al->IsMouseEvent()) {
 		ALLEGRO_EVENT ev = al->GetCurrentEvent();
-		// TODO: Register mouse movements or button clicks
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+			switch (ev.mouse.button) {
+				// buttons worden genummerd vanaf 1
+				//TODO
+				case 1:
+					break;
+			}
+		}
+		else if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) { //muis bewogen
+			//TODO
+		}
 	}
 }
 
