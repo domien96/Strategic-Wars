@@ -13,8 +13,8 @@ int Graphics::GetGridSize() {
 
 void Graphics::LoadFonts()
 {
-	font = al_load_ttf_font("../assets/fonts/arialn.ttf", 12, 0);
-	big_font = al_load_ttf_font("../assets/fonts/arialn.ttf", 15, 0);
+	font = al_load_ttf_font("../assets/fonts/arialn.ttf", FONT_SIZE_SMALL, 0);
+	big_font = al_load_ttf_font("../assets/fonts/arialn.ttf", FONT_SIZE_HUGE, 0);
 }
 
 void Graphics::LoadSpriteCache() {
