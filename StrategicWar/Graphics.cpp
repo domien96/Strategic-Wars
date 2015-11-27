@@ -126,7 +126,7 @@ void Graphics::ExecuteDraws()
 	// switch the display buffer to the screen.
 	al_flip_display();
 	// clear the buffer
-	al_destroy_bitmap(buffer);
+	ClearScreen();
 }
 
 void Graphics::ClearScreen()
