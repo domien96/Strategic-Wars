@@ -7,7 +7,7 @@ class PositionComponent : public Component
 {
 public:
 	Grid pos;
-	int z; //Depth in the layer system
+	int z; //Depth in the layer system. The lowest component has depth 0.
 
 	PositionComponent(Grid _pos, int _z) : pos(_pos), z(_z) {};
 	virtual ~PositionComponent() {};

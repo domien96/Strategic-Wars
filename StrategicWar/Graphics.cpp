@@ -122,13 +122,17 @@ int getAlign(Graphics::Align align)
 
 void Graphics::ExecuteDraws()
 {
-	// TODO: switch the display buffer to the screen.
-	// TODO: clear the buffer
+	ALLEGRO_BITMAP *buffer = al_get_backbuffer(al->display);
+	// switch the display buffer to the screen.
+	al_flip_display();
+	// clear the buffer
+	ClearScreen();
 }
 
 void Graphics::ClearScreen()
 {
-	// TODO: clear the buffer by painting it black;
+	// clear the buffer by painting it black
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 }
 
 void Graphics::GenerateBackgroundSprite(World * world)
