@@ -5,8 +5,40 @@
 #include <assert.h>
 #include <queue>
 
+bool comp(Node* i, Node* j) {
+	return i->cost < j->cost;
+}
 
+/*void pqueue_update(priority_queue<Node*, vector<Node*>, decltype(&comp)>* q, void* item, int cost)
+{
+	assert(q != NULL);
+	assert(item != NULL);
 
+	int first_empty = -1;
+	for (int i = 0; i < q->item_max_count; i++) {
+		if (q->items[i].item == item) {
+			q->items[i].cost = cost;
+			return;
+		}
+		if (q->items[i].item == NULL && first_empty < 0)
+			first_empty = i;
+	}
+	if (first_empty < 0) {
+		int old_size = q->item_max_count;
+		int new_size = q->item_max_count * 2;
+		q->items = realloc(q->items, new_size * sizeof(QueueItem));
+		q->item_max_count = new_size;
+		for (int i = old_size; i < new_size; i++) {
+			q->items[i].item = NULL;
+		}
+		first_empty = old_size;
+	}
+	assert(first_empty >= 0);
+	assert(first_empty < q->item_max_count);
+	q->items[first_empty].item = item;
+	q->items[first_empty].cost = cost;
+	q->item_count++;
+}*/
 
 Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& target) {
 
@@ -26,17 +58,17 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 		return path;
 	}
 
-	priority_queue<Node*>* pqueue = new priority_queue<Node*>();
+	priority_queue<Node*, vector<Node*>, decltype(&comp)> pqueue(&comp);
 
 	//FIX ME
-	pqueue->push(startNode);
+	pqueue.push(startNode);
 	//pqueue_update(queue, startNode, 0);
 	//FIX ME
 
-	while (pqueue->size() > 0) {
+	while (pqueue.size() > 0) {
 
-		current = pqueue->top();
-		pqueue->pop();
+		current = pqueue.top();
+		pqueue.pop();
 		//pqueue_remove_first(queue);
 
 		//vector<Node*> neighbours = current->neighbours; //= Pathfinder::neighbours(current, world.rows, world.columns);
@@ -53,7 +85,7 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 					neighbour->prev = current;
 
 					//FIX ME
-					pqueue->push(current->neighbours[i]);
+					pqueue.push(current->neighbours[i]);
 					//pqueue_update(queue, neighbours[i], c);
 					//FIX ME
 
@@ -65,11 +97,10 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 
 	if (targetNode->cost == INT_MAX) {
 		//There is no path
-		while (pqueue->size()!=0) {
-			delete pqueue->top();
-			pqueue->pop();
+		while (pqueue.size()!=0) {
+			delete pqueue.top();
+			pqueue.pop();
 		}
-		delete pqueue;
 		delete graph->graph;
 		delete graph;
 		return NULL;
@@ -92,11 +123,10 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 			current = current->prev;
 		}
 
-		while (pqueue->size()!=0) {
-			delete pqueue->top();
-			pqueue->pop();
+		while (pqueue.size()!=0) {
+			delete pqueue.top();
+			pqueue.pop();
 		}
-		delete pqueue;
 		delete graph->graph;
 		delete graph;
 
