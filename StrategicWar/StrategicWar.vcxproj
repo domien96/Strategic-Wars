@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="debug_file.h" />
+    <ClInclude Include="DWGraph.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
@@ -172,8 +173,10 @@
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="UnitComponent.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DWGraph.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityStream.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

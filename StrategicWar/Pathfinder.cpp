@@ -6,32 +6,23 @@
 #include <queue>
 
 
-//FIX ME
-class Path { public: Grid* steps; int cost; };
-class World;
-class Cell;
-class Node { public: int cost; Grid grid; Node** neighbours; size_t amountOfNeighbours; bool visited; int* costs; Node* prev; };
-class DWGraph;
-//FIX ME
 
 
-using namespace std;
+Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& target) {
 
-Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
+	DWGraph* graph = new DWGraph(world, unit);
 
-	//DWGraph* graph = make_graph_with_type(level, start->type);
-
-	Node* startNode /* = cell_to_node(graph, start)*/;
-	Node* targetNode /*= cell_to_node(graph, target)*/;
+	Node* startNode;//= cell_to_node(graph, start);
+	Node* targetNode;// = cell_to_node(graph, target);
 	Node* current = startNode;
-	startNode->cost = 0;
+	graph->set(start, 0);
 
 	//if (startNode->pos.col == targetNode->pos.col && startNode->pos.row == targetNode->pos.row) {
-	if (startNode->grid.col == targetNode->grid.col && startNode->grid.row == targetNode->grid.row) {
+	if (start.col == target.col && start.row == target.row) {
 		Path* path = new Path();
-		path->steps->col = startNode->grid.col;
-		path->steps->row = startNode->grid.row;
-		//remove graph;
+		path->steps->col = start.col;
+		path->steps->row = start.row;
+		//delete graph;
 		return path;
 	}
 
@@ -48,12 +39,13 @@ Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
 		pqueue->pop();
 		//pqueue_remove_first(queue);
 
-		Node** neighbours = (current->neighbours);
-		for (size_t i = 0; i < current->amountOfNeighbours; i++) {
-			Node *neighbour = neighbours[i];
+		//vector<Node*> neighbours = current->neighbours; //= Pathfinder::neighbours(current, world.rows, world.columns);
+
+		for (size_t i = 0; i < current->neighbours.size(); i++) {
+			Node* neighbour = current->neighbours[i];
 
 			if (!neighbour->visited) {
-				int c = current->costs[i] == INT_MAX || current->costs[i] == INT_MAX ?
+				int c = current->costs[i] == INT_MAX || current->cost == INT_MAX ?
 					INT_MAX : current->cost + current->costs[i];
 				if (c < 0) c = INT_MAX;
 				if (c < neighbour->cost) {
@@ -61,7 +53,7 @@ Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
 					neighbour->prev = current;
 
 					//FIX ME
-					pqueue->push(neighbours[i]);
+					pqueue->push(current->neighbours[i]);
 					//pqueue_update(queue, neighbours[i], c);
 					//FIX ME
 
@@ -73,9 +65,13 @@ Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
 
 	if (targetNode->cost == INT_MAX) {
 		//There is no path
+		while (pqueue->size()!=0) {
+			delete pqueue->top();
+			pqueue->pop();
+		}
 		delete pqueue;
-		//pqueue_free(queue);
-		//free_graph(graph);
+		delete graph->graph;
+		delete graph;
 		return NULL;
 	}
 	else {
@@ -86,7 +82,7 @@ Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
 			pathSize++;
 		}
 		current = targetNode;
-		
+
 		Path* path = new Path();
 		path->cost = targetNode->cost;
 
@@ -95,9 +91,45 @@ Path* /*Pathfinder::*/find_path(World* world, Cell* start, Cell* target) {
 			path->steps[i] = current->grid;
 			current = current->prev;
 		}
+
+		while (pqueue->size()!=0) {
+			delete pqueue->top();
+			pqueue->pop();
+		}
 		delete pqueue;
-		//pqueue_free(queue);
-		//free_graph(graph);
+		delete graph->graph;
+		delete graph;
+
 		return path;
 	}
+}
+
+vector<Grid> Pathfinder::neighbours(Grid& current, int rows, int columns) {
+	vector<Grid> neighbours;
+	if (current.row != 0) {
+		if (current.col != 0) {
+			neighbours.push_back(Grid(current.row - 1, current.col - 1));
+		}
+		neighbours.push_back(Grid(current.row - 1, current.col));
+		if (current.col != columns - 1) {
+			neighbours.push_back(Grid(current.row - 1, current.col + 1));
+		}
+	}
+	if (current.row != rows - 1) {
+		if (current.col != 0) {
+			neighbours.push_back(Grid(current.row + 1, current.col - 1));
+		}
+		neighbours.push_back(Grid(current.row + 1, current.col));
+		if (current.col != columns - 1) {
+			neighbours.push_back(Grid(current.row + 1, current.col + 1));
+		}
+	}
+	if (current.col != 0) {
+		neighbours.push_back(Grid(current.row, current.col - 1));
+	}
+	if (current.col != columns - 1) {
+		neighbours.push_back(Grid(current.row, current.col + 1));
+	}
+
+	return neighbours;
 }
