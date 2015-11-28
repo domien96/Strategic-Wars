@@ -11,15 +11,21 @@ using namespace std;
 //FIX ME
 class Path { public: Grid* steps; int cost; };
 
-class Node {
+/*class Node {
 public: int cost; Grid grid; vector<Node*> neighbours; bool visited; int* costs; Node* prev;
-};
+};*/
 //FIX ME
 
 class Pathfinder {
-	public:
+public:
 
-		Path* find_path(World& world, UnitComponent& unit, Grid& start, Grid& target);
+	bool comp(Grid* i, Grid* j);
+	//DWGraph* get_graph();
+	Path* find_path(World& world, UnitComponent& unit, Grid& start, Grid& target);
+
+private:
+
+	DWGraph* graph;
 
 };
 
