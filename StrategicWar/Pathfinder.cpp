@@ -40,7 +40,7 @@ bool comp(Node* i, Node* j) {
 	q->item_count++;
 }*/
 
-Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& target) {
+Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
 	DWGraph* graph = new DWGraph(world, unit);
 
@@ -134,32 +134,4 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 	}
 }
 
-vector<Grid> Pathfinder::neighbours(Grid& current, int rows, int columns) {
-	vector<Grid> neighbours;
-	if (current.row != 0) {
-		if (current.col != 0) {
-			neighbours.push_back(Grid(current.row - 1, current.col - 1));
-		}
-		neighbours.push_back(Grid(current.row - 1, current.col));
-		if (current.col != columns - 1) {
-			neighbours.push_back(Grid(current.row - 1, current.col + 1));
-		}
-	}
-	if (current.row != rows - 1) {
-		if (current.col != 0) {
-			neighbours.push_back(Grid(current.row + 1, current.col - 1));
-		}
-		neighbours.push_back(Grid(current.row + 1, current.col));
-		if (current.col != columns - 1) {
-			neighbours.push_back(Grid(current.row + 1, current.col + 1));
-		}
-	}
-	if (current.col != 0) {
-		neighbours.push_back(Grid(current.row, current.col - 1));
-	}
-	if (current.col != columns - 1) {
-		neighbours.push_back(Grid(current.row, current.col + 1));
-	}
 
-	return neighbours;
-}

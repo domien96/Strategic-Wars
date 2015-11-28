@@ -19,8 +19,7 @@ public: int cost; Grid grid; vector<Node*> neighbours; bool visited; int* costs;
 class Pathfinder {
 	public:
 
-		Path* find_path(World& world, Entity& unit, Grid& start, Grid& target);
-		vector<Grid> neighbours(Grid& current, int rows, int columns);
+		Path* find_path(World& world, UnitComponent& unit, Grid& start, Grid& target);
 
 };
 
