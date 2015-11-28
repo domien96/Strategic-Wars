@@ -47,7 +47,7 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 	Node* startNode;//= cell_to_node(graph, start);
 	Node* targetNode;// = cell_to_node(graph, target);
 	Node* current = startNode;
-	graph->set(start, 0);
+	graph->set_cost(start, 0);
 
 	//if (startNode->pos.col == targetNode->pos.col && startNode->pos.row == targetNode->pos.row) {
 	if (start.col == target.col && start.row == target.row) {
@@ -101,7 +101,7 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 			delete pqueue.top();
 			pqueue.pop();
 		}
-		delete graph->graph;
+		graph->delete_graph();
 		delete graph;
 		return NULL;
 	}
@@ -127,7 +127,7 @@ Path* Pathfinder::find_path(World& world, Entity& unit, Grid& start, Grid& targe
 			delete pqueue.top();
 			pqueue.pop();
 		}
-		delete graph->graph;
+		graph->delete_graph();
 		delete graph;
 
 		return path;

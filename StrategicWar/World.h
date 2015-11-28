@@ -3,9 +3,9 @@
 
 class World { 
 	public: 
-		int getRows();
+		size_t getRows();
 
-		int getColumns();
+		size_t getColumns();
 
 		// geef cel terug getCell(int row, int col);
 
