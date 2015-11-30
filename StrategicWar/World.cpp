@@ -1,11 +1,34 @@
 #include "World.h"
+#include "Entity.h"
+#include "PositionComponent.h"
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
+
 /*
-* Functie die de wereld initialiseert aan de hand van de data in het gegeven bestand.
+
+void init_texturemap() {
+std::map<char, TextureComponent*> = textures
+textures['*'] = *TextureComponent(Graphics::Sprite::SPRITE_WATER);
+//textures['W'] = TextureComponent(Graphics::Sprite::SPRITE_WATER);
+//textures['B'] = TextureComponent(Graphics::Sprite::SPRITE_BRIDGE);
+//textures['R'] = TextureComponent(Graphics::Sprite::SPRITE_ROCK);
+//textures['H'] = TextureComponent(Graphics::Sprite::SPRITE_HQ);
+*/
+
+TextureComponent getTextureComponent(char symbol) {
+	// TODO: implement switch case get uit texturemap
+	return NULL;
+}
+UnitComponent getUnitComponent(char Symbol) {
+	// TODO: implement switch case
+	return NULL;
+}
+
+/*
+* Functie die de wereld initialiseert aan de hand van de data in het gegeven BINAIR bestand.
 * Geeft 0 terug indien geslaagd en 1 indien mislukt.
 */
 int init_world(World* world, ifstream file) {
@@ -25,12 +48,37 @@ int init_world(World* world, ifstream file) {
 	//initialize cells
 	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
-			// TODO: initialize every cell + store these cells
-			// Cell = row, col, celltype, owner
+			// Read each charachter: TODO
+			char symbol; // !!!!
+			// Een cell is een entity met een positioncomponent en een texturecomponent.
+			Grid grid = Grid::Grid(r, c);
+			PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
+			TextureComponent tc = getTextureComponent(symbol);
+			Entity* cell = new Entity();
+			cell->Add(&pc);
+
+			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
+			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent
+			//TODO
+			Entity* unit = new Entity();
+			PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
+			
+			UnitComponent uc_unit = getUnitComponent(symbol);
+			unit->Add(&pc_unit);
+
+			// Voor een hoofdkwartier maken we geen nieuwe entity aan omdat een hoofdkwartier zich toch niet zal 
+			// verplaatsen, maar een hoofdkwartier heeft wel een extra unitcomponent nodig, omdat het bezit wordt 
+			// door een speler.
+			UnitComponent uc = getUnitComponent(symbol);
+			cell->Add(&uc);
+
+
 		}
 	}
 	return 0;
 }
+
+
 
 
 /*
@@ -43,12 +91,7 @@ World* generateWorld(string world_file) {
 		file.open(world_file);
 		if (file.is_open()) {
 			World* world;
-			string extension = world_file.substr(world_file.length() - 5);
-			if (extension == ".wld") {
-				//init_world_binary();
-				//return world;
-			}
-			extension = world_file.substr(world_file.length() - 8);
+			string extension = world_file.substr(world_file.length() - 8);
 			if (extension == ".world") {
 				// geeft nog een error op de ifstream file
 				// if (init_world(world, file) != 1) {

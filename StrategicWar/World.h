@@ -1,6 +1,9 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "TextureComponent.h"
+#include "UnitComponent.h"
+
 #include <string>
 
 using namespace std;
@@ -17,6 +20,11 @@ class World {
 
 
 		// geef cel terug getCell(int row, int col);
+
+		TextureComponent getTextureComponent(char symbol);
+		UnitComponent getUnitComponent(char Symbol);
+
+		int init_world(World* world, ifstream file);
 
 		World* generateWorld(string world_file);
 		void loadLevel(string world_file);
