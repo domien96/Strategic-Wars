@@ -18,20 +18,27 @@ textures['*'] = *TextureComponent(Graphics::Sprite::SPRITE_WATER);
 //textures['H'] = TextureComponent(Graphics::Sprite::SPRITE_HQ);
 */
 
-TextureComponent getTextureComponent(char symbol) {
+World::World(string world_file)
+{
+	this->world_file = world_file;
+	loadLevel();
+}
+
+TextureComponent World::getTextureComponent(char symbol) {
 	// TODO: implement switch case get uit texturemap
+	UnitComponent();
 	return NULL;
 }
-UnitComponent getUnitComponent(char Symbol) {
+UnitComponent World::getUnitComponent(char symbol) {
 	// TODO: implement switch case
 	return NULL;
 }
 
 /*
-* Functie die de wereld initialiseert aan de hand van de data in het gegeven BINAIR bestand.
+* Functie die de wereld initialiseert aan de hand van de data in het gegeven TEKSTUEEL bestand.
 * Geeft 0 terug indien geslaagd en 1 indien mislukt.
 */
-int init_world(World* world, ifstream file) {
+int World::init_world(World* world, ifstream file) {
 	string read_width;
 	string read_height;
 	// The first line is of the form: "width|height"
@@ -84,7 +91,7 @@ int init_world(World* world, ifstream file) {
 /*
 * Functie die een pointer naar de geïnititaliseerde wereld teruggeeft.
 */
-World* generateWorld(string world_file) {
+World* World::generateWorld() {
 	if (world_file.length() >= 6) {
 		/* open() the file */
 		ifstream file;
@@ -110,8 +117,8 @@ World* generateWorld(string world_file) {
 /*
 * Functie die men oproept om de wereld te initializeren aan de hand van de opgegeven file.
 */
-void loadLevel(std::string world_file) {
-	if (generateWorld(world_file) == NULL) {
+void World::loadLevel() {
+	if (generateWorld() == NULL) {
 		// loading failed
 		// TODO: Fout behandelen
 	}

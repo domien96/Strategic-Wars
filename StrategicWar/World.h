@@ -11,7 +11,8 @@ using namespace std;
 class World { 
 	public: 
 		
-		
+		World(string world_file);
+
 		size_t getRows();
 		size_t getColumns();
 
@@ -24,17 +25,19 @@ class World {
 		TextureComponent getTextureComponent(char symbol);
 		UnitComponent getUnitComponent(char Symbol);
 
-		int init_world(World* world, ifstream file);
-
-		World* generateWorld(string world_file);
-		void loadLevel(string world_file);
 
 		
 
 		//bool level_can_walk_over(cell1, cell2)
 		
 	private: 
-		int rows, columns; 
+		int rows, columns;
+		string world_file;
+
+		int init_world(World* world, ifstream file);
+
+		World* generateWorld();
+		void loadLevel();
 	};
 
 #endif
