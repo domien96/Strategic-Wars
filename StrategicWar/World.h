@@ -1,6 +1,10 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <string>
+
+using namespace std;
+
 class World { 
 	public: 
 		size_t getRows();

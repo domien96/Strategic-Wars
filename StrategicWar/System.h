@@ -10,7 +10,7 @@ class System
 {
 public:
 	enum Type {
-		TYPE_RENDER
+		TYPE_RENDER, TYPE_MOUSE, TYPE_ANIMATION
 	};
 
 	System() {};
