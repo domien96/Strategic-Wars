@@ -26,12 +26,55 @@ World::World(string world_file)
 
 TextureComponent World::getTextureComponent(char symbol) {
 	// TODO: implement switch case get uit texturemap
-	UnitComponent();
 	return NULL;
 }
+
+/*
+ * Generates a UnitComponent using the textual representation of a cell. 
+ * A unitcomponent has a constructor of the form:
+ * UnitComponent(System::Type _type, int _player, int _hp, int _ap, int _dp, int _range_min, int _range_max)
+ * Human player has the number 0 and the AI plater has the number 1.
+ * The stats of the units we've taken from the assignment.
+ * A headquarter can't attack, but it can be attacked, so it has a hp. The hp was not given in the assignment, but we've chosen 15.
+ */
 UnitComponent World::getUnitComponent(char symbol) {
-	// TODO: implement switch case
-	return NULL;
+		switch (symbol) {
+		case '1':
+			//TODO: wrong system type!
+
+			//infantry, human player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			break;
+		case '2':
+			//archery, human player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 3, 3, 0, 3);
+			break;
+		case '3':
+			//fire, human player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 4, 1, 2, 5);
+			break;
+		case '7':
+			//infantry, AI player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 2, 2, 0, 1);
+			break;
+		case '8':
+			//archery, AI player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 3, 3, 0, 3);
+			break;
+		case '9':
+			//fire, AI player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 4, 1, 2, 5);
+			break;
+		case 'h':
+			//headquarter, human player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 15, 0, 0, 0, 0);
+			break;
+		case 'H':
+			//headquarter, AI player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 15, 0, 0, 0, 0);
+			break;
+
+		}
 }
 
 /*
@@ -52,6 +95,16 @@ int World::init_world(World* world, ifstream file) {
 	};
 	world->setColumns(width);
 	world->setRows(height);
+
+	// Hou alle karakters bij die aangeven dat een symbool een unit is
+	std::vector<char> unitchars;
+	unitchars.push_back('1');
+	unitchars.push_back('2');
+	unitchars.push_back('3');
+	unitchars.push_back('7');
+	unitchars.push_back('8');
+	unitchars.push_back('9');
+
 	//initialize cells
 	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
@@ -66,18 +119,25 @@ int World::init_world(World* world, ifstream file) {
 
 			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
 			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent
-			//TODO
-			Entity* unit = new Entity();
-			PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
-			
-			UnitComponent uc_unit = getUnitComponent(symbol);
-			unit->Add(&pc_unit);
+			// Check of het symbool een unit voorstelt
+			std::vector<char>::iterator it;
+			it = find(unitchars.begin(), unitchars.end(), symbol);
+			if (it != unitchars.end()) {
+				Entity* unit = new Entity();
+				PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
+				UnitComponent uc_unit = getUnitComponent(symbol);
+				unit->Add(&pc_unit);
+			}
 
 			// Voor een hoofdkwartier maken we geen nieuwe entity aan omdat een hoofdkwartier zich toch niet zal 
 			// verplaatsen, maar een hoofdkwartier heeft wel een extra unitcomponent nodig, omdat het bezit wordt 
 			// door een speler.
-			UnitComponent uc = getUnitComponent(symbol);
-			cell->Add(&uc);
+			// Check of het symbool een hoofdkwartier voorstelt
+			if (symbol == 'h' || symbol == 'H') {
+				UnitComponent uc = getUnitComponent(symbol);
+				cell->Add(&uc);
+			}
+
 
 
 		}
