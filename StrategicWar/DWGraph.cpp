@@ -1,6 +1,9 @@
 #include "DWGraph.h"
 
+#include "TextureComponent.h"
+
 DWGraph::DWGraph(World& world, UnitComponent& unit) {
+
 	number_of_rows = world.getRows();
 	number_of_columns = world.getColumns();
 	Add(&unit);
