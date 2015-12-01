@@ -299,5 +299,12 @@ void World::loadLevel() {
 	}
 }
 
+/*
+* Destructor
+*/
+World::~World() {
+
+}
+
 
 

@@ -13,7 +13,9 @@ using namespace std;
 class World { 
 	public: 
 		
+		// CONSTRUCTORS AND DESTRUCTOR
 		World(string world_file);
+		~World();
 
 		int getRows();
 		int getColumns();
