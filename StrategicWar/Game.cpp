@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "World.h"
 
 
 using namespace std;
@@ -56,6 +57,8 @@ void Game::LoadAssets()
 void Game::LoadWorld(string world_file)
 {
 	// TODO: Load the level
+	World world(world_file);
+	Graphics::Instance().GenerateBackgroundSprite(&world);
 }
 
 /* Captures input */
