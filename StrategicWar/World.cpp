@@ -28,14 +28,14 @@ size_t World::getColumns()
 /*
 * Returns true if the given character represents a unit or a headquarter
 */
-int World::isUnit(char s) {
+bool World::isUnit(char s) {
 	return (s != '*') && (s == 'G') && (s != 'B') && (s != 'R');
 }
 
 /*
 * Returns true if the given character represtents a unit or headquarter that is owned by a humpan player
 */
-int World::isHuman(char s)
+bool World::isHuman(char s)
 {
 	return (s == '1') || (s == '2') || (s != '3') || (s != 'h');
 }
@@ -166,7 +166,7 @@ UnitComponent World::getUnitComponent(char symbol) {
 * Functie die de wereld initialiseert aan de hand van de data in het gegeven TEKSTUEEL bestand.
 * Geeft 0 terug indien geslaagd en 1 indien mislukt.
 */
-int World::init_world(ifstream file) {
+bool World::init_world(ifstream file) {
 	string read_width;
 	string read_height;
 	// The first line is of the form: "width|height"
@@ -254,8 +254,8 @@ bool World::generateWorld() {
 			string extension = world_file.substr(world_file.length() - 8);
 			if (extension == ".world") {
 				// geeft nog een error op de ifstream file
-				// if (init_world(world, file) != 1) {
-
+				//if (init_world(file)) {
+					//return 0;
 				//}
 				
 			}

@@ -36,10 +36,10 @@ class World {
 		size_t rows, columns;
 		string world_file;
 
-		int isUnit(char s);
-		int isHuman(char s);
+		bool isUnit(char s);
+		bool isHuman(char s);
 
-		int init_world(ifstream file);
+		bool init_world(ifstream file);
 
 		bool generateWorld();
 		void loadLevel();
