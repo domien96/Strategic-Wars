@@ -16,12 +16,12 @@ World::World(string world_file)
 	loadLevel();
 }
 
-size_t World::getRows()
+int World::getRows()
 {
 	return rows;
 }
 
-size_t World::getColumns()
+int World::getColumns()
 {
 	return columns;
 }
@@ -260,8 +260,8 @@ bool World::generateWorld() {
 		/* open() the file */
 		ifstream file(world_file);
 		if (file.is_open()) {
-			string extension = world_file.substr(world_file.length() - 8);
-			if (extension.compare(".world")) {
+			string extension = world_file.substr(world_file.find_last_of("."));
+			if (extension.compare(".world")==0) {
 				//initworld
 				// geeft nog een error op de ifstream file
 				if (init_world(&file) != 1) {
