@@ -40,7 +40,6 @@ class World {
 		int isHuman(char s);
 
 		int init_world(ifstream file);
-
 		bool generateWorld();
 		void loadLevel();
 	};

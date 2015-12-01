@@ -242,8 +242,13 @@ int World::init_world(ifstream file) {
 
 
 /*
-* Functie die een pointer naar de geïnititaliseerde wereld teruggeeft.
-* Return 0 if everything is ok
+* Functie die de file opent en adhv die file de wereld genereert.
+* Bovendien zal de wereld ook gecontroleerd worden op geldigheid. <==================TODO TODO TODO TODO TODO TODO
+* Return 
+* 0 : if everything is ok
+* 1 : File cannot be opened or is not readable or accesable
+* 2 : Unrecognized extension
+* 3 : Described World in the file is not a valid world.
 */
 bool World::generateWorld() {
 	if (world_file.length() >= 6) {
@@ -253,17 +258,27 @@ bool World::generateWorld() {
 		if (file.is_open()) {
 			string extension = world_file.substr(world_file.length() - 8);
 			if (extension == ".world") {
+				//initworld
 				// geeft nog een error op de ifstream file
 				// if (init_world(world, file) != 1) {
-
+				//   return 1;
 				//}
-				
+				// if world is not valid
+				//		return 3;
+			} else {
+				// onherkende extensie
+				return 2;
 			}
+		} else {
+			return 1;
 		}
 		file.close();
+		return 0;
 	}
-
-	return 1;
+	else {
+		// .world extension can never be the extenson of the file since the filename length < 6.
+		return 2;
+	}
 }
 
 
