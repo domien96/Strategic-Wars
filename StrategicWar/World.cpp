@@ -7,16 +7,7 @@
 using namespace std;
 
 
-/*
 
-void init_texturemap() {
-std::map<char, TextureComponent*> = textures
-textures['*'] = *TextureComponent(Graphics::Sprite::SPRITE_WATER);
-//textures['W'] = TextureComponent(Graphics::Sprite::SPRITE_WATER);
-//textures['B'] = TextureComponent(Graphics::Sprite::SPRITE_BRIDGE);
-//textures['R'] = TextureComponent(Graphics::Sprite::SPRITE_ROCK);
-//textures['H'] = TextureComponent(Graphics::Sprite::SPRITE_HQ);
-*/
 
 World::World(string world_file)
 {
@@ -25,6 +16,24 @@ World::World(string world_file)
 }
 
 /*
+* Returns true if the given character represents a unit or a headquarter
+*/
+int World::isUnit(char s) {
+	return (s != '*') && (s == 'G') && (s != 'B') && (s != 'R');
+}
+
+/*
+* Returns true if the given character represtents a unit or headquarter that is owned by a humpan player
+*/
+int World::isHuman(char s)
+{
+	return (s == '1') || (s == '2') || (s != '3') || (s != 'h');
+}
+
+
+/*
+* Generates a texture component using the textual representation of a cell.
+* It also generates a texture component for the flag representing the player
 */
 TextureComponent World::getTextureComponent(char symbol) {
 	switch (symbol) {
@@ -162,50 +171,56 @@ int World::init_world(World* world, ifstream file) {
 	world->setColumns(width);
 	world->setRows(height);
 
-	// Hou alle karakters bij die aangeven dat een symbool een unit is
-	std::vector<char> unitchars;
-	unitchars.push_back('1');
-	unitchars.push_back('2');
-	unitchars.push_back('3');
-	unitchars.push_back('7');
-	unitchars.push_back('8');
-	unitchars.push_back('9');
-
 	//initialize cells
 	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
 			// Read each charachter: TODO
 			char symbol; // !!!!
-			// Een cell is een entity met een positioncomponent en een texturecomponent.
+						 // Een cell is een entity met een positioncomponent en een texturecomponent. 
+			Entity* cell = new Entity();
 			Grid grid = Grid::Grid(r, c);
 			PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
-			TextureComponent tc = getTextureComponent(symbol);
-			Entity* cell = new Entity();
 			cell->Add(&pc);
 
-			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
-			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent
-			// Check of het symbool een unit voorstelt
-			std::vector<char>::iterator it;
-			it = find(unitchars.begin(), unitchars.end(), symbol);
-			if (it != unitchars.end()) {
+
+			// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
+			// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
+			if (!isUnit(symbol)) {
+				TextureComponent tc = getTextureComponent(symbol);
+				cell->Add(&tc);
+			}
+			else {
+				TextureComponent tc = getTextureComponent('*');
+				cell->Add(&tc);
+
+				// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
+				// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent.
+				// Merk op dat ook een hoofdkwartier kan aangevallen worden en bezit wordt door een speler dus dat 
+				// deze ook een entity nodig heeft.
 				Entity* unit = new Entity();
 				PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
 				UnitComponent uc_unit = getUnitComponent(symbol);
+				TextureComponent tc_unit = getTextureComponent(symbol);
 				unit->Add(&pc_unit);
+				unit->Add(&uc_unit);
+				unit->Add(&tc_unit);
+
+				// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
+				// Voor deze vlag maken we nog een entity aan.
+
+				Entity* player = new Entity();
+				PositionComponent pc_player = PositionComponent::PositionComponent(grid, 2);
+				if (isHuman(symbol)) {
+					TextureComponent tc_player = getTextureComponent('f');
+					player->Add(&tc_player);
+				}
+
+				else {
+					TextureComponent tc_player = getTextureComponent('F');
+					player->Add(&tc_player);
+				}
+				player->Add(&pc_player);
 			}
-
-			// Voor een hoofdkwartier maken we geen nieuwe entity aan omdat een hoofdkwartier zich toch niet zal 
-			// verplaatsen, maar een hoofdkwartier heeft wel een extra unitcomponent nodig, omdat het bezit wordt 
-			// door een speler.
-			// Check of het symbool een hoofdkwartier voorstelt
-			if (symbol == 'h' || symbol == 'H') {
-				UnitComponent uc = getUnitComponent(symbol);
-				cell->Add(&uc);
-			}
-
-
-
 		}
 	}
 	return 0;

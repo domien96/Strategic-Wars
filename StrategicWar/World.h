@@ -36,6 +36,9 @@ class World {
 		int rows, columns;
 		string world_file;
 
+		int isUnit(char s);
+		int isHuman(char s);
+
 		int init_world(World* world, ifstream file);
 
 		World* generateWorld();
