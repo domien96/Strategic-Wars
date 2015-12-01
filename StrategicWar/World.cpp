@@ -84,6 +84,10 @@ TextureComponent World::getTextureComponent(char symbol) {
 		//ROCK
 		return TextureComponent(Graphics::Sprite::SPRITE_ROCK);
 		break;
+	default:
+		// CURRENT DEFAULT : GROUND
+		return DEFAULT_TEXTURE;
+		break;
 	}
 }
 
@@ -97,6 +101,10 @@ TextureComponent World::getTextureComponent(char symbol) {
  */
 UnitComponent World::getUnitComponent(char symbol) {
 		switch (symbol) {
+		default:
+			//infantry, human player
+			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			break;
 		case '1':
 			//TODO: wrong system type!
 

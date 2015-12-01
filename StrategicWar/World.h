@@ -6,6 +6,8 @@
 
 #include <string>
 
+#define DEFAULT_TEXTURE Graphics::Sprite::SPRITE_TERRAIN
+
 using namespace std;
 
 class World { 
