@@ -167,12 +167,12 @@ UnitComponent World::getUnitComponent(char symbol) {
 * Functie die de wereld initialiseert aan de hand van de data in het gegeven TEKSTUEEL bestand.
 * Geeft 0 terug indien geslaagd en 1 indien mislukt.
 */
-int World::init_world(ifstream file) {
+int World::init_world(ifstream* file) {
 	string read_width;
 	string read_height;
 	// The first line is of the form: "width|height"
-	getline(file, read_width, '|');
-	getline(file, read_height);
+	getline(*file, read_width, '|');
+	getline(*file, read_height);
 	// TODO : invalid first line(geen int)
 	int width = stoi(read_width);
 	int height = stoi(read_height);
