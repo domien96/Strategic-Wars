@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-//TESTCOMMIT
+
 
 World::World(string world_file)
 {
@@ -16,12 +16,12 @@ World::World(string world_file)
 	loadLevel();
 }
 
-int World::getRows()
+size_t World::getRows()
 {
 	return rows;
 }
 
-int World::getColumns()
+size_t World::getColumns()
 {
 	return columns;
 }
@@ -181,61 +181,65 @@ int World::init_world(ifstream* file) {
 	};
 	this->columns = width;
 	this->rows = height;
-	this->setColumns(width);
-	this->setRows(height);
 
-	//initialize cells
-	for (int r = 0; r < height; r++) {
-		for (int c = 0; c < width; c++) {
-			// Read each charachter: TODO
-			char symbol; // !!!!
-						 // Een cell is een entity met een positioncomponent en een texturecomponent. 
-			Entity* cell = new Entity();
-			Grid grid = Grid::Grid(r, c);
-			PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
-			cell->Add(&pc);
+	int counter = 0;
+	char symbol; 
+	*file >> symbol; // pre-check
+
+	while (!(*file).fail()) {
+		// verwerk 
+		int r = floor(counter / this->columns);
+		int c = counter % this->columns;
+		Entity* cell = new Entity();
+		Grid grid = Grid::Grid(r, c);
+		PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
+		cell->Add(&pc);
 
 
-			// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
-			// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
-			if (!isUnit(symbol)) {
-				TextureComponent tc = getTextureComponent(symbol);
-				cell->Add(&tc);
-			}
-			else {
-				TextureComponent tc = getTextureComponent('*');
-				cell->Add(&tc);
-
-				// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
-				// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent.
-				// Merk op dat ook een hoofdkwartier kan aangevallen worden en bezit wordt door een speler dus dat 
-				// deze ook een entity nodig heeft.
-				Entity* unit = new Entity();
-				PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
-				UnitComponent uc_unit = getUnitComponent(symbol);
-				TextureComponent tc_unit = getTextureComponent(symbol);
-				unit->Add(&pc_unit);
-				unit->Add(&uc_unit);
-				unit->Add(&tc_unit);
-
-				// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
-				// Voor deze vlag maken we nog een entity aan.
-
-				Entity* player = new Entity();
-				PositionComponent pc_player = PositionComponent::PositionComponent(grid, 2);
-				if (isHuman(symbol)) {
-					TextureComponent tc_player = getTextureComponent('f');
-					player->Add(&tc_player);
-				}
-
-				else {
-					TextureComponent tc_player = getTextureComponent('F');
-					player->Add(&tc_player);
-				}
-				player->Add(&pc_player);
-			}
+		// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
+		// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
+		if (!isUnit(symbol)) {
+			TextureComponent tc = getTextureComponent(symbol);
+			cell->Add(&tc);
 		}
+		else {
+			TextureComponent tc = getTextureComponent('*');
+			cell->Add(&tc);
+
+			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
+			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent.
+			// Merk op dat ook een hoofdkwartier kan aangevallen worden en bezit wordt door een speler dus dat 
+			// deze ook een entity nodig heeft.
+			Entity* unit = new Entity();
+			PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
+			UnitComponent uc_unit = getUnitComponent(symbol);
+			TextureComponent tc_unit = getTextureComponent(symbol);
+			unit->Add(&pc_unit);
+			unit->Add(&uc_unit);
+			unit->Add(&tc_unit);
+
+			// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
+			// Voor deze vlag maken we nog een entity aan.
+
+			Entity* player = new Entity();
+			PositionComponent pc_player = PositionComponent::PositionComponent(grid, 2);
+			if (isHuman(symbol)) {
+				TextureComponent tc_player = getTextureComponent('f');
+				player->Add(&tc_player);
+			}
+
+			else {
+				TextureComponent tc_player = getTextureComponent('F');
+				player->Add(&tc_player);
+			}
+			player->Add(&pc_player);
+		}
+
+		counter++;
+		// lees terug een karakter in
+		*file >> symbol;
 	}
+
 	return 0;
 }
 
@@ -254,23 +258,25 @@ int World::init_world(ifstream* file) {
 bool World::generateWorld() {
 	if (world_file.length() >= 6) {
 		/* open() the file */
-		ifstream file;
-		file.open(world_file);
+		ifstream file(world_file);
 		if (file.is_open()) {
-			string extension = world_file.substr(world_file.find_last_of("."));
-			if (extension == ".world") {
+			string extension = world_file.substr(world_file.length() - 8);
+			if (extension.compare(".world")) {
 				//initworld
 				// geeft nog een error op de ifstream file
-				// if (init_world(world, file) != 1) {
-				//   return 1;
-				//}
+				if (init_world(&file) != 1) {
+					file.close();
+				    return 1;
+				}
 				// if world is not valid
 				//		return 3;
 			} else {
 				// onherkende extensie
+				file.close();
 				return 2;
 			}
 		} else {
+			file.close();
 			return 1;
 		}
 		file.close();

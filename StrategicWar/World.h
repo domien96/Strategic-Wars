@@ -15,8 +15,8 @@ class World {
 		
 		World(string world_file);
 
-		int getRows();
-		int getColumns();
+		size_t getRows();
+		size_t getColumns();
 
 		void setRows(int r) { rows = r; }
 		void setColumns(int c) { columns = c; }
@@ -33,7 +33,7 @@ class World {
 		//bool level_can_walk_over(cell1, cell2)
 		
 	private: 
-		int rows, columns;
+		size_t rows, columns;
 		string world_file;
 
 		int isUnit(char s);
