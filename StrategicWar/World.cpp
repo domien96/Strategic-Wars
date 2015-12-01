@@ -15,6 +15,16 @@ World::World(string world_file)
 	loadLevel();
 }
 
+size_t World::getRows()
+{
+	return rows;
+}
+
+size_t World::getColumns()
+{
+	return columns;
+}
+
 /*
 * Returns true if the given character represents a unit or a headquarter
 */
@@ -156,7 +166,7 @@ UnitComponent World::getUnitComponent(char symbol) {
 * Functie die de wereld initialiseert aan de hand van de data in het gegeven TEKSTUEEL bestand.
 * Geeft 0 terug indien geslaagd en 1 indien mislukt.
 */
-int World::init_world(World* world, ifstream file) {
+int World::init_world(ifstream file) {
 	string read_width;
 	string read_height;
 	// The first line is of the form: "width|height"
@@ -168,8 +178,10 @@ int World::init_world(World* world, ifstream file) {
 	if (width <= 0 || height <= 0) {
 		return 1;
 	};
-	world->setColumns(width);
-	world->setRows(height);
+	this->columns = width;
+	this->rows = height;
+	this->setColumns(width);
+	this->setRows(height);
 
 	//initialize cells
 	for (int r = 0; r < height; r++) {
@@ -231,19 +243,19 @@ int World::init_world(World* world, ifstream file) {
 
 /*
 * Functie die een pointer naar de geïnititaliseerde wereld teruggeeft.
+* Return 0 if everything is ok
 */
-World* World::generateWorld() {
+bool World::generateWorld() {
 	if (world_file.length() >= 6) {
 		/* open() the file */
 		ifstream file;
 		file.open(world_file);
 		if (file.is_open()) {
-			World* world;
 			string extension = world_file.substr(world_file.length() - 8);
 			if (extension == ".world") {
 				// geeft nog een error op de ifstream file
 				// if (init_world(world, file) != 1) {
-					return world;
+
 				//}
 				
 			}
@@ -251,7 +263,7 @@ World* World::generateWorld() {
 		file.close();
 	}
 
-	return (World*)NULL;
+	return 1;
 }
 
 
@@ -259,7 +271,7 @@ World* World::generateWorld() {
 * Functie die men oproept om de wereld te initializeren aan de hand van de opgegeven file.
 */
 void World::loadLevel() {
-	if (generateWorld() == NULL) {
+	if (generateWorld() != 0) {
 		// loading failed
 		// TODO: Fout behandelen
 	}

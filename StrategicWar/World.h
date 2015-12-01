@@ -33,15 +33,15 @@ class World {
 		//bool level_can_walk_over(cell1, cell2)
 		
 	private: 
-		int rows, columns;
+		size_t rows, columns;
 		string world_file;
 
 		int isUnit(char s);
 		int isHuman(char s);
 
-		int init_world(World* world, ifstream file);
+		int init_world(ifstream file);
 
-		World* generateWorld();
+		bool generateWorld();
 		void loadLevel();
 	};
 
