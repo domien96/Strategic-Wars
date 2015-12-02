@@ -3,10 +3,15 @@
 
 #include "TextureComponent.h"
 #include "UnitComponent.h"
+#include "PositionComponent.h"
 #include "Entity.h"
 
 #include <string>
 #include <vector>
+
+#include <iostream>
+#include <fstream>
+
 
 #define DEFAULT_TEXTURE Graphics::Sprite::SPRITE_TERRAIN
 
