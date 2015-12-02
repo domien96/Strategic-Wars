@@ -8,7 +8,9 @@
 #include "AllegroLib.h"
 #include "Color.h"
 #include "Grid.h"
-#include "World.h"
+
+// Forward declaration
+class World;
 
 class Graphics
 {

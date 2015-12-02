@@ -1,4 +1,8 @@
 #include "World.h"
+#include "Entity.h"
+#include "PositionComponent.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
