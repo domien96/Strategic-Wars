@@ -1,5 +1,7 @@
 #include "Graphics.h"
 #include "constants.h"
+#include "Entity.h"
+#include "World.h"
 
 using namespace std;
 
@@ -138,9 +140,16 @@ void Graphics::ClearScreen()
 void Graphics::GenerateBackgroundSprite(World * world)
 {
 	// TODO: Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
+	sprites[SPRITE_WORLD] = al_create_bitmap(world->getRows(), world->getColumns());
 	// TODO: Set the target for draw calls to this bitmap
+	al_set_target_bitmap(sprites[SPRITE_WORLD]);
 	// TODO: Draw all segments of the background (level)
+	vector<Entity*> v = world->GetWorldEntities();
+	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
+		(*it)->GetComponent(Component::TEXTURE);
+	}
 	// TODO: Reset the target for draw calls to the backbuffer of the display
+	al_set_target_bitmap(al_get_backbuffer(al->display));
 }
 
 
