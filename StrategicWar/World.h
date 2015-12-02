@@ -14,7 +14,9 @@ class World {
 	public: 
 		
 		// CONSTRUCTORS AND DESTRUCTOR
-		World(string world_file);
+		World(string world_file) : world_file(world_file) {
+			loadLevel();
+		}
 		~World();
 
 		int getRows();
@@ -36,7 +38,7 @@ class World {
 		
 	private: 
 		int rows, columns;
-		string world_file;
+		const string world_file;
 
 		int isUnit(char s);
 		int isHuman(char s);

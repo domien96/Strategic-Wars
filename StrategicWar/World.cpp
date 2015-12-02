@@ -8,14 +8,6 @@ using namespace std;
 
 
 
-
-
-World::World(string world_file)
-{
-	this->world_file = world_file;
-	loadLevel();
-}
-
 int World::getRows()
 {
 	return rows;
