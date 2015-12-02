@@ -38,8 +38,8 @@ class World {
 
 		// geef cel terug getCell(int row, int col);
 
-		TextureComponent getTextureComponent(char symbol);
-		UnitComponent getUnitComponent(char Symbol);
+		TextureComponent* getTextureComponent(char symbol);
+		UnitComponent* getUnitComponent(char Symbol);
 
 
 		

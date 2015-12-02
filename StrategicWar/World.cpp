@@ -48,67 +48,67 @@ int World::isHuman(char s)
 * Generates a texture component using the textual representation of a cell.
 * It also generates a texture component for the flag representing the player
 */
-TextureComponent World::getTextureComponent(char symbol) {
+TextureComponent* World::getTextureComponent(char symbol) {
 	switch (symbol) {
 	case '1':
 		//infantry, human player
-		return TextureComponent(Graphics::Sprite::SPRITE_INFANTRY);
+		return new TextureComponent(Graphics::Sprite::SPRITE_INFANTRY);
 		break;
 	case '2':
 		//archery, human player
-		return TextureComponent(Graphics::Sprite::SPRITE_ARCHERY);
+		return new TextureComponent(Graphics::Sprite::SPRITE_ARCHERY);
 		break;
 	case '3':
 		//firecannon, human player
-		return TextureComponent(Graphics::Sprite::SPRITE_FIRE);
+		return new TextureComponent(Graphics::Sprite::SPRITE_FIRE);
 		break;
 	case '7':
 		//infantry, AI player
-		return TextureComponent(Graphics::Sprite::SPRITE_INFANTRY);
+		return new TextureComponent(Graphics::Sprite::SPRITE_INFANTRY);
 		break;
 	case '8':
 		//archery, AI player
-		return TextureComponent(Graphics::Sprite::SPRITE_ARCHERY);
+		return new TextureComponent(Graphics::Sprite::SPRITE_ARCHERY);
 		break;
 	case '9':
 		//firecannon, AI player
-		return TextureComponent(Graphics::Sprite::SPRITE_FIRE);
+		return new TextureComponent(Graphics::Sprite::SPRITE_FIRE);
 		break;
 	case 'h':
 		//headquarter, human player
-		return TextureComponent(Graphics::Sprite::SPRITE_HQ);
+		return new TextureComponent(Graphics::Sprite::SPRITE_HQ);
 		break;
 	case 'f':
 		//flag, human player
-		return TextureComponent(Graphics::Sprite::SPRITE_FLAG1);
+		return new TextureComponent(Graphics::Sprite::SPRITE_FLAG1);
 		break;
 	case 'H':
 		//headquarter, AI player
-		return TextureComponent(Graphics::Sprite::SPRITE_HQ);
+		return new TextureComponent(Graphics::Sprite::SPRITE_HQ);
 		break;
 	case 'F':
 		//flag, AI player
-		return TextureComponent(Graphics::Sprite::SPRITE_FLAG2);
+		return new TextureComponent(Graphics::Sprite::SPRITE_FLAG2);
 		break;
 	case '*':
 		//GROUND
-		return TextureComponent(Graphics::Sprite::SPRITE_TERRAIN);
+		return new TextureComponent(Graphics::Sprite::SPRITE_TERRAIN);
 		break;
 	case 'W':
 		//WATER
-		return TextureComponent(Graphics::Sprite::SPRITE_WATER);
+		return new TextureComponent(Graphics::Sprite::SPRITE_WATER);
 		break;
 	case 'B':
 		//BRIDGE
-		return TextureComponent(Graphics::Sprite::SPRITE_BRIDGE);
+		return new TextureComponent(Graphics::Sprite::SPRITE_BRIDGE);
 		break;
 	case 'R':
 		//ROCK
-		return TextureComponent(Graphics::Sprite::SPRITE_ROCK);
+		return new TextureComponent(Graphics::Sprite::SPRITE_ROCK);
 		break;
 	default:
 		// CURRENT DEFAULT : GROUND
-		return DEFAULT_TEXTURE;
+		return new TextureComponent(DEFAULT_TEXTURE);
 		break;
 	}
 }
@@ -121,45 +121,45 @@ TextureComponent World::getTextureComponent(char symbol) {
  * The stats of the units we've taken from the assignment.
  * A headquarter can't attack, but it can be attacked, so it has a hp. The hp was not given in the assignment, but we've chosen 15.
  */
-UnitComponent World::getUnitComponent(char symbol) {
+UnitComponent* World::getUnitComponent(char symbol) {
 		switch (symbol) {
 		default:
 			//infantry, human player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
 			break;
 		case '1':
 			//TODO: wrong system type!
 
 			//infantry, human player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
 			break;
 		case '2':
 			//archery, human player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 3, 3, 0, 3);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 3, 3, 0, 3);
 			break;
 		case '3':
 			//fire, human player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 4, 1, 2, 5);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 4, 1, 2, 5);
 			break;
 		case '7':
 			//infantry, AI player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 2, 2, 0, 1);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 2, 2, 0, 1);
 			break;
 		case '8':
 			//archery, AI player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 3, 3, 0, 3);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 3, 3, 0, 3);
 			break;
 		case '9':
 			//fire, AI player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 4, 1, 2, 5);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 4, 1, 2, 5);
 			break;
 		case 'h':
 			//headquarter, human player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 0, 15, 0, 0, 0, 0);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 15, 0, 0, 0, 0);
 			break;
 		case 'H':
 			//headquarter, AI player
-			return UnitComponent::UnitComponent(System::Type::TYPE_ANIMATION, 1, 15, 0, 0, 0, 0);
+			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 15, 0, 0, 0, 0);
 			break;
 
 		}
@@ -194,46 +194,46 @@ int World::init_world(ifstream* file) {
 		int c = counter % this->columns;
 		Entity* cell = new Entity();
 		Grid grid = Grid::Grid(r, c);
-		PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
-		cell->Add(&pc);
+		PositionComponent* pc =  new PositionComponent(grid, 0);
+		cell->Add(pc);
 
 		// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
 		// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
 		if (!isUnit(symbol)) {
-			TextureComponent tc = getTextureComponent(symbol);
-			cell->Add(&tc);
+			TextureComponent* tc = getTextureComponent(symbol);
+			cell->Add(tc);
 		}
 		else {
-			TextureComponent tc = getTextureComponent('*');
-			cell->Add(&tc);
+			TextureComponent* tc = getTextureComponent('*');
+			cell->Add(tc);
 
 			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
 			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent.
 			// Merk op dat ook een hoofdkwartier kan aangevallen worden en bezit wordt door een speler dus dat 
 			// deze ook een entity nodig heeft.
 			Entity* unit = new Entity();
-			PositionComponent pc_unit = PositionComponent::PositionComponent(grid, 1);
-			UnitComponent uc_unit = getUnitComponent(symbol);
-			TextureComponent tc_unit = getTextureComponent(symbol);
-			unit->Add(&pc_unit);
-			unit->Add(&uc_unit);
-			unit->Add(&tc_unit);
+			PositionComponent* pc_unit = new PositionComponent(grid, 1);
+			UnitComponent* uc_unit = getUnitComponent(symbol);
+			TextureComponent* tc_unit = getTextureComponent(symbol);
+			unit->Add(pc_unit);
+			unit->Add(uc_unit);
+			unit->Add(tc_unit);
 			world_entities.push_back(unit);
 			// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
 			// Voor deze vlag maken we nog een entity aan.
 
 			Entity* player = new Entity();
-			PositionComponent pc_player = PositionComponent::PositionComponent(grid, 2);
+			PositionComponent* pc_player = new PositionComponent(grid, 2);
 			if (isHuman(symbol)) {
-				TextureComponent tc_player = getTextureComponent('f');
-				player->Add(&tc_player);
+				TextureComponent* tc_player = getTextureComponent('f');
+				player->Add(tc_player);
 			}
 
 			else {
-				TextureComponent tc_player = getTextureComponent('F');
-				player->Add(&tc_player);
+				TextureComponent* tc_player = getTextureComponent('F');
+				player->Add(tc_player);
 			}
-			player->Add(&pc_player);
+			player->Add(pc_player);
 			world_entities.push_back(player);
 		}
 		world_entities.push_back(cell);
@@ -307,7 +307,10 @@ void World::loadLevel() {
 * Destructor
 */
 World::~World() {
-
+	// delete all cell-entities
+	for (auto it = this->world_entities.begin(); it != this->world_entities.end(); it++) {
+		delete *it;
+	}
 }
 
 

@@ -9,7 +9,9 @@ Entity::Entity()
 
 Entity::~Entity()
 {
-	//ok
+	for (auto it = components.begin(); it != components.end(); it++) {
+		delete (*it).second; // it->second compileert hier niet!
+	}
 }
 
 Entity* Entity::Add(Component * component) {
