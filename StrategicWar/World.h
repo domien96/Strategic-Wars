@@ -13,9 +13,9 @@ using namespace std;
 class World { 
 	public: 
 		
-		World(string world_file) : world_file(world_file) {
-			loadLevel();
-		}
+		// CONSTRUCTORS AND DESTRUCTOR
+		World(string world_file);
+		~World();
 
 		int getRows();
 		int getColumns();
@@ -36,7 +36,7 @@ class World {
 		
 	private: 
 		int rows, columns;
-		const string world_file;
+		string world_file;
 
 		int isUnit(char s);
 		int isHuman(char s);
