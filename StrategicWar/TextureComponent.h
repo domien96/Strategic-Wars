@@ -12,7 +12,7 @@ public:
 	Color color;
 
 	TextureComponent(Graphics::Sprite _sprite): texture(_sprite) {};
-	TextureComponent(Color _color) : color(_color), texture(Graphics::SPRITE_NONE) {};
+	TextureComponent(Color _color) : color(_color), texture(Graphics::Sprite::SPRITE_NONE) {};
 	virtual ~TextureComponent() {};
 	virtual Tag GetTag() { return TEXTURE; };
 };
