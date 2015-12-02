@@ -3,8 +3,10 @@
 
 #include "TextureComponent.h"
 #include "UnitComponent.h"
+#include "Entity.h"
 
 #include <string>
+#include <vector>
 
 #define DEFAULT_TEXTURE Graphics::Sprite::SPRITE_TERRAIN
 
@@ -22,8 +24,16 @@ class World {
 		int getRows();
 		int getColumns();
 
+		/* Returns all Entities that represent an elemnt of World.
+		 * This entity can be a part of the landscape, a unit, a headquarter or
+		 * a representation of the player.
+		 */
+		vector<Entity*> GetWorldEntities();
+
 		void setRows(int r) { rows = r; }
 		void setColumns(int c) { columns = c; }
+
+
 
 
 		// geef cel terug getCell(int row, int col);
@@ -39,6 +49,7 @@ class World {
 	private: 
 		int rows, columns;
 		const string world_file;
+		vector<Entity*> world_entities;
 
 		int isUnit(char s);
 		int isHuman(char s);

@@ -18,6 +18,16 @@ int World::getColumns()
 	return columns;
 }
 
+
+/* Returns all Entities that represent an elemnt of World.
+* This entity can be a part of the landscape, a unit, a headquarter or
+* a representation of the player.
+*/
+vector<Entity*> World::GetWorldEntities()
+{
+	return world_entities;
+}
+
 /*
 * Returns true if the given character represents a unit or a headquarter
 */
@@ -187,7 +197,6 @@ int World::init_world(ifstream* file) {
 		PositionComponent pc = PositionComponent::PositionComponent(grid, 0);
 		cell->Add(&pc);
 
-
 		// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
 		// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
 		if (!isUnit(symbol)) {
@@ -209,7 +218,7 @@ int World::init_world(ifstream* file) {
 			unit->Add(&pc_unit);
 			unit->Add(&uc_unit);
 			unit->Add(&tc_unit);
-
+			world_entities.push_back(unit);
 			// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
 			// Voor deze vlag maken we nog een entity aan.
 
@@ -225,7 +234,10 @@ int World::init_world(ifstream* file) {
 				player->Add(&tc_player);
 			}
 			player->Add(&pc_player);
+			world_entities.push_back(player);
 		}
+		world_entities.push_back(cell);
+
 
 		counter++;
 		// lees terug een karakter in
