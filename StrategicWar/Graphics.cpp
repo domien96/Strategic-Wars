@@ -141,9 +141,11 @@ void Graphics::ClearScreen()
 void Graphics::GenerateBackgroundSprite(World * world)
 {
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
-	sprites[SPRITE_WORLD] = al_create_bitmap(world->getRows(), world->getColumns());
+	sprites[SPRITE_WORLD] = al_create_bitmap(world->getColumns()*GetGridSize(), world->getRows()*GetGridSize());
 	// Set the target for draw calls to this bitmap
 	al_set_target_bitmap(sprites[SPRITE_WORLD]);
+	// eerst garbage wegdoen
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 	// TODO: Draw all segments of the background (level)
 	vector<Entity*> v = world->GetWorldEntities();
 	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
@@ -154,6 +156,8 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	}
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
+	al_draw_bitmap(sprites[SPRITE_WORLD], 0, 0, 0);
+	al_flip_display();
 }
 
 
