@@ -7,7 +7,7 @@
 using namespace std;
 
 Vector2 Graphics::ToPx(Grid gridloc) {
-	return Vector2(gridloc.col, gridloc.row);
+	return Vector2(gridloc.col*30, gridloc.row*30);
 }
 
 int Graphics::GetGridSize() {
