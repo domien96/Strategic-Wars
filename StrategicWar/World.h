@@ -33,10 +33,15 @@ class World {
 		void setRows(size_t r) { rows = r; }
 		void setColumns(size_t c) { columns = c; }
 
-
-
-
-		// geef cel terug getCell(int row, int col);
+		/* geef cel terug TODO JENS 
+		*
+		* 0 = terrein grond
+		*En ik lees daaruit wa ik gebruik
+		*1 : eenheden en hq
+		*2: teams
+		*
+		*/
+		Entity* getCell(int row, int col, int depth);
 
 		TextureComponent* getTextureComponent(char symbol);
 		UnitComponent* getUnitComponent(char Symbol);
@@ -53,6 +58,8 @@ class World {
 
 		int isUnit(char s);
 		int isHuman(char s);
+		int isAI(char s);
+
 
 		int init_world(ifstream* file);
 		bool generateWorld();

@@ -32,7 +32,7 @@ vector<Entity*> World::GetWorldEntities()
 * Returns true if the given character represents a unit or a headquarter
 */
 int World::isUnit(char s) {
-	return (s != '*') && (s == 'G') && (s != 'B') && (s != 'R');
+	return isHuman(s) || isAI(s);
 }
 
 /*
@@ -40,7 +40,15 @@ int World::isUnit(char s) {
 */
 int World::isHuman(char s)
 {
-	return (s == '1') || (s == '2') || (s != '3') || (s != 'h');
+	return (s == '1') || (s == '2') || (s == '3') || (s == 'h');
+}
+
+/*
+* Returns true if the given character represtents a unit or headquarter that is owned by a humpan player
+*/
+int World::isAI(char s)
+{
+	return (s == '7') || (s == '8') || (s == '9') || (s == 'H');
 }
 
 
@@ -193,6 +201,7 @@ int World::init_world(ifstream* file) {
 		int r = floor(counter / this->columns);
 		int c = counter % this->columns;
 		Entity* cell = new Entity();
+		world_entities.push_back(cell);
 		Grid grid = Grid::Grid(r, c);
 		PositionComponent* pc =  new PositionComponent(grid, 0);
 		cell->Add(pc);
@@ -236,7 +245,6 @@ int World::init_world(ifstream* file) {
 			player->Add(pc_player);
 			world_entities.push_back(player);
 		}
-		world_entities.push_back(cell);
 
 
 		counter++;
@@ -292,6 +300,7 @@ bool World::generateWorld() {
 	}
 }
 
+//Entity*
 
 /*
 * Functie die men oproept om de wereld te initializeren aan de hand van de opgegeven file.
