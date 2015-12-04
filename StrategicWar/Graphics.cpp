@@ -125,20 +125,11 @@ int getAlign(Graphics::Align align)
 
 void Graphics::ExecuteDraws()
 {
-	
-	vector<Entity*> entities = engine->GetEntities();
-	for (vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it) {
-		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
-		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
-		Vector2 v2 = ToPx(pc->pos);
-		DrawBitmap(tc->texture, v2.x, v2.y);
-
-	}
-
-	// Reset the target for draw calls to the backbuffer of the display
-	al_set_target_bitmap(al_get_backbuffer(al->display));
-	al_draw_bitmap(sprites[SPRITE_WORLD], 0, 0, 0);
+	ALLEGRO_BITMAP *buffer = al_get_backbuffer(al->display);
+	// switch the display buffer to the screen.
 	al_flip_display();
+	// clear the buffer
+	ClearScreen();
 }
 
 void Graphics::ClearScreen()
@@ -147,7 +138,7 @@ void Graphics::ClearScreen()
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 }
 
-void Graphics::GenerateBackgroundSprite(World * world, Engine* engine)
+void Graphics::GenerateBackgroundSprite(World * world)
 {
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
 	sprites[SPRITE_WORLD] = al_create_bitmap(world->getColumns()*GetGridSize(), world->getRows()*GetGridSize());
@@ -156,7 +147,6 @@ void Graphics::GenerateBackgroundSprite(World * world, Engine* engine)
 	// eerst garbage wegdoen
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	// TODO: Draw all segments of the background (level)
-	this->engine = engine;
 	vector<Entity*> v = world->GetWorldEntities();
 	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
 		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
