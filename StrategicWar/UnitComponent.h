@@ -7,7 +7,12 @@
 class UnitComponent : public Component
 {
 public:
-	System::Type type;
+
+	enum UnitType {
+		ARCHERY, INFANTRY, FIRE
+	};
+
+	UnitComponent::UnitType type;
 	int player;
 	int hp, ap, dp, range_min, range_max;
 
@@ -15,7 +20,7 @@ public:
 	 * human player => 0
 	 * AI player => 1
 	 */
-	UnitComponent(System::Type _type, int _player, int _hp, int _ap, int _dp, int _range_min, int _range_max) :
+	UnitComponent(UnitComponent::UnitType _type, int _player, int _hp, int _ap, int _dp, int _range_min, int _range_max) :
 		type(_type), player(_player), hp(_hp), ap(_ap), dp(_dp), range_min(_range_min), range_max(_range_max) {};
 	virtual ~UnitComponent() {};
 	virtual Tag GetTag() { return UNIT; };

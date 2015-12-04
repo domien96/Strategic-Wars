@@ -16,6 +16,7 @@ private:
 	vector<vector<bool>>* visited;
 	vector <vector<Grid*>>* previous;
 	int number_of_rows, number_of_columns;
+	World* world;
 
 public:
 
@@ -26,9 +27,11 @@ public:
 	bool is_visited(Grid& g);
 	void set_previous(Grid& g, Grid& prev);
 	Grid* get_previous(Grid& g);
-	void delete_graph();
 	vector<Grid> neighbours(Grid& g);
 	int cost(Grid& from, Grid& to);
+	bool unit_can_walk_over(Entity& unit, Entity& target);
+
+	~DWGraph();
 };
 
 #endif

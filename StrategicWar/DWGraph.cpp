@@ -4,6 +4,8 @@
 
 DWGraph::DWGraph(World& world, UnitComponent& unit) {
 
+	this->world = &world;
+
 	number_of_rows = world.getRows();
 	number_of_columns = world.getColumns();
 	Add(&unit);
@@ -62,12 +64,6 @@ Grid* DWGraph::get_previous(Grid& g) {
 	return (*previous)[g.row][g.col];
 }
 
-void DWGraph::delete_graph() {
-	delete costs;
-	delete visited;
-	delete previous;
-}
-
 vector<Grid> DWGraph::neighbours(Grid& g) {
 	vector<Grid> neighbours;
 	if (g.row != 0) {
@@ -102,10 +98,29 @@ vector<Grid> DWGraph::neighbours(Grid& g) {
 /* Cost of this step, assuming 'from' and 'to' are neighbours */
 int DWGraph::cost(Grid& from, Grid& to) {
 
-	//if(!World::unit_can_walk_over(...)) return INT_MAX
+	if (!unit_can_walk_over()) return INT_MAX;
 
 	if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
 		return 12;
 	}
 	else return 17;
+}
+
+bool DWGraph::unit_can_walk_over(Entity& unit, Entity& target) {
+	UnitComponent* c = (UnitComponent*) target.GetComponent(Component:: UNIT);
+	//c->type
+	return true;
+}
+
+DWGraph::~DWGraph() {
+	delete visited;
+	for (size_t i = 0; i < previous->size(); i++)
+	{
+		for (size_t j = 0; j < (*previous)[i].size(); j++)
+		{
+			delete (*previous)[i][j];
+		}
+	}
+	delete previous;
+	delete costs;
 }
