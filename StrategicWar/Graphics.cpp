@@ -126,6 +126,7 @@ int getAlign(Graphics::Align align)
 void Graphics::ExecuteDraws()
 {
 	ALLEGRO_BITMAP *buffer = al_get_backbuffer(al->display);
+	al_draw_bitmap(sprites[SPRITE_WORLD], 0, 0, 0);
 	// switch the display buffer to the screen.
 	al_flip_display();
 	// clear the buffer
@@ -156,8 +157,6 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	}
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
-	al_draw_bitmap(sprites[SPRITE_WORLD], 0, 0, 0);
-	al_flip_display();
 }
 
 
