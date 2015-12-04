@@ -8,12 +8,12 @@ using namespace std;
 
 
 
-int World::getRows()
+size_t World::getRows()
 {
 	return rows;
 }
 
-int World::getColumns()
+size_t World::getColumns()
 {
 	return columns;
 }

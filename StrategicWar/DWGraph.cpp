@@ -98,7 +98,12 @@ vector<Grid> DWGraph::neighbours(Grid& g) {
 /* Cost of this step, assuming 'from' and 'to' are neighbours */
 int DWGraph::cost(Grid& from, Grid& to) {
 
-	if (!unit_can_walk_over()) return INT_MAX;
+	int f = from.row * number_of_rows + from.col;
+	int t = to.row * number_of_rows + to.col;
+
+	if (!unit_can_walk_over(*world->GetWorldEntities()[f], *world->GetWorldEntities()[t])) {
+		return INT_MAX;
+	}
 
 	if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
 		return 12;

@@ -21,8 +21,8 @@ class World {
 		}
 		~World();
 
-		int getRows();
-		int getColumns();
+		size_t getRows();
+		size_t getColumns();
 
 		/* Returns all Entities that represent an elemnt of World.
 		 * This entity can be a part of the landscape, a unit, a headquarter or
@@ -30,8 +30,8 @@ class World {
 		 */
 		vector<Entity*> GetWorldEntities();
 
-		void setRows(int r) { rows = r; }
-		void setColumns(int c) { columns = c; }
+		void setRows(size_t r) { rows = r; }
+		void setColumns(size_t c) { columns = c; }
 
 
 
@@ -47,7 +47,7 @@ class World {
 		//bool level_can_walk_over(cell1, cell2)
 		
 	private: 
-		int rows, columns;
+		size_t rows, columns;
 		const string world_file;
 		vector<Entity*> world_entities;
 
