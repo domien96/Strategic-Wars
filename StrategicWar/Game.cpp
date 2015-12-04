@@ -49,6 +49,8 @@ void Game::LoadAssets()
 	Graphics::Instance().LoadSpriteCache();
 	Graphics::Instance().LoadFonts();
 
+	rs.SetEngine(&engine);
+
 	// TODO: Add all required systems
 	engine.AddSystem(&rs);		// Renders all to screen
 }
@@ -58,39 +60,13 @@ void Game::LoadWorld(string world_file)
 {
 	// TODO: Load the level
 	World world(world_file);
-	Graphics::Instance().GenerateBackgroundSprite(&world);
+	Graphics::Instance().GenerateBackgroundSprite(&world, &engine);
 }
 
 /* Captures input */
 void Game::CaptureInput()
 {
-	AllegroLib* al = &AllegroLib::Instance();
-	// Mark changes in keymap
-	if (al->IsKeyboardEvent()) {
-		ALLEGRO_EVENT ev = al->GetCurrentEvent();
-		if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-			switch (ev.keyboard.keycode) {
-				//TODO opzoeken op welke keys er allemaal gereageerd moet worden
-				case ALLEGRO_KEY_ESCAPE:
-					break;
-			}
-		}
-	}
-
-	if (al->IsMouseEvent()) {
-		ALLEGRO_EVENT ev = al->GetCurrentEvent();
-		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-			switch (ev.mouse.button) {
-				// buttons worden genummerd vanaf 1
-				//TODO
-				case 1:
-					break;
-			}
-		}
-		else if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) { //muis bewogen
-			//TODO
-		}
-	}
+	// TODO: wat hier eerst stond is verplaatst naar de mousesystem
 }
 
 void Game::DestroyEntities()
