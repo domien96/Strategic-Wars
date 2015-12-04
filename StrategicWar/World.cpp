@@ -125,41 +125,41 @@ UnitComponent* World::getUnitComponent(char symbol) {
 		switch (symbol) {
 		default:
 			//infantry, human player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			return new UnitComponent(UnitComponent::UnitType::INFANTRY, 0, 10, 2, 2, 0, 1);
 			break;
 		case '1':
 			//TODO: wrong system type!
 
 			//infantry, human player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 2, 2, 0, 1);
+			return new UnitComponent(UnitComponent::UnitType::INFANTRY, 0, 10, 2, 2, 0, 1);
 			break;
 		case '2':
 			//archery, human player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 3, 3, 0, 3);
+			return new UnitComponent(UnitComponent::UnitType::ARCHERY, 0, 10, 3, 3, 0, 3);
 			break;
 		case '3':
 			//fire, human player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 10, 4, 1, 2, 5);
+			return new UnitComponent(UnitComponent::UnitType::FIRE, 0, 10, 4, 1, 2, 5);
 			break;
 		case '7':
 			//infantry, AI player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 2, 2, 0, 1);
+			return new UnitComponent(UnitComponent::UnitType::INFANTRY, 1, 10, 2, 2, 0, 1);
 			break;
 		case '8':
 			//archery, AI player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 3, 3, 0, 3);
+			return new UnitComponent(UnitComponent::UnitType::ARCHERY, 1, 10, 3, 3, 0, 3);
 			break;
 		case '9':
 			//fire, AI player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 10, 4, 1, 2, 5);
+			return new UnitComponent(UnitComponent::UnitType::FIRE, 1, 10, 4, 1, 2, 5);
 			break;
 		case 'h':
 			//headquarter, human player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 0, 15, 0, 0, 0, 0);
+			return new UnitComponent(UnitComponent::UnitType::HQ, 0, 15, 0, 0, 0, 0);
 			break;
 		case 'H':
 			//headquarter, AI player
-			return new UnitComponent(System::Type::TYPE_ANIMATION, 1, 15, 0, 0, 0, 0);
+			return new UnitComponent(UnitComponent::UnitType::HQ, 1, 15, 0, 0, 0, 0);
 			break;
 
 		}

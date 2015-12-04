@@ -9,7 +9,7 @@ class UnitComponent : public Component
 public:
 
 	enum UnitType {
-		ARCHERY, INFANTRY, FIRE
+		ARCHERY, INFANTRY, FIRE, HQ
 	};
 
 	UnitComponent::UnitType type;
