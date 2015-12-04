@@ -147,12 +147,14 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	al_set_target_bitmap(sprites[SPRITE_WORLD]);
 	// eerst garbage wegdoen
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	// TODO: Draw all segments of the background (level)
+	// Draw all segments of the background (level)
 	vector<Entity*> v = world->GetWorldEntities();
 	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
 		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
 		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
 		Vector2 v2 = ToPx(pc->pos);
+		//TODO diepte
+
 		DrawBitmap(tc->texture, v2.x, v2.y);
 	}
 	// Reset the target for draw calls to the backbuffer of the display
