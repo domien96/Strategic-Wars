@@ -13,7 +13,8 @@ public:
 		context(_context),
 		size(_context->GetScreenSize()),
 		engine(_context),
-		fps(_context->GetFps())
+		fps(_context->GetFps()),
+		rs()
 	{};
 	~Game();
 

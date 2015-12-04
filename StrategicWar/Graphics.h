@@ -8,6 +8,7 @@
 #include "AllegroLib.h"
 #include "Color.h"
 #include "Grid.h"
+#include "Engine.h"
 
 // Forward declaration
 class World;
@@ -106,7 +107,7 @@ public:
 	void ExecuteDraws();
 	void ClearScreen();
 
-	void GenerateBackgroundSprite(World* world);
+	void GenerateBackgroundSprite(World* world, Engine* engine);
 
 	void DrawBitmap(Sprite sprite, float dx, float dy);
 	void DrawString(std::string str, float dx, float dy, Color c, Align align, bool hugeFont);
@@ -121,6 +122,7 @@ private:
 	std::vector<ALLEGRO_BITMAP *> sprites;
 	ALLEGRO_FONT* font;
 	ALLEGRO_FONT* big_font;
+	Engine* engine;
 
 	/* Private constructor to make sure no extra instances are made */
 	Graphics(): 
