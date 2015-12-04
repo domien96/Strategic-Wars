@@ -8,7 +8,6 @@
 
 using namespace std;
 
-//FIX ME
 class Path { public: Grid* steps; int cost; };
 class Node {
 public:
@@ -16,16 +15,23 @@ public:
 	Grid grid;
 	Node(Grid _grid, int _cost) { grid = _grid; cost = _cost; }
 };
-//FIX ME
 
 class Pathfinder {
 public:
 
+	/*
+		IMPORTANT: if either 'World& world' or 'Grid& start' has changed, one should reset first
+	*/
 	Path* find_path(World& world, UnitComponent& unit, Grid& start, Grid& target);
+	void reset() {
+		graph = NULL;
+		start = NULL;
+	}
 
 private:
 
 	DWGraph* graph;
+	Grid* start;
 
 };
 

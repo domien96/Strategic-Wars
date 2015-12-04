@@ -6,51 +6,53 @@
 #include <queue>
 
 bool comp(Node* i, Node* j) {
-	//DWGraph* graph = Pathfinder::get_graph();
-	//return graph->get_cost(*i) < graph->get_cost(*j);
 	return i->cost < j->cost;
 }
 
 Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
-	graph = new DWGraph(world, unit);
-	Grid current = start;
-	graph->set_cost(start, 0);
+	if (this->graph == NULL && this->start == NULL) {
+		graph = new DWGraph(world, unit);
+		this->start = &start;
 
-	if (start.col == target.col && start.row == target.row) {
-		Path* path = new Path();
-		path->steps->col = start.col;
-		path->steps->row = start.row;
-		delete graph;
-		return path;
-	}
+		Grid current = start;
+		graph->set_cost(start, 0);
 
-	priority_queue<Node*, vector<Node*>, decltype(&comp)> pqueue(&comp);
+		if (start.col == target.col && start.row == target.row) {
+			Path* path = new Path();
+			path->steps->col = start.col;
+			path->steps->row = start.row;
+			delete graph;
+			return path;
+		}
 
-	pqueue.push(new Node(start,0));
+		priority_queue<Node*, vector<Node*>, decltype(&comp)> pqueue(&comp);
 
-	while (pqueue.size() > 0) {
+		pqueue.push(new Node(start, 0));
 
-		current = pqueue.top()->grid;
-		delete pqueue.top();
-		pqueue.pop();
+		while (pqueue.size() > 0) {
 
-		vector<Grid> neighbours = graph->neighbours(current);
-		for (size_t i = 0; i < neighbours.size(); i++) {
-			Grid neighbour = neighbours[i];
+			current = pqueue.top()->grid;
+			delete pqueue.top();
+			pqueue.pop();
 
-			if (!graph->is_visited(neighbour)) {
-				int c = graph->cost(current,neighbour) == INT_MAX || graph->get_cost(current) == INT_MAX ?
-					INT_MAX : graph->get_cost(current) + graph->cost(current, neighbour);
-				if (c < 0) c = INT_MAX;
-				if (c < graph->get_cost(neighbour)) {
-					graph->set_cost(neighbour, c);
-					graph->set_previous(neighbour, current);
-					pqueue.push(new Node(neighbour,c));
+			vector<Grid> neighbours = graph->neighbours(current);
+			for (size_t i = 0; i < neighbours.size(); i++) {
+				Grid neighbour = neighbours[i];
+
+				if (!graph->is_visited(neighbour)) {
+					int c = graph->cost(current, neighbour) == INT_MAX || graph->get_cost(current) == INT_MAX ?
+						INT_MAX : graph->get_cost(current) + graph->cost(current, neighbour);
+					if (c < 0) c = INT_MAX;
+					if (c < graph->get_cost(neighbour)) {
+						graph->set_cost(neighbour, c);
+						graph->set_previous(neighbour, current);
+						pqueue.push(new Node(neighbour, c));
+					}
 				}
 			}
+			graph->set_visited(current, true);
 		}
-		graph->set_visited(current, true);
 	}
 
 	if (graph->get_cost(target) == INT_MAX) {
@@ -59,7 +61,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 		return NULL;
 	}
 	else {
-		current = target;
+		Grid current = target;
 		int pathSize = 1;
 		while (graph->get_previous(current) != NULL) {
 			current = *graph->get_previous(current);
