@@ -19,13 +19,27 @@ size_t World::getColumns()
 }
 
 
-/* Returns all Entities that represent an elemnt of World.
+/* Returns all Entities that represent an elemnt of World at the given depth.
 * This entity can be a part of the landscape, a unit, a headquarter or
 * a representation of the player.
 */
-vector<Entity*> World::GetWorldEntities()
+vector<Entity*> World::GetWorldEntities(unsigned int depth)
 {
-	return world_entities;
+	switch (depth) {
+		case 0:
+			return world_entities_map[0];
+			break;
+		case 1:
+			return world_entities_map[1];
+			break;
+		case 2:
+			return world_entities_map[2];
+			break;
+		default:
+			// hoogste diepte om eventueel de anderen niet te overschrijven.
+			return world_entities_map[2];
+			break;
+	}
 }
 
 /*
@@ -51,6 +65,11 @@ int World::isAI(char s)
 	return (s == '7') || (s == '8') || (s == '9') || (s == 'H');
 }
 
+
+Entity * World::getWorldEntity(int row, int col, int depth)
+{
+	return nullptr;
+}
 
 /*
 * Generates a texture component using the textual representation of a cell.
@@ -184,72 +203,72 @@ int World::init_world(ifstream* file) {
 	getline(*file, read_width, '|');
 	getline(*file, read_height);
 	// TODO : invalid first line(geen int)
-	int width = stoi(read_width);
-	int height = stoi(read_height);
+	size_t width = stoi(read_width);
+	size_t height = stoi(read_height);
 	if (width <= 0 || height <= 0) {
 		return 1;
 	};
 	this->columns = width;
 	this->rows = height;
 
-	int counter = 0;
-	char symbol; 
-	*file >> symbol; // pre-check
+	// Cells initializeren
+	int row = -1;
+	string line; 
 
-	while (!(*file).fail()) {
-		// verwerk 
-		int r = floor(counter / this->columns);
-		int c = counter % this->columns;
-		Entity* cell = new Entity();
-		world_entities.push_back(cell);
-		Grid grid = Grid::Grid(r, c);
-		PositionComponent* pc =  new PositionComponent(grid, 0);
-		cell->Add(pc);
-
-		// In het geval de cell een unit bevat, gaan we drie entity's boven elkaar hebben: 
-		// 1 van de grond onder de unit,  1 van de unit zelf en 1 die de speler aangeeft(met verschillende diepte in de positioncomponent).
-		if (!isUnit(symbol)) {
-			TextureComponent* tc = getTextureComponent(symbol);
-			cell->Add(tc);
+	while (getline(*file,line)) {
+		// Volgende rij : Update row counter 
+		row++;
+		if (line.length() < width) {
+			return 1; // te korte lijn
 		}
-		else {
-			TextureComponent* tc = getTextureComponent('*');
-			cell->Add(tc);
 
-			// Indien er zich op de cell een zekere unit bevindt. Dan maken we hiervoor nog een entity aan, die zich op 
-			// dezelfde positie bevindt, maar met een andere diepte. Deze entity heeft dan ook een unitcomponent.
-			// Merk op dat ook een hoofdkwartier kan aangevallen worden en bezit wordt door een speler dus dat 
-			// deze ook een entity nodig heeft.
-			Entity* unit = new Entity();
-			PositionComponent* pc_unit = new PositionComponent(grid, 1);
-			UnitComponent* uc_unit = getUnitComponent(symbol);
-			TextureComponent* tc_unit = getTextureComponent(symbol);
-			unit->Add(pc_unit);
-			unit->Add(uc_unit);
-			unit->Add(tc_unit);
-			world_entities.push_back(unit);
-			// Deze units moeten nog een vlag hebben die aangeeft van welke speler ze is.
-			// Voor deze vlag maken we nog een entity aan.
+		for (unsigned int col = 0; col < width; col++) {
+			char symbol = line.at(col);
+			///////////////////////////
+			Grid pos = Grid(row, col);
 
-			Entity* player = new Entity();
-			PositionComponent* pc_player = new PositionComponent(grid, 2);
-			if (isHuman(symbol)) {
-				TextureComponent* tc_player = getTextureComponent('f');
-				player->Add(tc_player);
+			// depth 0 : Terrain entities voor this grid
+			Entity* depth_0 = new Entity();
+			world_entities_map[0].push_back(depth_0);
+			depth_0->Add(new PositionComponent(pos, 0));
+
+			// depth 1 : Unit entities voor this grid
+			Entity* depth_1 = new Entity();
+			world_entities_map[1].push_back(depth_1);
+			depth_1->Add(new PositionComponent(pos, 1));
+
+			// depth 2 : Team/Flag entities voor this grid
+			Entity* depth_2 = new Entity();
+			world_entities_map[2].push_back(depth_2);
+			depth_2->Add(new PositionComponent(pos, 2));
+
+
+			if (!isUnit(symbol)) {
+				// depth 0 
+				TextureComponent* tc = getTextureComponent(symbol);
+				depth_0->Add(tc);
+				//depth1, depth2 no textures defined.
 			}
-
 			else {
-				TextureComponent* tc_player = getTextureComponent('F');
-				player->Add(tc_player);
+				// depth 0 : gras(default) voor units.
+				depth_0->Add(getTextureComponent(DEFAULT_SYMBOL));
+
+				// Depth 1 : Deze entity heeft dan ook een unitcomponent.
+				depth_1->Add(getUnitComponent(symbol));
+				depth_1->Add(getTextureComponent(symbol));
+				// Depth 3 : Vlag
+
+				if (isHuman(symbol)) {
+					depth_2->Add(getTextureComponent('f'));
+				}
+				else {
+					depth_2->Add(getTextureComponent('F'));
+				}
 			}
-			player->Add(pc_player);
-			world_entities.push_back(player);
 		}
-
-
-		counter++;
-		// lees terug een karakter in
-		*file >> symbol;
+	}
+	if (row != height) {
+		return 1;
 	}
 
 	return 0;
@@ -276,9 +295,9 @@ bool World::generateWorld() {
 			if (extension.compare(".world")==0) {
 				//initworld
 				// geeft nog een error op de ifstream file
-				if (init_world(&file) != 1) {
+				if (init_world(&file) == 0) {
 					file.close();
-				    return 1;
+				    return 0;
 				}
 				// if world is not valid
 				//		return 3;
@@ -309,6 +328,7 @@ void World::loadLevel() {
 	if (generateWorld() != 0) {
 		// loading failed
 		// TODO: Fout behandelen
+		this->~World();
 	}
 }
 
@@ -317,8 +337,10 @@ void World::loadLevel() {
 */
 World::~World() {
 	// delete all cell-entities
-	for (auto it = this->world_entities.begin(); it != this->world_entities.end(); it++) {
-		delete *it;
+	for (int i = 0; i <= MAX_CELL_DEPTH; i++) {
+		for (vector<Entity*>::iterator it = world_entities_map[i].begin(); it != world_entities_map[i].end(); it++) {
+			delete *it;
+		}
 	}
 }
 

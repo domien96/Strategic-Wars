@@ -88,7 +88,7 @@ void Graphics::LoadSpriteCache() {
 	sprites[SPRITE_WATER] = al_load_bitmap("../assets/images/civ/water.png");
 
 	// World: pointer set to NULL so it can be filled in later
-	sprites[SPRITE_WORLD] = NULL;
+	sprites[SPRITE_BACKGROUND] = NULL;
 }
 
 void Graphics::UnLoadFonts()
@@ -126,7 +126,7 @@ int getAlign(Graphics::Align align)
 void Graphics::ExecuteDraws()
 {
 	ALLEGRO_BITMAP *buffer = al_get_backbuffer(al->display);
-	al_draw_bitmap(sprites[SPRITE_WORLD], 0, 0, 0);
+	al_draw_bitmap(sprites[SPRITE_BACKGROUND], 0, 0, 0);
 	// switch the display buffer to the screen.
 	al_flip_display();
 	// clear the buffer
@@ -142,21 +142,26 @@ void Graphics::ClearScreen()
 void Graphics::GenerateBackgroundSprite(World * world)
 {
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
-	sprites[SPRITE_WORLD] = al_create_bitmap(world->getColumns()*GetGridSize(), world->getRows()*GetGridSize());
+	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), world->getRows()*GetGridSize());
 	// Set the target for draw calls to this bitmap
-	al_set_target_bitmap(sprites[SPRITE_WORLD]);
+	al_set_target_bitmap(sprites[SPRITE_BACKGROUND]);
 	// eerst garbage wegdoen
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	// Draw all segments of the background (level)
-	vector<Entity*> v = world->GetWorldEntities();
-	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
+
+
+	vector<Entity*> v0 = world->GetWorldEntities(0);
+	for (vector<Entity*>::iterator it = v0.begin(); it != v0.end(); ++it) {
 		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
 		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
 		Vector2 v2 = ToPx(pc->pos);
-		//TODO diepte
 
+		if (tc != nullptr)
 		DrawBitmap(tc->texture, v2.x, v2.y);
 	}
+
+	//TODO STATS TEKENEN
+
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
 }
