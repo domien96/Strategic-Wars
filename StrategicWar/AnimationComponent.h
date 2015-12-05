@@ -6,10 +6,22 @@
 class AnimationComponent : public Component
 {
 public:
-	//Grid pos;
-	//int z; //Depth in the layer system. The lowest component has depth 0.
 
-	//AnimationComponent(Grid _pos, int _z) : pos(_pos), z(_z) {};
+	/* True if the animation is an attack, false if it is a movement */
+	bool is_attack;
+
+	/* New position, only if the animation is a movement */
+	Grid* new_pos;
+	
+	/* New hp, only if the animation is an attack*/
+	int new_hp;
+
+
+	/* Call if animation is a movement*/
+	AnimationComponent(Grid& _new_pos) : is_attack(false), new_pos(&_new_pos), new_hp(0) {};
+	/* Call if animation is an attack*/
+	AnimationComponent(int _new_hp) : is_attack(true), new_pos(NULL), new_hp(_new_hp) {};
+
 	virtual ~AnimationComponent() {};
 	virtual Tag GetTag() { return ANIMATION; };
 };

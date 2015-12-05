@@ -16,7 +16,7 @@ protected:
 		vector<Entity*> entities = engine->GetEntities();
 		Context* context = engine->GetContext();
 
-		//vector<Entity*> en = es->WithTag(Component::UNIT);
+		set<Entity*> en = es->WithTag(Component::ANIMATION);
 		
 
 		// TODO 
