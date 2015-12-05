@@ -23,23 +23,28 @@ size_t World::getColumns()
 * This entity can be a part of the landscape, a unit, a headquarter or
 * a representation of the player.
 */
-vector<Entity*> World::GetWorldEntities(unsigned int depth)
+vector<Entity*> * World::GetWorldEntities(unsigned int depth)
 {
 	switch (depth) {
 		case 0:
-			return world_entities_map[0];
+			return &world_entities_map[0];
 			break;
 		case 1:
-			return world_entities_map[1];
+			return &world_entities_map[1];
 			break;
 		case 2:
-			return world_entities_map[2];
+			return &world_entities_map[2];
+			break;
+		case 3:
+			return &world_entities_map[3];
 			break;
 		default:
 			// hoogste diepte om eventueel de anderen niet te overschrijven.
-			return world_entities_map[2];
+			return &world_entities_map[2];
 			break;
 	}
+
+	// Waarom niet gwn return &world_entities_map[depth] ?
 }
 
 /*

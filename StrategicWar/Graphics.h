@@ -89,6 +89,7 @@ public:
 		SPRITE_WAIT,
 		SPRITE_WATER,
 		SPRITE_BACKGROUND,
+		SPRITE_FOREGROUND,
 		SPRITE_LENGTH
 	};
 
@@ -104,6 +105,7 @@ public:
 	void UnLoadSpriteCache();
 
 	void ExecuteDraws();
+	void ExecuteHudDraws(World *world);
 	void ClearScreen();
 
 	void GenerateBackgroundSprite(World* world);

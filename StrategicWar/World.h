@@ -10,7 +10,7 @@
 
 #define DEFAULT_SYMBOL '*'
 #define DEFAULT_TEXTURE Graphics::Sprite::SPRITE_TERRAIN
-#define MAX_CELL_DEPTH 2
+#define MAX_CELL_DEPTH 3
 
 using namespace std;
 
@@ -38,7 +38,7 @@ class World {
 		 * Depth 2 : Entities about the team where this Cell belongs to, may also be null when this Cell has no owner.
 		 *
 		 */
-		vector<Entity*> GetWorldEntities(unsigned int depth);
+		vector<Entity*> *GetWorldEntities(unsigned int depth);
 
 		void setRows(size_t r) { rows = r; }
 		void setColumns(size_t c) { columns = c; }
@@ -57,8 +57,6 @@ class World {
 
 		TextureComponent* getTextureComponent(char symbol);
 		UnitComponent* getUnitComponent(char Symbol);
-
-
 		
 
 		//bool level_can_walk_over(cell1, cell2)
