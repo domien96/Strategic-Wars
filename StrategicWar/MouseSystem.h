@@ -6,6 +6,7 @@
 #include "AllegroLib.h"
 #include "Graphics.h"
 #include "Entity.h"
+#include "Engine.h"
 #include "Component.h"
 #include "Vector2.h"
 #include "UnitComponent.h"
@@ -56,7 +57,7 @@ protected:
 				World* world = engine->world;
 				Entity* clickedEntity = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 
-				if (!selectedUnit) {
+				if (selectedUnit==(Entity*)0xcccccccc) {
 					// Er is nog geen unit geselecteerd. 
 					// Als er nu een unit wordt aangeklikt, geven we de statistieken hiervan weer op het scherm.
 					// Als we niet op een unit geklikt hebben, geven we lege statistieken weer.
@@ -67,11 +68,15 @@ protected:
 
 						// Als deze unit van de human player is en geen hoofdkwartier, dan wordt die bijgehouden als een veld, zodat
 						// bij de volgende klik we de unit kunnen verplaatsen of doen aanvallen.
-						int player = ((UnitComponent*) selectedUnit->GetComponent(Component::Tag::UNIT))->player;
-						UnitComponent::UnitType type = ((UnitComponent*) selectedUnit->GetComponent(Component::Tag::UNIT))->type;
-						if ((player == 0) && (UnitComponent::UnitType::HQ != type)) {
-							selectedUnit = clickedEntity;
-							selectedGrid = clickedGrid;
+						UnitComponent* uc = (UnitComponent*)clickedEntity->GetComponent(Component::Tag::UNIT);
+						int player = uc == NULL ? 0 : uc->player;
+						if (uc != NULL) {
+							UnitComponent::UnitType type = uc->type;
+
+							if ((player == 0) && (UnitComponent::UnitType::HQ != type)) {
+								selectedUnit = clickedEntity;
+								selectedGrid = clickedGrid;
+							}
 						}
 					}
 				}

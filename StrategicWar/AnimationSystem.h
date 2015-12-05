@@ -32,6 +32,7 @@ protected:
 				else {
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
 					uc->hp = ac->new_hp;
+					
 				}
 			}
 			else {

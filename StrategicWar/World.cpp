@@ -352,6 +352,7 @@ World::~World() {
 			delete *it;
 		}
 	}
+	cout << "World destructed" << endl;
 }
 
 
