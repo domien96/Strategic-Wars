@@ -2,8 +2,13 @@
 #define ANIMATION_SYSTEM_H
 
 #include "System.h"
+#include "UnitComponent.h"
 #include "AnimationComponent.h"
 #include "PositionComponent.h"
+#include "EntityStream.h"
+#include "Engine.h"
+
+using namespace std;
 
 class AnimationSystem : public System
 {
