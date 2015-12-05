@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Context.h"
 #include "RenderSystem.h"
+#include "MouseSystem.h"
 
 class Game
 {
@@ -13,7 +14,9 @@ public:
 		context(_context),
 		size(_context->GetScreenSize()),
 		engine(_context),
-		fps(_context->GetFps())
+		fps(_context->GetFps()),
+		rs(),
+		ms()
 	{};
 	~Game();
 
@@ -34,6 +37,7 @@ private:
 	Vector2 size;
 	Engine engine;
 	RenderSystem rs;
+	MouseSystem ms;
 	Context* context;
 };
 

@@ -48,7 +48,8 @@ void Game::LoadAssets()
 {
 	Graphics::Instance().LoadSpriteCache();
 	Graphics::Instance().LoadFonts();
-
+	rs.SetEngine(&engine);
+	ms.SetEngine(&engine);
 	// TODO: Add all required systems
 	engine.AddSystem(&rs);		// Renders all to screen
 }
