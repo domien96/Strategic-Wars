@@ -155,13 +155,13 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	for (int depth = 0; depth < 3; ++depth) {
 		vector<Entity*> v = world->GetWorldEntities(depth);
 		for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
+			if ((*it) != nullptr) {
 			PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
 			TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
 			Vector2 v2 = ToPx(pc->pos);
-
-			if (tc != nullptr) {
 				DrawBitmap(tc->texture, v2.x, v2.y);
 			}
+
 		}
 	}
 

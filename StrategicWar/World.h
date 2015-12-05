@@ -33,9 +33,9 @@ class World {
 		 * This entity can be a part of the landscape, a unit, a headquarter or
 		 * a representation of the player.
 		 *
-		 * Depth 0 : Entities about the kind of terrain that their Cell has.
-		 * Depth 1 : Entities about the unit standing on this cell, which may be null if no unit is standing there.
-		 * Depth 2 : Entities about the team where this Cell belongs to, may also be null when this Cell has no owner.
+		 * Depth 0 : Entities about the kind of terrain that their Cell has. Never nullpointer because each grid has a background.
+		 * Depth 1 : Entities about the unit standing on this cell, which may be nullpointer if no unit is standing there.
+		 * Depth 2 : Entities about the team where this Cell belongs to, may also be nullpointer when this Cell has no owner.
 		 *
 		 */
 		vector<Entity*> GetWorldEntities(unsigned int depth);
