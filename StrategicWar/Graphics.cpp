@@ -6,8 +6,6 @@
 
 using namespace std;
 
-World *w;
-
 Vector2 Graphics::ToPx(Grid gridloc) {
 	return Vector2(gridloc.col*GetGridSize(), gridloc.row*GetGridSize());
 }
@@ -146,9 +144,6 @@ void Graphics::ClearScreen()
 
 void Graphics::GenerateBackgroundSprite(World * world)
 {
-	if (w == nullptr) {
-		w = world;
-	}
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
 	Vector2 v = al->screensize;
 	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), v.y);
