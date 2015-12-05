@@ -43,7 +43,9 @@ class World {
 		void setRows(size_t r) { rows = r; }
 		void setColumns(size_t c) { columns = c; }
 
-		/* geef cel terug  op coordinaten x,y,z.TODO JENS 
+		/* geef cel terug  op coordinaten x,y,z.
+		* indien er niets op de specifieke diepte is, return null
+		* indien x of y buiten grid vallen, return null
 		*
 		* 0 = terrein grond
 		*En ik lees daaruit wa ik gebruik
