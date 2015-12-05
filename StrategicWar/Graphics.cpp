@@ -166,27 +166,27 @@ void Graphics::GenerateBackgroundSprite(World * world)
 		}
 	}
 
-	//TODO STATS TEKENEN
+	//stats tekenen
 	//linkerkolom
 	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize()+2);
-	DrawString("Selected unit image here", 2*(GetGridSize() + 2), world->getRows()*GetGridSize(), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("Selected unit image here", 2*(GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_HP, 0, world->getRows()*GetGridSize()+2 + (GetGridSize()+2));
-	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + (GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + (GetGridSize()+2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_ATTACK, 0, world->getRows()*GetGridSize()+2 + 2*(GetGridSize()+2));
-	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 2*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 2*(GetGridSize()+2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize()+2 + 3*(GetGridSize()+2));
-	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 3*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 3*(GetGridSize()+2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MAX, 0, world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2));
-	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2));
-	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 
-	DrawString(to_string(al->fps) + " fps", 5, world->getRows()*GetGridSize()+2 + 6*(GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, false);
+	DrawString(to_string((int) floor(al->fps+0.5)) + " fps", 5, world->getRows()*GetGridSize()+2 + 6*(GetGridSize() + 2), Color(1, 1, 0, 1), ALIGN_LEFT, false);
 
 	//rechterkolom
 	DrawBitmap(SPRITE_LMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2);
 	DrawBitmap(SPRITE_RMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2 + (GetGridSize() + 2));
-	DrawString("Who's turn it is", world->getColumns()*GetGridSize()/2 + GetGridSize(), world->getRows()*GetGridSize() + 4 * (GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, true);
+	DrawString("Who's turn it is", world->getColumns()*GetGridSize()/2 + GetGridSize(), world->getRows()*GetGridSize() + 4 * (GetGridSize() + 2), Color(1, 1, 0, 1), ALIGN_LEFT, true);
 
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
