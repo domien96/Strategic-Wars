@@ -299,6 +299,9 @@ bool World::generateWorld() {
 					file.close();
 				    return 0;
 				}
+				else {
+					return 1;
+				}
 				// if world is not valid
 				//		return 3;
 			} else {
@@ -328,7 +331,7 @@ void World::loadLevel() {
 	if (generateWorld() != 0) {
 		// loading failed
 		// TODO: Fout behandelen
-		this->~World();
+		//throw std::invalid_argument("Level ongeldig");
 	}
 }
 

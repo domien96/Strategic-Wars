@@ -62,6 +62,9 @@ class World {
 		//bool level_can_walk_over(cell1, cell2)
 		
 	private: 
+		// No World creation without filename.
+		World();
+
 		size_t rows, columns;
 		const string world_file;
 
