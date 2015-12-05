@@ -6,6 +6,8 @@
 
 using namespace std;
 
+World *w;
+
 Vector2 Graphics::ToPx(Grid gridloc) {
 	return Vector2(gridloc.col*GetGridSize(), gridloc.row*GetGridSize());
 }
@@ -125,7 +127,6 @@ int getAlign(Graphics::Align align)
 
 void Graphics::ExecuteDraws()
 {
-	ALLEGRO_BITMAP *buffer = al_get_backbuffer(al->display);
 	al_draw_bitmap(sprites[SPRITE_BACKGROUND], 0, 0, 0);
 	// switch the display buffer to the screen.
 	al_flip_display();
@@ -141,6 +142,9 @@ void Graphics::ClearScreen()
 
 void Graphics::GenerateBackgroundSprite(World * world)
 {
+	if (w == nullptr) {
+		w = world;
+	}
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
 	Vector2 v = al->screensize;
 	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), v.y);
@@ -176,6 +180,8 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2));
 	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+
+	DrawString(to_string(al->fps) + " fps", 5, world->getRows()*GetGridSize()+2 + 6*(GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, false);
 
 	//rechterkolom
 	DrawBitmap(SPRITE_LMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2);
