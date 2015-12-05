@@ -33,6 +33,7 @@ private:
 	void DestroyEntities();
 
 	// Fields
+	World* world;
 	double fps;
 	Vector2 size;
 	Engine engine;

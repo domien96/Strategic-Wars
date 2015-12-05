@@ -14,6 +14,7 @@ using namespace std;
 
 Game::~Game()
 {
+	delete world;
 	DestroyOther();
 	DestroyEntities();
 }
@@ -59,9 +60,9 @@ void Game::LoadAssets()
 void Game::LoadWorld(string world_file)
 {
 	// Load the level
-	World world(world_file);
-	engine.SetWorld(&world);
-	Graphics::Instance().GenerateBackgroundSprite(&world);
+	world = new World(world_file);
+	engine.SetWorld(world);
+	Graphics::Instance().GenerateBackgroundSprite(world);
 }
 
 /* Captures input */
