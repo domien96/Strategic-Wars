@@ -26,8 +26,6 @@ protected:
 	virtual void Update() {
 		AllegroLib* al = &AllegroLib::Instance();
 		// Mark changes in keymap
-		AllegroLib* al = &AllegroLib::Instance();
-		// Mark changes in keymap
 		if (al->IsKeyboardEvent()) {
 			ALLEGRO_EVENT ev = al->GetCurrentEvent();
 			if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -45,33 +43,28 @@ protected:
 
 			if (state.buttons && 1) { // linker
 									  // KLIK 1
-				int x = state.x;
-				int y = state.y;
-				Vector2 v = Vector2(x, y);
+				Vector2 v = Vector2(state.x, state.y);
 
 				Grid* clickedGrid = &Graphics::Instance().ToGrid(v);
 				World* world; // TODO: vraag de world aan de engine
-				Entity* clickedEntity = world->GetWorldEntity(clickedGrid->row, clickedGrid->col, 1);
-
+				Entity* clickedEntity = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 
 				if (!selectedUnit) {
 					// Er is nog geen unit geselecteerd. 
 					// Als er nu een unit wordt aangeklikt, geven we de statistieken hiervan weer op het scherm.
-					// Als we niet op een unit geklikt hebben, doen we niets.
+					// Als we niet op een unit geklikt hebben, geven we lege statistieken weer.
 					if (clickedEntity) {
-
 						// TODO:: show stats van deze unit
 						// TODO:: teken het select-icoontje 
 						Graphics::Instance().DrawBitmap(Graphics::Sprite::SPRITE_SELECT, clickedGrid->row, clickedGrid->col);
 
-
 						// Als deze unit van de human player is en geen hoofdkwartier, dan wordt die bijgehouden als een veld, zodat
 						// bij de volgende klik we de unit kunnen verplaatsen of doen aanvallen.
-						int player = (*selectedUnit).GetComponent(Component::Tag::UNIT)->player;
-						UnitComponent::UnitType type = (*selectedUnit).GetComponent(Component::Tag::UNIT)->type;
+						int player = ((UnitComponent*) selectedUnit->GetComponent(Component::Tag::UNIT))->player;
+						UnitComponent::UnitType type = ((UnitComponent*) selectedUnit->GetComponent(Component::Tag::UNIT))->type;
 						if ((player == 0) && (UnitComponent::UnitType::HQ != type)) {
-							selectedUnit->clickedEntity;
-							selectedGrid->clickedGrid;
+							selectedUnit = clickedEntity;
+							selectedGrid = clickedGrid;
 						}
 					}
 				}
