@@ -66,9 +66,16 @@ int World::isAI(char s)
 }
 
 
-Entity * World::getWorldEntity(int row, int col, int depth)
+Entity * World::getWorldEntity(unsigned int row, unsigned int col, unsigned int depth)
 {
-	return nullptr;
+	//boundaries
+	if (row < 0 || row >= this->rows - 1 || col < 0 || col >= this->columns - 1) {
+		col = 0;
+		row = 0;
+	}
+	depth = max(0, depth);
+	depth = min(MAX_CELL_DEPTH, depth);
+	return world_entities_map[depth].at(row*columns + col);
 }
 
 /*
