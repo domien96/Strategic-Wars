@@ -142,25 +142,45 @@ void Graphics::ClearScreen()
 void Graphics::GenerateBackgroundSprite(World * world)
 {
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
-	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), world->getRows()*GetGridSize());
+	Vector2 v = al->screensize;
+	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), v.y);
 	// Set the target for draw calls to this bitmap
 	al_set_target_bitmap(sprites[SPRITE_BACKGROUND]);
 	// eerst garbage wegdoen
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	// Draw all segments of the background (level)
+	for (int depth = 0; depth < 3; ++depth) {
+		vector<Entity*> v = world->GetWorldEntities(depth);
+		for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
+			PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
+			TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
+			Vector2 v2 = ToPx(pc->pos);
 
-
-	vector<Entity*> v0 = world->GetWorldEntities(0);
-	for (vector<Entity*>::iterator it = v0.begin(); it != v0.end(); ++it) {
-		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
-		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
-		Vector2 v2 = ToPx(pc->pos);
-
-		if (tc != nullptr)
-		DrawBitmap(tc->texture, v2.x, v2.y);
+			if (tc != nullptr) {
+				DrawBitmap(tc->texture, v2.x, v2.y);
+			}
+		}
 	}
 
 	//TODO STATS TEKENEN
+	//linkerkolom
+	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize()+2);
+	DrawString("Selected unit image here", 2*(GetGridSize() + 2), world->getRows()*GetGridSize(), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawBitmap(SPRITE_BADGE_HP, 0, world->getRows()*GetGridSize()+2 + (GetGridSize()+2));
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + (GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawBitmap(SPRITE_BADGE_ATTACK, 0, world->getRows()*GetGridSize()+2 + 2*(GetGridSize()+2));
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 2*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize()+2 + 3*(GetGridSize()+2));
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 3*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawBitmap(SPRITE_BADGE_RANGE_MAX, 0, world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2));
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 4*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2));
+	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
+
+	//rechterkolom
+	DrawBitmap(SPRITE_LMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2);
+	DrawBitmap(SPRITE_RMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2 + (GetGridSize() + 2));
+	DrawString("Who's turn it is", world->getColumns()*GetGridSize()/2 + GetGridSize(), world->getRows()*GetGridSize() + 4 * (GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, true);
 
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
