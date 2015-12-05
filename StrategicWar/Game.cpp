@@ -57,8 +57,9 @@ void Game::LoadAssets()
 /* Load the level from file */
 void Game::LoadWorld(string world_file)
 {
-	// TODO: Load the level
+	// Load the level
 	World world(world_file);
+	engine.SetWorld(&world);
 	Graphics::Instance().GenerateBackgroundSprite(&world);
 }
 

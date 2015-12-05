@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "System.h"
 #include "EntityStream.h"
+#include "World.h"
 
 
 class Engine
@@ -14,6 +15,9 @@ class Engine
 public:
 	Engine(Context* _context) : context(_context) {};
 	~Engine() {};
+
+	World *world;
+	void SetWorld(World *w);
 
 	/* Adds an Entity to the Engine, warning the EntityStream. */
 	void AddEntity(Entity* entity);

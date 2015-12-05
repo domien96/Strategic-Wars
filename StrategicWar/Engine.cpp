@@ -5,6 +5,10 @@
 
 using namespace std;
 
+void Engine::SetWorld(World * w) {
+	world = w;
+}
+
 /* If the Enitity is not yet attached to the Engine, then it will be added and the EntityStream will be warned. */
 void Engine::AddEntity(Entity* entity)
 {
