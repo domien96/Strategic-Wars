@@ -52,6 +52,7 @@ void Game::LoadAssets()
 	ms.SetEngine(&engine);
 	// TODO: Add all required systems
 	engine.AddSystem(&rs);		// Renders all to screen
+	engine.AddSystem(&ms);
 }
 
 /* Load the level from file */

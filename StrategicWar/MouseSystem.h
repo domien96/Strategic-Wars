@@ -37,16 +37,23 @@ protected:
 				}
 			}
 		}
-		else {
+		else if(al->IsMouseEvent()) {
+			ALLEGRO_EVENT ev = al->GetCurrentEvent();
+
+				
+
+		}
 			ALLEGRO_MOUSE_STATE state;
 			al_get_mouse_state(&state);
 
 			if (state.buttons && 1) { // linker
 									  // KLIK 1
+				cout << "Button down" << endl;
+				
 				Vector2 v = Vector2(state.x, state.y);
 
 				Grid* clickedGrid = &Graphics::Instance().ToGrid(v);
-				World* world; // TODO: vraag de world aan de engine
+				World* world = engine->world;
 				Entity* clickedEntity = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 
 				if (!selectedUnit) {
@@ -81,7 +88,6 @@ protected:
 
 					// un-select na verplaatsing en aanval
 				}
-			}
 			}
 		}
 	virtual Type GetType() { return System::TYPE_MOUSE; };
