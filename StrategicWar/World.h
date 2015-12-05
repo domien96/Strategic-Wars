@@ -51,7 +51,7 @@ class World {
 		*2: teams
 		*
 		*/
-		Entity* getWorldEntity(int row, int col, int depth);
+		Entity* getWorldEntity(unsigned int row, unsigned int col, unsigned int depth);
 
 		TextureComponent* getTextureComponent(char symbol);
 		UnitComponent* getUnitComponent(char Symbol);
