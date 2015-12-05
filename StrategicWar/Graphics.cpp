@@ -166,7 +166,7 @@ void Graphics::GenerateBackgroundSprite(World * world)
 		}
 	}
 
-	//TODO STATS TEKENEN
+	//stats tekenen
 	//linkerkolom
 	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize()+2);
 	DrawString("Selected unit image here", 2*(GetGridSize() + 2), world->getRows()*GetGridSize(), Color(255, 255, 255), ALIGN_LEFT, false);
@@ -181,7 +181,7 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2));
 	DrawString("-", 2*(GetGridSize() + 2), world->getRows()*GetGridSize()+2 + 5*(GetGridSize()+2), Color(255, 255, 255), ALIGN_LEFT, false);
 
-	DrawString(to_string(al->fps) + " fps", 5, world->getRows()*GetGridSize()+2 + 6*(GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, false);
+	DrawString(to_string((int) floor(al->fps+0.5)) + " fps", 5, world->getRows()*GetGridSize()+2 + 6*(GetGridSize() + 2), Color(255, 255, 0), ALIGN_LEFT, false);
 
 	//rechterkolom
 	DrawBitmap(SPRITE_LMB, world->getColumns()*GetGridSize()/2, world->getRows()*GetGridSize()+2);
