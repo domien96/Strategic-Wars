@@ -15,8 +15,6 @@ public:
 protected:
 	virtual void Update() {
 		EntityStream* es = engine->GetEntityStream();
-		vector<Entity*> entities = engine->GetEntities();
-		Context* context = engine->GetContext();
 
 		set<Entity*> entity_set = es->WithTag(Component::ANIMATION);
 		for (set<Entity*>::iterator i = entity_set.begin(); i!= entity_set.end(); i++) {
@@ -35,6 +33,7 @@ protected:
 				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
 				pc->pos = *ac->new_pos;
 			}
+			entity->Remove(ac);
 		}
 		
 
