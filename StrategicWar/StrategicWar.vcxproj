@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="debug_file.h" />

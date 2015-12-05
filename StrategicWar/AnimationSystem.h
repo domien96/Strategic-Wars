@@ -12,6 +12,13 @@ public:
 
 protected:
 	virtual void Update() {
+		EntityStream* es = engine->GetEntityStream();
+		vector<Entity*> entities = engine->GetEntities();
+		Context* context = engine->GetContext();
+
+		//vector<Entity*> en = es->WithTag(Component::UNIT);
+		
+
 		// TODO 
 	};
 
