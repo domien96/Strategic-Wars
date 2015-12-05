@@ -101,7 +101,7 @@ int DWGraph::cost(Grid& from, Grid& to) {
 	int f = from.row * number_of_rows + from.col;
 	int t = to.row * number_of_rows + to.col;
 
-	if (!unit_can_walk_over(*world->GetWorldEntities()[f], *world->GetWorldEntities()[t])) {
+	if (!unit_can_walk_over(*world->getWorldEntity(from.row,from.col,1), *world->getWorldEntity(to.row, to.col, 1))) {
 		return INT_MAX;
 	}
 
