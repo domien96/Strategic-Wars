@@ -75,8 +75,7 @@ Entity * World::getWorldEntity(unsigned int row, unsigned int col, unsigned int 
 {
 	//boundaries
 	if (row < 0 || row >= this->rows - 1 || col < 0 || col >= this->columns - 1) {
-		col = 0;
-		row = 0;
+		return nullptr;
 	}
 	depth = max(0, depth);
 	depth = min(MAX_CELL_DEPTH, depth);
@@ -239,29 +238,29 @@ int World::init_world(ifstream* file) {
 			///////////////////////////
 			Grid pos = Grid(row, col);
 
-			// depth 0 : Terrain entities voor this grid
+			// depth 0 : Terrain entities voor this grid, elke cell heeft een entity op diepte 0;
 			Entity* depth_0 = new Entity();
-			world_entities_map[0].push_back(depth_0);
 			depth_0->Add(new PositionComponent(pos, 0));
 
 			// depth 1 : Unit entities voor this grid
-			Entity* depth_1 = new Entity();
-			world_entities_map[1].push_back(depth_1);
-			depth_1->Add(new PositionComponent(pos, 1));
+			Entity* depth_1 = nullptr; // later initen naargelang de situatie
 
 			// depth 2 : Team/Flag entities voor this grid
-			Entity* depth_2 = new Entity();
-			world_entities_map[2].push_back(depth_2);
-			depth_2->Add(new PositionComponent(pos, 2));
+			Entity* depth_2 = nullptr; // later initen naargelang de situatie
 
 
 			if (!isUnit(symbol)) {
 				// depth 0 
 				TextureComponent* tc = getTextureComponent(symbol);
 				depth_0->Add(tc);
-				//depth1, depth2 no textures defined.
+				//depth1, depth2 no units or owners defined.
 			}
 			else {
+				depth_1 = new Entity();
+				depth_1->Add(new PositionComponent(pos, 1));
+				depth_2 = new Entity();
+				depth_2->Add(new PositionComponent(pos, 2));
+
 				// depth 0 : gras(default) voor units.
 				depth_0->Add(getTextureComponent(DEFAULT_SYMBOL));
 
@@ -277,6 +276,10 @@ int World::init_world(ifstream* file) {
 					depth_2->Add(getTextureComponent('F'));
 				}
 			}
+
+			world_entities_map[0].push_back(depth_0);
+			world_entities_map[1].push_back(depth_1);
+			world_entities_map[2].push_back(depth_2);
 		}
 	}
 	if (row != height) {
@@ -357,7 +360,6 @@ World::~World() {
 			delete *it;
 		}
 	}
-	cout << "World destructed" << endl;
 }
 
 
