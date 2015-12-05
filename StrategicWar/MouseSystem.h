@@ -13,6 +13,7 @@
 #include "PositionComponent.h"
 #include "Pathfinder.h"
 #include "World.h"
+#include "Pathfinder.h"
 #include <iostream>
 
 using namespace std;
@@ -81,7 +82,22 @@ protected:
 					}
 				}
 				else {
-					// Er is wel een unit geselecteerd. 
+
+					// Er is wel een unit geselecteerd.
+
+					Pathfinder finder;
+					Path* p = finder.find_path(*world, *(UnitComponent*) selectedUnit->GetComponent(Component::UNIT),
+						*selectedGrid, *clickedGrid);
+					finder.reset();
+
+					//TODO: find_path moet opgeroepen worden zelfs als er nog geen bevestigende klik is geweest.
+
+					int path_length = p->cost;
+					Grid* steps = p->steps;
+
+					//Zet mag enkel toegelaten worden als path_length <= range vd unit
+
+ 
 					// Kan je er naartoe verplaatsen?
 					// doe dit
 					// methode ergens aanroepen of via Path* path = Pathfinder::find_path(world, selectedUnitComponent, selectedGrid, clickedPosition);
