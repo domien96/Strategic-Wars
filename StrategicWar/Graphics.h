@@ -113,6 +113,7 @@ public:
 	void DrawRectangle(float dx, float dy, float width, float height, Color c, float thickness);
 
 	Vector2 ToPx(Grid gridloc);
+	Grid ToGrid(Vector2 vector);
 	int GetGridSize();
 
 private:

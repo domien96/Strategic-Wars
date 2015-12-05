@@ -12,6 +12,10 @@ Vector2 Graphics::ToPx(Grid gridloc) {
 	return Vector2(gridloc.col*GetGridSize(), gridloc.row*GetGridSize());
 }
 
+Grid Graphics::ToGrid(Vector2 vector) {
+	return Grid(floor(vector.y/GetGridSize()+0.5), floor(vector.x/GetGridSize()+0.5));
+}
+
 int Graphics::GetGridSize() {
 	return GRID_SIZE;
 }
