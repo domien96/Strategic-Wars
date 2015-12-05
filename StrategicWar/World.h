@@ -45,7 +45,7 @@ class World {
 
 		/* geef cel terug  op coordinaten x,y,z.
 		* indien er niets op de specifieke diepte is, return null
-		* indien x of y buiten grid vallen, return null
+		* indien x of y buiten grid vallen, wordt entity op rand weergegeven
 		*
 		* 0 = terrein grond
 		*En ik lees daaruit wa ik gebruik
