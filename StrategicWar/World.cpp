@@ -39,8 +39,8 @@ vector<Entity*> * World::GetWorldEntities(unsigned int depth)
 			return &world_entities_map[3];
 			break;
 		default:
-			// hoogste diepte om eventueel de anderen niet te overschrijven.
-			return &world_entities_map[2];
+			//laagste diepte om eventueel de anderen niet te overschrijven.
+			return &world_entities_map[0];
 			break;
 	}
 
