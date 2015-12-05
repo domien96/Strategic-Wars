@@ -33,7 +33,7 @@ protected:
 			}
 			else {
 				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
-				pc->pos = ac->new_pos;
+				pc->pos = *ac->new_pos;
 			}
 		}
 		
