@@ -85,7 +85,7 @@ protected:
 					Pathfinder finder;
 					UnitComponent *uc = static_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
 
-					Path* p = finder.find_path(*world, *uc,*selectedGrid, *mouseMovedGrid);
+					Path* p = finder.find_path(*world, *uc, *selectedGrid, *mouseMovedGrid);
 
 					finder.reset();
 
