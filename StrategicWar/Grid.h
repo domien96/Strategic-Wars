@@ -4,10 +4,14 @@
 class Grid
 {
 public:
-	int row;
-	int col;
+	unsigned int row;
+	unsigned int col;
 
-	Grid(int _row = 0, int _col = 0):
+	bool operator==(const Grid& other) const {
+		return row == other.row && col == other.col;
+	};
+
+	Grid(unsigned int _row = 0, unsigned int _col = 0):
 		row(_row), col(_col) {};
 
 	~Grid()	{};
