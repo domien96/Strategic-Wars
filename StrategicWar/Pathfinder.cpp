@@ -5,9 +5,9 @@
 #include <assert.h>
 #include <queue>
 
-bool comp(Node* i, Node* j) {
+/*bool comp(Node* i, Node* j) {
 	return i->cost < j->cost;
-}
+}*/
 
 Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
@@ -25,15 +25,15 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 			return path;
 		}
 
-		priority_queue<Node*, vector<Node*>, decltype(&comp)> pqueue(&comp);
+		queue<Node*> queue;
 
-		pqueue.push(new Node(start, 0));
+		queue.push(new Node(start, 0));
 
-		while (pqueue.size() > 0) {
+		while (queue.size() > 0) {
 
-			current = pqueue.top()->grid;
-			Node* toDelete = pqueue.top();
-			pqueue.pop();
+			current = queue.front()->grid;
+			Node* toDelete = queue.front();
+			queue.pop();
 			delete toDelete;
 
 			vector<Grid> neighbours = graph->neighbours(current);
@@ -47,7 +47,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 					if (c < graph->get_cost(neighbour)) {
 						graph->set_cost(neighbour, c);
 						graph->set_previous(neighbour, current);
-						pqueue.push(new Node(neighbour, c));
+						queue.push(new Node(neighbour, c));
 					}
 				}
 			}
