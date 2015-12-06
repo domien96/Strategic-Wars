@@ -150,7 +150,7 @@ protected:
 
 				// PAD TONEN INDIEN EEN UNIT IS GESELECTEERD
 
-				if (selectedUnit != nullptr) {
+				if (selectedUnit != nullptr && world->isValidGrid(mouseMovedGrid)) {
 
 					Pathfinder* finder = new Pathfinder();
 					UnitComponent *uc = dynamic_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
@@ -189,10 +189,13 @@ protected:
 			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
 				ALLEGRO_MOUSE_EVENT mouseEvent = ev.mouse;
 				Grid* clickedGrid = &Graphics::Instance().ToGrid(v);
-				if (mouseEvent.button == 0) {
+				if (mouseEvent.button == 1) {
 					// LEFT BUTTON
 					switch (leftbutton) {
 					case NONE:
+						break;
+					case SELECT:
+						selectedUnit = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 						break;
 					case MOVE:
 						// TODO
@@ -204,7 +207,7 @@ protected:
 						break;
 					}
 				}
-				else if (mouseEvent.button == 1) {
+				else if (mouseEvent.button == 2) {
 					// RIGHT BUTTON
 					switch (rightbutton) {
 					case NONE:

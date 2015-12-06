@@ -60,7 +60,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 	if (graph->get_cost(target) == INT_MAX) {
 		//There is no path
 		delete graph;
-		return NULL;
+		return nullptr;
 	}
 	else {
 		Grid current = target;
