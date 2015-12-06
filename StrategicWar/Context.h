@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include <math.h>
 #include "constants.h"
+#include "world.h"
 
 class Context
 {
@@ -22,6 +23,12 @@ public:
 
 	/* Returns the screen total size in pixels */
 	Vector2 GetScreenSize() { return size; };
+
+	/* Returns the World, nullptr when not yet set. */
+	World * Context::getworld()	{return world;}
+
+	/* Sets world */
+	void Context::setWorld(World * world){this->world = world;}
 	
 	/* Returns the fps of the game */
 	double GetFps() { return fps; };
@@ -31,6 +38,7 @@ private:
 	Vector2 size;
 	bool debug_mode;
 	double fps;
+	World* world;
 };
 
 #endif

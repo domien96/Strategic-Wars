@@ -16,9 +16,6 @@ public:
 	Engine(Context* _context) : context(_context) {};
 	~Engine() {};
 
-	World *world;
-	void SetWorld(World *w);
-
 	/* Adds an Entity to the Engine, warning the EntityStream. */
 	void AddEntity(Entity* entity);
 

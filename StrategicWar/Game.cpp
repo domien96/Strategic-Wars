@@ -61,7 +61,7 @@ void Game::LoadWorld(string world_file)
 {
 	// Load the level
 	world = new World(world_file);
-	engine.SetWorld(world);
+	context->setWorld(world);
 	Graphics::Instance().GenerateBackgroundSprite(world);
 }
 
