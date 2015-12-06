@@ -55,7 +55,7 @@ void Game::LoadAssets()
 	engine.AddSystem(&rs);		// Renders all to screen
 	engine.AddSystem(&ms);
 	engine.AddSystem(&as);
-	engine.AddSystem(&als);
+	//engine.AddSystem(&als);
 }
 
 /* Load the level from file */
@@ -120,7 +120,7 @@ void Game::DestroyOther()
 	engine.RemoveSystem(&rs);	
 	engine.RemoveSystem(&ms);
 	engine.RemoveSystem(&as);
-	engine.RemoveSystem(&als);
+	//engine.RemoveSystem(&als);
 
 	AllegroLib::Instance().Destroy();
 }
