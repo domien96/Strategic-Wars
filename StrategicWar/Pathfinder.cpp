@@ -21,10 +21,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 		if (start.col == target.col && start.row == target.row) {
 			Path* path = new Path();
 			path->steps.push_back(start);
-			//path->steps[0].col = start.col;
-			//path->steps[0].row = start.row;
 			path->cost = 0;
-			delete graph;
 			return path;
 		}
 
@@ -59,7 +56,6 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 
 	if (graph->get_cost(target) == INT_MAX) {
 		//There is no path
-		delete graph;
 		return nullptr;
 	}
 	else {
@@ -78,8 +74,6 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 			path->steps[i] = current;
 			current = *graph->get_previous(current);
 		}
-
-		delete graph;
 
 		return path;
 	}

@@ -37,7 +37,7 @@ public:
 			delete graph;
 		}
 		if (start != nullptr) {
-			delete start;
+			//delete start;
 		}
 	}
 
