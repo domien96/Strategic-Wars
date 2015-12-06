@@ -28,6 +28,11 @@ public:
 		start = NULL;
 	}
 
+	~Pathfinder() {
+		delete graph;
+		delete start;
+	}
+
 private:
 
 	DWGraph* graph;

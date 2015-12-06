@@ -145,19 +145,23 @@ protected:
 				
 				}
 		}
-		else {
-			/*
+		else /*if (selectedUnit != nullptr && selectedGrid->col >0)*/{// != nullptr) {
+			
 			// Er is wel een unit geselecteerd.
 
+			/*cout << "yes" << endl;
+
 			Pathfinder finder;
-			Path* p = finder.find_path(*world, *(UnitComponent*) selectedUnit->GetComponent(Component::UNIT),
-				*selectedGrid, *clickedGrid);
-			finder.reset();
+			Path* p = finder.find_path(*engine->GetContext()->getworld(),
+				*(UnitComponent*) selectedUnit->GetComponent(Component::UNIT),
+				*selectedGrid, *&Graphics::Instance().ToGrid(Vector2(state.x, state.y)));
+			finder.reset();*/
+			//delete finder;
 
 			//TODO: find_path moet opgeroepen worden zelfs als er nog geen bevestigende klik is geweest.
 
-			int path_length = p->cost;
-			Grid* steps = p->steps;
+			//int path_length = p->cost;
+			//Grid* steps = p->steps;
 
 			//Zet mag enkel toegelaten worden als path_length <= range vd unit
 
@@ -173,8 +177,6 @@ protected:
 
 			// un-select na verplaatsing en aanval
 
-		}
-	}*/
 		}
 	}
 	virtual Type GetType() { return System::TYPE_MOUSE; };
