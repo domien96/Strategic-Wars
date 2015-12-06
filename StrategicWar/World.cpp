@@ -173,7 +173,7 @@ TextureComponent* World::getTextureComponent(char symbol) {
 /*
  * Generates a UnitComponent using the textual representation of a cell. 
  * A unitcomponent has a constructor of the form:
- * UnitComponent(System::Type _type, int _player, int _hp, int _ap, int _dp, int _range_min, int _range_max)
+ * UnitComponent(UntiComponent::UnitType _type, int _player, int _hp, int _ap, int _dp, int _range_min, int _range_max)
  * Human player has the number 0 and the AI player has the number 1.
  * The stats of the units we've taken from the assignment.
  * A headquarter can't attack, but it can be attacked, so it has a hp. The hp was not given in the assignment, but we've chosen 15.
