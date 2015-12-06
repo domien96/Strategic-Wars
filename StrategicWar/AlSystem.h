@@ -21,7 +21,7 @@ public:
 
 protected:
 	virtual void Update() {
-		/* eenvoudige strategie
+		/* algoritme voor strategie van Al
 		* voor elke unit:
 		*	bereken path naar HQ
 		*	if (HQ in range)
@@ -40,6 +40,7 @@ protected:
 		vector<Entity*> vPlayer; //units van player
 		vector<Entity*> vAl; //units van Al
 
+		//units 2 in lijsten verdelen, die van player en die van Al
 		for (vector<Entity*>::iterator it = v->begin(); it != v->end(); ++it) {
 			if ((*it) != nullptr ) {
 				UnitComponent *uc = static_cast<UnitComponent*>((*it)->GetComponent(Component::UNIT));
@@ -56,21 +57,22 @@ protected:
 			}
 		}
 
+		Pathfinder *finder = new Pathfinder();
 		for (vector<Entity*>::iterator it = vAl.begin(); it != vAl.end(); ++it) {
-			Pathfinder *finder = new Pathfinder();
 			UnitComponent *uc = static_cast<UnitComponent*>((*it)->GetComponent(Component::UNIT));
 			PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
 			//path naar HQ
 			PositionComponent *pcHQ = static_cast<PositionComponent*>(HQPlayer->GetComponent(Component::POSITION));
 			Path *pHQ = finder->find_path(*world, *uc, pc->pos, pcHQ->pos);
+			finder->reset();
 
 			if (pHQ->cost <= uc->range_max && pHQ->cost >= uc->range_min) { //HQ kan aangevallen worden
 				//attack HQ
 			} else {
 				for (vector<Entity*>::iterator it2 = vPlayer.begin(); it2 != vPlayer.end(); ++it2) {
 					PositionComponent *pcHuman = static_cast<PositionComponent*>((*it2)->GetComponent(Component::POSITION));
-					finder->reset();
 					Path *p = finder->find_path(*world, *uc, pc->pos, pcHuman->pos);
+					finder->reset();
 
 					if (p->cost <= uc->range_max && p->cost >= uc->range_min) {
 						// attack unit in range
