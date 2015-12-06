@@ -84,6 +84,14 @@ protected:
 						world->getWorldEntity(pos.row, pos.col, 4)->Add(new TextureComponent(sprite));
 						es->EntityChanged(world->getWorldEntity(pos.row, pos.col, 4));
 					}
+
+					//Remove if dead
+					if (uc->hp <= 0) {
+						entity->Remove(entity->GetComponent(Component::POSITION));
+						entity->Remove(entity->GetComponent(Component::TEXTURE));
+						entity->Remove(entity->GetComponent(Component::UNIT));
+						es->EntityRemoved(entity);
+					}
 				}
 			}
 			else {
