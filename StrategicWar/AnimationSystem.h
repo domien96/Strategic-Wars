@@ -36,7 +36,9 @@ protected:
 			AnimationComponent* ac = (AnimationComponent*) entity->GetComponent(Component::ANIMATION);
 			if (ac->is_attack) {
 				if (ac->is_attacker) {
-					// TODO
+					UnitComponent* uc = (UnitComponent*)entity->GetComponent(Component::UNIT);
+					uc->ap = ac->new_ap;
+					es->EntityChanged(entity);
 				}
 				else {
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
@@ -85,8 +87,12 @@ protected:
 				}
 			}
 			else {
-				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
-				pc->pos = ac->path->steps[ac->path->steps.size()-1];
+				//PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
+				//pc->pos = ac->path->steps[ac->path->steps.size()-1];
+				UnitComponent* uc = (UnitComponent*)entity->GetComponent(Component::UNIT);
+				uc->ap = ac->new_ap;
+				es->EntityChanged(entity);
+
 				for (size_t i = 0; i < ac->path->steps.size()-1; i++){
 					Grid from = ac->path->steps[i];
 					Grid to = ac->path->steps[i + 1];
