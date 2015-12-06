@@ -289,7 +289,13 @@ int World::init_world(ifstream* file) {
 	return 0;
 }
 
-
+bool World::unit_can_walk_over(Grid from, Grid to) {
+	if(this->getWorldEntity(to.row, to.col, 1)==NULL) return false;
+	Entity* e = this->getWorldEntity(to.row, to.col, 0);
+	TextureComponent* tc = (TextureComponent*) e->GetComponent(Component::TEXTURE);
+	Graphics::Sprite sprite = tc->texture;
+	return sprite!=Graphics::SPRITE_WATER && sprite!=Graphics::SPRITE_ROCK;
+}
 
 
 /*

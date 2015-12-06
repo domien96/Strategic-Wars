@@ -29,7 +29,7 @@ public:
 	Grid* get_previous(Grid& g);
 	vector<Grid> neighbours(Grid& g);
 	int cost(Grid& from, Grid& to);
-	bool unit_can_walk_over(Entity& unit, Entity& target);
+	bool unit_can_walk_over(World& world, Grid& to);
 
 	~DWGraph();
 };

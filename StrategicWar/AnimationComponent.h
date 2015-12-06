@@ -11,7 +11,7 @@ public:
 	/* True if the animation is an attack, false if it is a movement */
 	bool is_attack;
 
-	/* New position, only if the animation is a movement */
+	/* Path to follow, only if the animation is a movement */
 	Path* path;
 	
 	/* True if this unit is the attacker, false if it is being attacked; only if the animation is an attack */
