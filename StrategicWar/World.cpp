@@ -18,6 +18,17 @@ size_t World::getColumns()
 	return columns;
 }
 
+bool World::isUnit(Entity* ent) {
+	PositionComponent* pc = dynamic_cast<PositionComponent*>(ent->GetComponent(Component::POSITION));
+	return getWorldEntity(pc->pos.row, pc->pos.col, pc->z) != nullptr;
+}
+
+bool World::isValidGrid(Grid * grid)
+{
+	return grid->col < this->columns && grid->col >= 0 &&
+		grid->row < this->rows && grid->row >= 0;
+}
+
 
 /* Returns all Entities that represent an elemnt of World at the given depth.
 * This entity can be a part of the landscape, a unit, a headquarter or
@@ -34,9 +45,6 @@ vector<Entity*> * World::GetWorldEntities(unsigned int depth)
 			break;
 		case 2:
 			return &world_entities_map[2];
-			break;
-		case 3:
-			return &world_entities_map[3];
 			break;
 		default:
 			//laagste diepte om eventueel de anderen niet te overschrijven.
@@ -74,11 +82,9 @@ int World::isAI(char s)
 Entity * World::getWorldEntity(unsigned int row, unsigned int col, unsigned int depth)
 {
 	//boundaries
-	if (row < 0 || row >= this->rows - 1 || col < 0 || col >= this->columns - 1) {
+	if (row < 0 || row >= this->rows - 1 || col < 0 || col >= this->columns - 1 || depth <0 || depth>MAX_CELL_DEPTH) {
 		return nullptr;
 	}
-	depth = max(0, depth);
-	depth = min(MAX_CELL_DEPTH, depth);
 	return world_entities_map[depth].at(row*columns + col);
 }
 

@@ -10,7 +10,7 @@
 
 #define DEFAULT_SYMBOL '*'
 #define DEFAULT_TEXTURE Graphics::Sprite::SPRITE_TERRAIN
-#define MAX_CELL_DEPTH 3
+#define MAX_CELL_DEPTH 2
 
 using namespace std;
 
@@ -29,6 +29,12 @@ class World {
 		size_t getRows();
 		size_t getColumns();
 
+		/* Check if the Grid is withtin the boundaries of this level*/
+		bool isValidGrid(Grid* grid);
+
+		/* Kijkt of de gegeven entity een eeheid is. */
+		bool World::isUnit(Entity* ent);
+
 		/* Returns all Entities that represent an elemnt of World at the given depth.
 		 * This entity can be a part of the landscape, a unit, a headquarter or
 		 * a representation of the player.
@@ -44,15 +50,14 @@ class World {
 		void setColumns(size_t c) { columns = c; }
 
 		/* geef cel terug  op coordinaten x,y,z.
-		* indien er niets op de specifieke diepte is, return null
-		* indien x of y buiten grid vallen, wordt entity op rand weergegeven
-		*
+		* Indien er niets op de specifieke diepte is, return null
+		* Indien x of y buiten grid vallen, wordt nullptr weergegeven.
+		* diepte:
 		* 0 = terrein grond
-		*En ik lees daaruit wa ik gebruik
-		*1: eenheden en hq
-		*2: teams
-		*3: grid selector
-		*4: health bars
+		* 1: eenheden en hq
+		* 2: teams
+		* 3: grid selector
+		* (4: health bars)
 		*
 		*/
 		Entity* getWorldEntity(unsigned int row, unsigned int col, unsigned int depth);
