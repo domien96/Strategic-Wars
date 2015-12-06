@@ -35,6 +35,9 @@ class World {
 		/* Kijkt of de gegeven entity een eeheid is. */
 		bool World::isUnit(Entity* ent);
 
+		/* Kijkt of de gegeven entity van het etam van de speler is. */
+		bool World::isHuman(Entity* ent);
+
 		/* Returns all Entities that represent an elemnt of World at the given depth.
 		 * This entity can be a part of the landscape, a unit, a headquarter or
 		 * a representation of the player.

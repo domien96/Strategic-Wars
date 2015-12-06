@@ -74,6 +74,7 @@ protected:
 			}
 		}
 
+		// LINKERKOLOM
 		drawer.DrawString(to_string((int)floor(engine->GetContext()->GetFps() + 0.5)) + " fps", 5, world->getRows()*GRID_SIZE + 2 + 6 * (GRID_SIZE + 2), Color(1, 1, 0, 1), Graphics::ALIGN_LEFT, false);
 
 		drawer.DrawString(HP, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
@@ -81,6 +82,11 @@ protected:
 		drawer.DrawString(MIN_RANGE, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + 3 * (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
 		drawer.DrawString(MAX_RANGE, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + 4 * (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
 		drawer.DrawString(AP, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + 5 * (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
+
+		// RECHTERKOLOM
+		MouseSystem* ms = dynamic_cast<MouseSystem*>(engine->GetSystem(System::TYPE_MOUSE));
+		drawer.DrawString(ms->GetLeftButtonActionString(), world->getColumns()*GRID_SIZE / 2 + GRID_SIZE, world->getRows()*GRID_SIZE + 2, Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
+		drawer.DrawString(ms->GetRightButtonActionString(), world->getColumns()*GRID_SIZE / 2 + GRID_SIZE, world->getRows()*GRID_SIZE + 2 + (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
 	};
 
 	void drawStreamEntities() {

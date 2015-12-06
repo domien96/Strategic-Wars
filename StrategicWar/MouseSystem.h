@@ -34,6 +34,44 @@ public:
 		NONE
 	};
 
+	/* Geeft de mogelijke actie als string van de linkermuisknop */
+	string GetLeftButtonActionString()
+	{
+		switch (leftbutton) {
+		case MOVE:
+			return "Move";
+			break;
+		case ATTACK:
+			return "Attack";
+			break;
+		case SELECT:
+			return "Select";
+			break;
+		case NONE:
+			return "-";
+			break;
+		default:
+			return "-";
+			break;
+		}
+	}
+
+	/* Geeft de mogelijke actie als string van de rechtermuisknop */
+	string GetRightButtonActionString()
+	{
+		switch (rightbutton) {
+		case DESELECT:
+			return "Deselect";
+			break;
+		case NONE:
+			return "-";
+			break;
+		default:
+			return "-";
+			break;
+		}
+	}
+
 protected:
 	virtual void Update() {
 		AllegroLib* al = &AllegroLib::Instance();
@@ -51,11 +89,19 @@ protected:
 		}
 		else {
 			rightbutton = DESELECT;
-			if (hoveredCell && world->isUnit(hoveredCell)) {
-				leftbutton = ATTACK;
-			}
-			else {
-				leftbutton = MOVE;
+			leftbutton = NONE;
+			if (world->isHuman(selectedUnit)) {
+				if (hoveredCell && world->isUnit(hoveredCell)) {
+					if (world->isHuman(hoveredCell)) {
+						leftbutton = NONE;
+					}
+					else {
+						leftbutton = ATTACK;
+					}
+				}
+				else {
+					leftbutton = MOVE;
+				}
 			}
 		}
 

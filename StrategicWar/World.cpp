@@ -20,7 +20,20 @@ size_t World::getColumns()
 
 bool World::isUnit(Entity* ent) {
 	PositionComponent* pc = dynamic_cast<PositionComponent*>(ent->GetComponent(Component::POSITION));
-	return getWorldEntity(pc->pos.row, pc->pos.col, pc->z) != nullptr;
+	return getWorldEntity(pc->pos.row, pc->pos.col, 1) != nullptr;
+}
+
+bool World::isHuman(Entity* ent) {
+	PositionComponent* pc = dynamic_cast<PositionComponent*>(ent->GetComponent(Component::POSITION));
+	Entity* unit_entity = getWorldEntity(pc->pos.row, pc->pos.col, 1);
+	if (unit_entity) {
+		UnitComponent* uc = dynamic_cast<UnitComponent*>(unit_entity->GetComponent(Component::UNIT));
+		return uc->player == 0;
+
+	}
+	else {
+		return false;
+	}
 }
 
 bool World::isValidGrid(Grid * grid)
