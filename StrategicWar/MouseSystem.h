@@ -163,28 +163,29 @@ protected:
 					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 
 					delete finder;
+					if (p != nullptr) {
+						int path_length = p->cost;
+						vector<Grid> steps = p->steps;
+						int max_cost = uc->ap;
+						int length_move = min(path_length, max_cost);
 
-					int path_length = p->cost;
-					vector<Grid> steps = p->steps;
-					int max_cost = uc->ap;
-					int length_move = min(path_length, max_cost);
-
-					for (int i = 0; i < length_move; i++) {
-						Grid g = steps[i];
-						Entity* green_step = new Entity();
-						green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
-						green_step->Add(new PositionComponent(g, 3));
-						engine->AddEntity(green_step);
+						for (int i = 0; i < length_move; i++) {
+							Grid g = steps[i];
+							Entity* green_step = new Entity();
+							green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
+							green_step->Add(new PositionComponent(g, 3));
+							engine->AddEntity(green_step);
+						}
+						for (int j = length_move + 1; j < path_length; j++) {
+							Grid h = steps[j];
+							Entity* yellow_step = new Entity();
+							yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
+							yellow_step->Add(new PositionComponent(h, 3));
+							engine->AddEntity(yellow_step);
+						}
+						delete p;
+						//Zet mag enkel toegelaten worden als path_length <= range vd unit
 					}
-					for (int j = length_move + 1; j < path_length; j++) {
-						Grid h = steps[j];
-						Entity* yellow_step = new Entity();
-						yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
-						yellow_step->Add(new PositionComponent(h, 3));
-						engine->AddEntity(yellow_step);
-					}
-					delete p;
-					//Zet mag enkel toegelaten worden als path_length <= range vd unit
 				}
 			}
 
