@@ -18,6 +18,11 @@ public:
 	~AnimationSystem() {};
 
 protected:
+
+	virtual void move(Entity* entity, Grid& from, Grid& to) {
+		//TODO
+	}
+
 	virtual void Update() {
 		EntityStream* es = engine->GetEntityStream();
 		World* world = engine->GetContext()->getworld();
@@ -70,7 +75,12 @@ protected:
 			}
 			else {
 				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
-				pc->pos = *ac->new_pos;
+				pc->pos = ac->path->steps[ac->path->steps.size()-1];
+				for (size_t i = 0; i < ac->path->steps.size()-1; i++){
+					Grid from = ac->path->steps[i];
+					Grid to = ac->path->steps[i + 1];
+					move(entity, from, to);
+				}
 				
 			}
 			entity->Remove(ac);
