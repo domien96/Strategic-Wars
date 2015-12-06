@@ -12,9 +12,9 @@ class DWGraph: public Entity {
 
 private:
 	
-	vector<vector<double>>* costs;
-	vector<vector<bool>>* visited;
-	vector <vector<Grid*>>* previous;
+	vector<vector<double>> costs;
+	vector<vector<bool>> visited;
+	vector <vector<Grid*>> previous;
 	int number_of_rows, number_of_columns;
 	World* world;
 
@@ -29,7 +29,6 @@ public:
 	Grid* get_previous(Grid& g);
 	vector<Grid> neighbours(Grid& g);
 	int cost(Grid& from, Grid& to);
-	bool unit_can_walk_over(World& world, Grid& to);
 
 	~DWGraph();
 };

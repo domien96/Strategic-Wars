@@ -19,7 +19,8 @@ public:
 
 protected:
 
-	virtual void move(Entity* entity, Grid& from, Grid& to) {
+	virtual void move(World* world, Entity* entity, Grid& from, Grid& to) {
+		//world->getWorldEntity(from.row, from.col, 1)=NULL;
 		//TODO
 	}
 
@@ -39,7 +40,6 @@ protected:
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
 					uc->hp = ac->new_hp;
 
-					Entity* health_bar = new Entity();
 					Graphics::Sprite sprite;
 					switch (ac->new_hp){
 					case 10:
@@ -67,10 +67,17 @@ protected:
 					default:
 						sprite = Graphics::SPRITE_HEALTH_TEN;
 					}
-					health_bar->Add(new TextureComponent(sprite));
+
 					Grid pos = ((PositionComponent*)entity->GetComponent(Component::POSITION))->pos;
-					health_bar->Add(new PositionComponent(pos, 4));
-					world->GetWorldEntities(4)->push_back(health_bar);
+
+					if (world->getWorldEntity(pos.row, pos.col, 4) == NULL) {
+						Entity* health_bar = new Entity();
+						health_bar->Add(new TextureComponent(sprite));
+						health_bar->Add(new PositionComponent(pos, 4));
+						world->GetWorldEntities(4)->push_back(health_bar);
+					} else {
+						world->getWorldEntity(pos.row, pos.col, 4)->Add(new TextureComponent(sprite));
+					}
 				}
 			}
 			else {
@@ -79,7 +86,7 @@ protected:
 				for (size_t i = 0; i < ac->path->steps.size()-1; i++){
 					Grid from = ac->path->steps[i];
 					Grid to = ac->path->steps[i + 1];
-					move(entity, from, to);
+					move(world, entity, from, to);
 				}
 				
 			}

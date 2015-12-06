@@ -83,7 +83,7 @@ protected:
 				if (selectedUnit != NULL) {
 
 					Pathfinder* finder = new Pathfinder();
-					UnitComponent *uc = static_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
+					UnitComponent *uc = (UnitComponent*) selectedUnit->GetComponent(Component::UNIT);
 
 					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 

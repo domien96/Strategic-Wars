@@ -11,7 +11,7 @@ bool comp(Node* i, Node* j) {
 
 Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
-	//if (this->graph == nullptr && this->start == nullptr) {
+	if (this->graph == nullptr && this->start == nullptr) {
 		graph = new DWGraph(world, unit);
 		this->start = &start;
 
@@ -55,7 +55,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 			}
 			graph->set_visited(current, true);
 		}
-	//}
+	}
 
 	if (graph->get_cost(target) == INT_MAX) {
 		//There is no path
