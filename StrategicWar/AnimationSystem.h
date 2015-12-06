@@ -96,9 +96,6 @@ protected:
 			}
 			entity->Remove(ac);
 		}
-		
-
-		// TODO 
 	};
 
 	virtual Type GetType() { return System::TYPE_ANIMATION; };

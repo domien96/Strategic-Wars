@@ -108,7 +108,6 @@ protected:
 
 
 		}
-
 		ALLEGRO_MOUSE_STATE state;
 		al_get_mouse_state(&state);
 

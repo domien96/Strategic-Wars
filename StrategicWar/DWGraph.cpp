@@ -104,11 +104,11 @@ int DWGraph::cost(Grid& from, Grid& to) {
 	if (!world->unit_can_walk_over(from, to)) {
 		return INT_MAX;
 	}
-
-	if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
+	else return 1;
+	/*if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
 		return 12;
 	}
-	else return 17;
+	else return 17;*/
 }
 
 /*bool DWGraph::unit_can_walk_over(World& world, Grid& to) {
