@@ -18,6 +18,11 @@ int Graphics::GetGridSize() {
 	return GRID_SIZE;
 }
 
+float Graphics::GetFps()
+{
+	return al->fps;
+}
+
 void Graphics::LoadFonts()
 {
 	font = al_load_ttf_font("../assets/fonts/arialn.ttf", FONT_SIZE_SMALL, 0);
@@ -170,8 +175,6 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2));
 	DrawBitmap(SPRITE_BADGE_RANGE_MAX, 0, world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2));
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2));
-
-	DrawString(to_string((int)floor(al->fps + 0.5)) + " fps", 5, world->getRows()*GetGridSize() + 2 + 6 * (GetGridSize() + 2), Color(1, 1, 0, 1), ALIGN_LEFT, false);
 
 	//rechterkolom
 	DrawBitmap(SPRITE_LMB, world->getColumns()*GetGridSize() / 2, world->getRows()*GetGridSize() + 2);

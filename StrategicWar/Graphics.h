@@ -116,6 +116,7 @@ public:
 	Vector2 ToPx(Grid gridloc);
 	Grid ToGrid(Vector2 vector);
 	int GetGridSize();
+	float GetFps();
 
 private:
 	bool redraw;
