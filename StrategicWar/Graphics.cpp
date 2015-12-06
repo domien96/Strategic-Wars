@@ -93,7 +93,6 @@ void Graphics::LoadSpriteCache() {
 
 	// World: pointer set to NULL so it can be filled in later
 	sprites[SPRITE_BACKGROUND] = NULL;
-	sprites[SPRITE_FOREGROUND] = NULL;
 }
 
 void Graphics::UnLoadFonts()
@@ -130,68 +129,11 @@ int getAlign(Graphics::Align align)
 
 void Graphics::ExecuteDraws()
 {
-	al_draw_bitmap(sprites[SPRITE_BACKGROUND], 0, 0, 0);
-
-	al_convert_mask_to_alpha(sprites[SPRITE_FOREGROUND], al_map_rgb(0, 0, 0)); // maak bitmap transparant
-	al_draw_bitmap(sprites[SPRITE_FOREGROUND], 0, 0, 0);	
-
 	// switch the display buffer to the screen.
 	al_flip_display();
 	// clear the buffer
 	ClearScreen();
 }
-
-
-//This methode is made to update the SPRITE_FOREGROUND with the new entities in world;
-void Graphics::ExecuteHudDraws(World *world, Entity *entity) {
-
-	// Set the target for draw calls to this bitmap
-	al_set_target_bitmap(sprites[SPRITE_FOREGROUND]);
-	// eerst garbage wegdoen
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-
-	vector<Entity*> v = *(world->GetWorldEntities(3));
-
-	for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
-		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
-		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
-		Vector2 v2 = ToPx(pc->pos);
-		if (tc != nullptr) {
-			DrawBitmap(tc->texture, v2.x, v2.y);
-		}
-	}
-
-	if (entity != nullptr) {
-		UnitComponent *uc = static_cast<UnitComponent*>(entity->GetComponent(Component::UNIT));
-
-		if (uc != nullptr) {
-
-			DrawString("", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			//HP
-			DrawString("" + to_string(uc->hp), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			//ATT
-			DrawString("" + to_string(uc->dp), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			//MIN RANGE
-			DrawString("" + to_string(uc->range_min), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			//MAX RANGE
-			DrawString("" + to_string(uc->range_max), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			// AP
-			DrawString("" + to_string(uc->ap), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-		}
-		else {
-			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
-		}
-	}
-
-	// Reset the target for draw calls to the backbuffer of the display
-	al_set_target_bitmap(al_get_backbuffer(al->display));
-
-}
-
 
 void Graphics::ClearScreen()
 {
@@ -204,7 +146,6 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	// Create an appropriately sized bitmap for the SPRITE_WORLD bitmap pointer
 	Vector2 v = al->screensize;
 	sprites[SPRITE_BACKGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), v.y);
-	sprites[SPRITE_FOREGROUND] = al_create_bitmap(world->getColumns()*GetGridSize(), v.y);
 
 	// Set the target for draw calls to this bitmap
 	al_set_target_bitmap(sprites[SPRITE_BACKGROUND]);
@@ -224,8 +165,6 @@ void Graphics::GenerateBackgroundSprite(World * world)
 
 	//stats tekenen
 	//linkerkolom
-	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize() + 2);
-	DrawString("Selected unit image here", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_HP, 0, world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2));
 	DrawBitmap(SPRITE_BADGE_ATTACK, 0, world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2));
 	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2));

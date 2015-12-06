@@ -24,6 +24,9 @@ public:
 		System() {};
 	~MouseSystem() {};
 
+	Entity* GetSelectedUnit() { return selectedUnit; }
+	Grid* GetSelectedGrid() { return selectedGrid; }
+
 protected:
 	virtual void Update() {
 		AllegroLib* al = &AllegroLib::Instance();
@@ -98,7 +101,7 @@ protected:
 
 				}
 
-				Graphics::Instance().ExecuteHudDraws(world,nullptr);
+				//Graphics::Instance().ExecuteHudDraws(world,nullptr);
 
 			}
 
@@ -137,7 +140,7 @@ protected:
 							}
 						}
 
-						Graphics::Instance().ExecuteHudDraws(world, clickedEntity);
+						//Graphics::Instance().ExecuteHudDraws(world, clickedEntity);
 					}
 				
 				}
