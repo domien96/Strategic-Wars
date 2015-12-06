@@ -10,7 +10,7 @@ typedef std::map<Component::Tag, Component*> componentmap;
 class Entity
 {
 public:
-	Entity() : components(new componentmap()) {};
+	Entity();
 	~Entity();
 
 	/* Add a component to the entity, nothing happens if component is a nullpointer or points to a non-accessable location*/
@@ -29,7 +29,7 @@ public:
 	std::vector<Component*> GetComponents();
 
 private:
-	componentmap* components;
+	componentmap components;
 };
 
 #endif

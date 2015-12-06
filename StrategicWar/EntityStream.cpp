@@ -10,15 +10,19 @@ using namespace std;
 EntityStream::EntityStream() {}
 
 EntityStream::~EntityStream() {
-	for (auto it = index.begin(); it != index.end(); it++) {
-		for (set<Entity*>::iterator it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-			/*
-			delete *it2; // it->second compileert hier niet!
-			*/
+	for (auto it = index.begin(); it != index.end(); it++)
+	{
+		if (it->second.size() > 0)
+		{
+			for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+			{
+				if (*it2 != nullptr) {
+					Entity *entity = static_cast<Entity*>(*it2);
+					entity->~Entity();
+				}
+			}
 		}
-		
 	}
-	
 }
 
 set<Entity*> EntityStream::WithTag(Component::Tag tag)
