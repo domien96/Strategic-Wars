@@ -72,7 +72,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 		path->cost = graph->get_cost(target);
 
 		for (int i = pathSize - 1; i >= 0; i--) {
-			path->steps[i] = current;
+			path->steps.push_back(current);
 			current = graph->get_previous(current);
 		}
 
