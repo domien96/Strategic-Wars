@@ -13,8 +13,10 @@
 class Engine
 {
 public:
-	Engine(Context* _context) : context(_context) {};
-	~Engine() {};
+	Engine(Context* _context) : context(_context) {
+		es = new EntityStream();
+	};
+	Engine::~Engine();
 
 	/* Adds an Entity to the Engine, warning the EntityStream. */
 	void AddEntity(Entity* entity);
@@ -62,7 +64,7 @@ private:
 
 	Context *context;
 	double time_now, time_prev;
-	EntityStream es;
+	EntityStream* es;
 };
 
 #endif

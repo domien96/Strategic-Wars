@@ -6,6 +6,11 @@
 using namespace std;
 
 
+Engine::~Engine() {
+	delete es;
+	
+};
+
 /* If the Enitity is not yet attached to the Engine, then it will be added and the EntityStream will be warned. */
 void Engine::AddEntity(Entity* entity)
 {
@@ -110,5 +115,5 @@ System* Engine::GetSystem(System::Type type)
 /* Returns a pointer to the EntityStream object of this Entity */
 EntityStream* Engine::GetEntityStream()
 {
-	return &es;
+	return es;
 }

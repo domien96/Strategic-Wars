@@ -9,7 +9,17 @@ using namespace std;
 
 EntityStream::EntityStream() {}
 
-EntityStream::~EntityStream() {}
+EntityStream::~EntityStream() {
+	for (auto it = index.begin(); it != index.end(); it++) {
+		for (set<Entity*>::iterator it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
+			/*
+			delete *it2; // it->second compileert hier niet!
+			*/
+		}
+		
+	}
+	
+}
 
 set<Entity*> EntityStream::WithTag(Component::Tag tag)
 {
