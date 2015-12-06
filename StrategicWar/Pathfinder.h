@@ -28,12 +28,12 @@ public:
 	*/
 	Path* find_path(World& world, UnitComponent& unit, Grid& start, Grid& target);
 	void reset() {
-		graph = NULL;
-		start = NULL;
+		graph = nullptr;
+		start = nullptr;
 	}
 
 	~Pathfinder() {
-		delete graph;
+		//delete graph;
 	}
 
 private:
