@@ -8,7 +8,7 @@ DWGraph::DWGraph(World& world, UnitComponent& unit) {
 
 	number_of_rows = world.getRows();
 	number_of_columns = world.getColumns();
-	Add(&unit);
+	//Add(&unit);
 
 	//Initialize costs matrix
 	costs = vector<vector<double>>();
