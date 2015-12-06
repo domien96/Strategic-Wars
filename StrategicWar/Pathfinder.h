@@ -30,7 +30,6 @@ public:
 
 	~Pathfinder() {
 		delete graph;
-		delete start;
 	}
 
 private:

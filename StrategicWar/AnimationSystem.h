@@ -63,14 +63,15 @@ protected:
 						sprite = Graphics::SPRITE_HEALTH_TEN;
 					}
 					health_bar->Add(new TextureComponent(sprite));
-					health_bar->Add(new PositionComponent(((PositionComponent*)entity->GetComponent(Component::POSITION))->pos, 4));
+					Grid pos = ((PositionComponent*)entity->GetComponent(Component::POSITION))->pos;
+					health_bar->Add(new PositionComponent(pos, 4));
 					world->GetWorldEntities(4)->push_back(health_bar);
-					
 				}
 			}
 			else {
 				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
 				pc->pos = *ac->new_pos;
+				
 			}
 			entity->Remove(ac);
 		}
