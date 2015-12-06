@@ -22,7 +22,10 @@ class MouseSystem : public System
 public:
 	MouseSystem() : selectedUnit(nullptr), hoveredCell(nullptr), System() {
 	};
-	~MouseSystem() {};
+	~MouseSystem() {
+		delete 	selectedUnit;
+		delete hoveredCell;
+	};
 
 	Entity* GetSelectedUnit() { return selectedUnit; }
 
