@@ -20,6 +20,7 @@ public:
 protected:
 	virtual void Update() {
 		EntityStream* es = engine->GetEntityStream();
+		World* world = engine->GetContext()->getworld();
 
 		set<Entity*> entity_set = es->WithTag(Component::ANIMATION);
 		for (set<Entity*>::iterator i = entity_set.begin(); i!= entity_set.end(); i++) {
@@ -32,6 +33,38 @@ protected:
 				else {
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
 					uc->hp = ac->new_hp;
+
+					Entity* health_bar = new Entity();
+					Graphics::Sprite sprite;
+					switch (ac->new_hp){
+					case 10:
+						sprite = Graphics::SPRITE_HEALTH_TEN;
+					case 9:
+						sprite = Graphics::SPRITE_HEALTH_NINE;
+					case 8:
+						sprite = Graphics::SPRITE_HEALTH_EIGHT;
+					case 7:
+						sprite = Graphics::SPRITE_HEALTH_SEVEN;
+					case 6:
+						sprite = Graphics::SPRITE_HEALTH_SIX;
+					case 5:
+						sprite = Graphics::SPRITE_HEALTH_FIVE;
+					case 4:
+						sprite = Graphics::SPRITE_HEALTH_FOUR;
+					case 3:
+						sprite = Graphics::SPRITE_HEALTH_THREE;
+					case 2:
+						sprite = Graphics::SPRITE_HEALTH_TWO;
+					case 1:
+						sprite = Graphics::SPRITE_HEALTH_ONE;
+					case 0:
+						sprite = Graphics::SPRITE_HEALTH_HALF;
+					default:
+						sprite = Graphics::SPRITE_HEALTH_TEN;
+					}
+					health_bar->Add(new TextureComponent(sprite));
+					health_bar->Add(new PositionComponent(((PositionComponent*)entity->GetComponent(Component::POSITION))->pos, 4));
+					world->GetWorldEntities(4)->push_back(health_bar);
 					
 				}
 			}

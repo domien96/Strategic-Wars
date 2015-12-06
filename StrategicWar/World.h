@@ -49,8 +49,10 @@ class World {
 		*
 		* 0 = terrein grond
 		*En ik lees daaruit wa ik gebruik
-		*1 : eenheden en hq
+		*1: eenheden en hq
 		*2: teams
+		*3: grid selector
+		*4: health bars
 		*
 		*/
 		Entity* getWorldEntity(unsigned int row, unsigned int col, unsigned int depth);
