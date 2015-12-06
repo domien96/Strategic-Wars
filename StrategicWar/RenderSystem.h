@@ -7,7 +7,6 @@
 #include "PositionComponent.h"
 #include "TextureComponent.h"
 #include "MouseSystem.h"
-#include "Context.h"
 
 class RenderSystem : public System
 {
@@ -71,7 +70,7 @@ protected:
 			}
 		}
 
-		drawer.DrawString(to_string((int)floor(engine->GetContext.GetFps() + 0.5)) + " fps", 5, world->getRows()*GRID_SIZE + 2 + 6 * (GRID_SIZE + 2), Color(1, 1, 0, 1), Graphics::ALIGN_LEFT, false);
+		drawer.DrawString(to_string((int)floor(engine->GetContext()->GetFps() + 0.5)) + " fps", 5, world->getRows()*GRID_SIZE + 2 + 6 * (GRID_SIZE + 2), Color(1, 1, 0, 1), Graphics::ALIGN_LEFT, false);
 		
 		drawer.DrawString(HP, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
 		drawer.DrawString(ATT, 2 * (GRID_SIZE + 2), world->getRows()*GRID_SIZE + 2 + 2 * (GRID_SIZE + 2), Color(1, 1, 1, 1), Graphics::ALIGN_LEFT, false);
