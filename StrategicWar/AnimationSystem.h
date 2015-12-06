@@ -108,7 +108,7 @@ protected:
 				}
 				
 			}
-			entity->Remove(ac);engine->GetSystem(System::TYPE_MOUSE)->Update;
+			entity->Remove(ac);
 		}
 	};
 
