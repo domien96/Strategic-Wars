@@ -20,8 +20,9 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 
 		if (start.col == target.col && start.row == target.row) {
 			Path* path = new Path();
-			path->steps->col = start.col;
-			path->steps->row = start.row;
+			path->steps.push_back(start);
+			//path->steps[0].col = start.col;
+			//path->steps[0].row = start.row;
 			path->cost = 0;
 			delete graph;
 			return path;

@@ -90,7 +90,7 @@ protected:
 					finder.reset();
 
 					int path_length = p->cost;
-					Grid* steps = p->steps;
+					vector<Grid> steps = p->steps;
 
 					for (int i = 0; i < path_length; i++) {
 						Grid g = steps[i];
