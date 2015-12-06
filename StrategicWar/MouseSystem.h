@@ -11,6 +11,7 @@
 #include "Vector2.h"
 #include "UnitComponent.h"
 #include "PositionComponent.h"
+#include "pathComponent.h"
 #include "Pathfinder.h"
 #include "World.h"
 #include "Pathfinder.h"
@@ -155,7 +156,14 @@ protected:
 				// PAD TONEN INDIEN EEN UNIT IS GESELECTEERD
 
 				if (selectedUnit != nullptr && world->isValidGrid(mouseMovedGrid)) {
+					// EERST VORIGE PATH VERWIJDEREN
+					set<Entity*> path = engine->GetEntityStream()->WithTag(Component::PATH);
+					for (set<Entity*>::iterator it = path.begin(); it != path.end(); it++) {
+						engine->GetEntityStream()->EntityRemoved(*it);
+						delete (*it);
+					}
 
+					// NIEUW PAD MAKEN
 					Pathfinder* finder = new Pathfinder();
 					UnitComponent *uc = dynamic_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
 					Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
@@ -174,6 +182,7 @@ protected:
 							Entity* green_step = new Entity();
 							green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
 							green_step->Add(new PositionComponent(g, 3));
+							green_step->Add(new PathComponent());
 							engine->AddEntity(green_step);
 						}
 						for (int j = length_move + 1; j < path_length; j++) {
@@ -181,6 +190,7 @@ protected:
 							Entity* yellow_step = new Entity();
 							yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
 							yellow_step->Add(new PositionComponent(h, 3));
+							yellow_step->Add(new PathComponent());
 							engine->AddEntity(yellow_step);
 						}
 						delete p;

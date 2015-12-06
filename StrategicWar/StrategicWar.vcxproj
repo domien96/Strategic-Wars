@@ -169,6 +169,7 @@
     <ClInclude Include="AllegroLib.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="MouseSystem.h" />
+    <ClInclude Include="pathComponent.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="PositionComponent.h" />
     <ClInclude Include="RenderSystem.h" />

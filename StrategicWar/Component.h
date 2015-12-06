@@ -8,7 +8,7 @@ class Component
 {
 public:
 	enum Tag {
-		TEXTURE, POSITION, UNIT, ANIMATION
+		TEXTURE, POSITION, UNIT, ANIMATION, PATH
 	};
 
 	Component() {};
