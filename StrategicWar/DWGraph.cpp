@@ -113,7 +113,7 @@ int DWGraph::cost(Grid& from, Grid& to) {
 
 bool DWGraph::unit_can_walk_over(Entity& unit, Entity& target) {
 	UnitComponent* c = (UnitComponent*) target.GetComponent(Component:: UNIT);
-
+	//TODO
 	//NEEDS FIX
 	return true;
 }
