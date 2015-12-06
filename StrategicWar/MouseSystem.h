@@ -162,10 +162,6 @@ protected:
 
 					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 
-					if (p == nullptr) {
-						p = p;
-					}
-
 					delete finder;
 
 					int path_length = p->cost;
@@ -178,14 +174,14 @@ protected:
 						Entity* green_step = new Entity();
 						green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
 						green_step->Add(new PositionComponent(g, 3));
-						engine->GetEntityStream()->EntityAdded(green_step);
+						engine->AddEntity(green_step);
 					}
 					for (int j = length_move + 1; j < path_length; j++) {
 						Grid h = steps[j];
 						Entity* yellow_step = new Entity();
 						yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
 						yellow_step->Add(new PositionComponent(h, 3));
-						engine->GetEntityStream()->EntityAdded(yellow_step);
+						engine->AddEntity(yellow_step);
 					}
 					delete p;
 					//Zet mag enkel toegelaten worden als path_length <= range vd unit
