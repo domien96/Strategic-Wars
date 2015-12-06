@@ -11,57 +11,57 @@ DWGraph::DWGraph(World& world, UnitComponent& unit) {
 	Add(&unit);
 
 	//Initialize costs matrix
-	costs = new vector<vector<double>>;
+	costs = vector<vector<double>>();
 	for (size_t i = 0; i < world.getRows(); i++) {
 		vector<double> row;
 		for (size_t j = 0; j < world.getColumns(); j++) {
 			row.push_back(INT_MAX);
 		}
-		costs->push_back(row);
+		costs.push_back(row);
 	}
 
 	//Initialize visited matrix
-	visited = new vector<vector<bool>>;
+	visited = vector<vector<bool>>();
 	for (size_t i = 0; i < world.getRows(); i++) {
 		vector<bool> row;
 		for (size_t j = 0; j < world.getColumns(); j++) {
 			row.push_back(false);
 		}
-		visited->push_back(row);
+		visited.push_back(row);
 	}
 
 	//Initialize previous matrix
-	previous = new vector<vector<Grid*>>;
+	previous = vector<vector<Grid*>>();
 	for (size_t i = 0; i < world.getRows(); i++) {
 		vector<Grid*> row;
 		for (size_t j = 0; j < world.getColumns(); j++) {
 			row.push_back(NULL);
 		}
-		previous->push_back(row);
+		previous.push_back(row);
 	}
 }
 
 void DWGraph::set_cost(Grid& g, double cost) {
-	(*costs)[g.row][g.col] = cost;
+	costs[g.row][g.col] = cost;
 }
 
 int DWGraph::get_cost(Grid& g) {
-	return (*costs)[g.row][g.col];
+	return costs[g.row][g.col];
 }
 
 void DWGraph::set_visited(Grid& g, bool _visited) {
-	(*visited)[g.row][g.col] = _visited;
+	visited[g.row][g.col] = _visited;
 }
 
 bool DWGraph::is_visited(Grid& g) {
-	return (*visited)[g.row][g.col];
+	return visited[g.row][g.col];
 }
 
 void DWGraph::set_previous(Grid& g, Grid& prev) {
-	(*previous)[g.row][g.col] = &prev;
+	previous[g.row][g.col] = &prev;
 }
 Grid* DWGraph::get_previous(Grid& g) {
-	return (*previous)[g.row][g.col];
+	return previous[g.row][g.col];
 }
 
 vector<Grid> DWGraph::neighbours(Grid& g) {
@@ -101,32 +101,33 @@ int DWGraph::cost(Grid& from, Grid& to) {
 	int f = from.row * number_of_rows + from.col;
 	int t = to.row * number_of_rows + to.col;
 
-	if (!unit_can_walk_over(*world->getWorldEntity(from.row,from.col,1), *world->getWorldEntity(to.row, to.col, 1))) {
+	if (!world->unit_can_walk_over(from, to)) {
 		return INT_MAX;
 	}
-
-	if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
+	else return 1;
+	/*if (abs(from.col - to.col) + abs(from.row - to.row) == 1) {
 		return 12;
 	}
-	else return 17;
+	else return 17;*/
 }
 
-bool DWGraph::unit_can_walk_over(Entity& unit, Entity& target) {
-	UnitComponent* c = (UnitComponent*) target.GetComponent(Component:: UNIT);
+/*bool DWGraph::unit_can_walk_over(World& world, Grid& to) {
+	if (world.getWorldEntity(to.row, to.col, 1) == NULL) return false;
+	world.getWorldEntity(to.row, to.col, 0)->GetComponent(Component::;
 	//TODO
 	//NEEDS FIX
-	return true;
-}
+	return target == NULL;
+}*/
 
 DWGraph::~DWGraph() {
-	delete visited;
-	for (size_t i = 0; i < previous->size(); i++)
+	//delete visited;
+	for (size_t i = 0; i < previous.size(); i++)
 	{
-		for (size_t j = 0; j < (*previous)[i].size(); j++)
+		for (size_t j = 0; j < previous[i].size(); j++)
 		{
-			delete (*previous)[i][j];
+			//delete previous[i][j];
 		}
 	}
-	delete previous;
-	delete costs;
+	//delete previous;
+	//delete costs;
 }

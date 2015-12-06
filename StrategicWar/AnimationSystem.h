@@ -19,7 +19,10 @@ public:
 
 protected:
 
-	virtual void move(Entity* entity, Grid& from, Grid& to) {
+	virtual void move(EntityStream* es, Entity* entity, Grid& from, Grid& to) {
+		PositionComponent* pc = (PositionComponent*) entity->GetComponent(Component::POSITION);
+		pc->pos = to;
+		es->EntityChanged(entity);
 		//TODO
 	}
 
@@ -33,13 +36,14 @@ protected:
 			AnimationComponent* ac = (AnimationComponent*) entity->GetComponent(Component::ANIMATION);
 			if (ac->is_attack) {
 				if (ac->is_attacker) {
-					// TODO
+					UnitComponent* uc = (UnitComponent*)entity->GetComponent(Component::UNIT);
+					uc->ap = ac->new_ap;
+					es->EntityChanged(entity);
 				}
 				else {
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
 					uc->hp = ac->new_hp;
 
-					Entity* health_bar = new Entity();
 					Graphics::Sprite sprite;
 					switch (ac->new_hp){
 					case 10:
@@ -67,27 +71,37 @@ protected:
 					default:
 						sprite = Graphics::SPRITE_HEALTH_TEN;
 					}
-					health_bar->Add(new TextureComponent(sprite));
+
 					Grid pos = ((PositionComponent*)entity->GetComponent(Component::POSITION))->pos;
-					health_bar->Add(new PositionComponent(pos, 4));
-					world->GetWorldEntities(4)->push_back(health_bar);
+
+					if (world->getWorldEntity(pos.row, pos.col, 4) == NULL) {
+						Entity* health_bar = new Entity();
+						health_bar->Add(new TextureComponent(sprite));
+						health_bar->Add(new PositionComponent(pos, 4));
+						world->GetWorldEntities(4)->push_back(health_bar);
+						es->EntityChanged(health_bar);
+					} else {
+						world->getWorldEntity(pos.row, pos.col, 4)->Add(new TextureComponent(sprite));
+						es->EntityChanged(world->getWorldEntity(pos.row, pos.col, 4));
+					}
 				}
 			}
 			else {
-				PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
-				pc->pos = ac->path->steps[ac->path->steps.size()-1];
+				//PositionComponent* pc = (PositionComponent*)entity->GetComponent(Component::POSITION);
+				//pc->pos = ac->path->steps[ac->path->steps.size()-1];
+				UnitComponent* uc = (UnitComponent*)entity->GetComponent(Component::UNIT);
+				uc->ap = ac->new_ap;
+				es->EntityChanged(entity);
+
 				for (size_t i = 0; i < ac->path->steps.size()-1; i++){
 					Grid from = ac->path->steps[i];
 					Grid to = ac->path->steps[i + 1];
-					move(entity, from, to);
+					move(es, entity, from, to);
 				}
 				
 			}
 			entity->Remove(ac);
 		}
-		
-
-		// TODO 
 	};
 
 	virtual Type GetType() { return System::TYPE_ANIMATION; };
