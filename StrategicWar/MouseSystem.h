@@ -24,7 +24,7 @@ public:
 	MouseSystem() : selectedUnit(nullptr), hoveredCell(nullptr), System() {
 	};
 	~MouseSystem() {
-		delete 	selectedUnit;
+		delete selectedUnit;
 		delete hoveredCell;
 		delete finder;
 	};
@@ -98,15 +98,15 @@ protected:
 			leftbutton = NONE;
 			if (world->isHuman(selectedUnit)) {
 				Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
-				Grid hoveredGrid = dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos;
-				if (hoveredCell && world->isUnit(hoveredCell)) {
-					if (!world->isHuman(hoveredCell)) {
+				if (hoveredCell ) {
+					Grid hoveredGrid = dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos;
+					if (!world->isHuman(hoveredCell)&& world->isUnit(hoveredCell)) {
 						leftbutton = ATTACK;
+					} else if (hoveredCell && world->unit_can_walk_over(selectedGrid, hoveredGrid)) {
+						leftbutton = MOVE;
 					}
 				}
-				else if (world->unit_can_walk_over(selectedGrid, hoveredGrid)) {
-					leftbutton = MOVE;
-				}
+				
 
 			}
 		}
@@ -133,75 +133,73 @@ protected:
 
 			if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
 				Grid *mouseMovedGrid = &(Graphics::Instance().ToGrid(v));
-
-				//  Update selection square's position
-				if (world->isValidGrid(mouseMovedGrid)) {
-					if (hoveredCell) {
-						dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos = *mouseMovedGrid;
-						engine->GetEntityStream()->EntityChanged(hoveredCell);
+				if ( hoveredCell==nullptr || ! (*mouseMovedGrid == dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos) ) {
+					//  Update selection square's position
+					if (world->isValidGrid(mouseMovedGrid)) {
+						if (hoveredCell) {
+							dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos = *mouseMovedGrid;
+							engine->GetEntityStream()->EntityChanged(hoveredCell);
+						}
+						else {
+							hoveredCell = new Entity();
+							hoveredCell->Add(new PositionComponent(*mouseMovedGrid, 3));
+							hoveredCell->Add(new TextureComponent(Graphics::SPRITE_SELECT));
+							engine->GetEntityStream()->EntityAdded(hoveredCell);
+						}
 					}
 					else {
-						hoveredCell = new Entity();
-						hoveredCell->Add(new PositionComponent(*mouseMovedGrid, 3));
-						hoveredCell->Add(new TextureComponent(Graphics::SPRITE_SELECT));
-						engine->GetEntityStream()->EntityAdded(hoveredCell);
-					}
-				}
-				else {
-					engine->GetEntityStream()->EntityRemoved(hoveredCell);
-					delete hoveredCell;
-					hoveredCell = nullptr;
-				}
-
-
-				// PAD TONEN INDIEN EEN UNIT IS GESELECTEERD
-
-				if (selectedUnit != nullptr && world->isValidGrid(mouseMovedGrid)) {
-					// EERST VORIGE PATH VERWIJDEREN
-					set<Entity*> path = engine->GetEntityStream()->WithTag(Component::PATH);
-					for (set<Entity*>::iterator it = path.begin(); it != path.end(); it++) {
-						engine->GetEntityStream()->EntityRemoved(*it);
-						delete (*it);
+						engine->GetEntityStream()->EntityRemoved(hoveredCell);
+						delete hoveredCell;
+						hoveredCell = nullptr;
 					}
 
-					// NIEUW PAD MAKEN
-					finder = new Pathfinder();
-					UnitComponent *uc = dynamic_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
-					Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
 
-					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
+					// PAD TONEN INDIEN EEN UNIT IS GESELECTEERD
 
-					delete finder;
-					if (p != nullptr) {
-						int path_length = p->cost;
-						vector<Grid> steps = p->steps;
-						int max_cost = uc->ap;
-						int length_move = min(path_length, max_cost);
-
-						for (int i = 0; i < length_move; i++) {
-							Grid g = steps[i];
-							Entity* green_step = new Entity();
-							green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
-							green_step->Add(new PositionComponent(g, 3));
-							green_step->Add(new PathComponent());
-							engine->AddEntity(green_step);
+					if (selectedUnit != nullptr && world->isValidGrid(mouseMovedGrid)) {
+						// EERST VORIGE PATH VERWIJDEREN
+						set<Entity*> path = engine->GetEntityStream()->WithTag(Component::PATH);
+						for (set<Entity*>::iterator it = path.begin(); it != path.end(); it++) {
+							engine->GetEntityStream()->EntityRemoved(*it);
+							delete (*it);
 						}
-						for (int j = length_move + 1; j < path_length; j++) {
-							Grid h = steps[j];
-							Entity* yellow_step = new Entity();
-							yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
-							yellow_step->Add(new PositionComponent(h, 3));
-							yellow_step->Add(new PathComponent());
-							engine->AddEntity(yellow_step);
+
+						// NIEUW PAD MAKEN
+						finder = new Pathfinder();
+						UnitComponent *uc = dynamic_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
+						Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
+
+						Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
+
+						delete finder;
+						if (p != nullptr) {
+							int path_length = p->cost;
+							vector<Grid> steps = p->steps;
+							int max_cost = uc->ap;
+							int length_move = min(path_length, max_cost);
+
+							for (int i = 0; i < length_move; i++) {
+								Grid g = steps[i];
+								Entity* green_step = new Entity();
+								green_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH));
+								green_step->Add(new PositionComponent(g, 3));
+								green_step->Add(new PathComponent());
+								engine->AddEntity(green_step);
+							}
+							for (int j = length_move + 1; j < path_length; j++) {
+								Grid h = steps[j];
+								Entity* yellow_step = new Entity();
+								yellow_step->Add(new TextureComponent(Graphics::Sprite::SPRITE_PATH_FAR));
+								yellow_step->Add(new PositionComponent(h, 3));
+								yellow_step->Add(new PathComponent());
+								engine->AddEntity(yellow_step);
+							}
+							delete p;
+							//Zet mag enkel toegelaten worden als path_length <= range vd unit
 						}
-						delete p;
-						//Zet mag enkel toegelaten worden als path_length <= range vd unit
 					}
 				}
-			}
-
-
-
+			} else
 			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
 				ALLEGRO_MOUSE_EVENT mouseEvent = ev.mouse;
 				Grid* clickedGrid = &Graphics::Instance().ToGrid(v);
@@ -238,8 +236,6 @@ protected:
 					}
 				}
 				//cout << "Button down" << clickedGrid->col << "-" << clickedGrid->row << "!" << endl;
-
-				Entity* clickedEntity = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 
 				/*if (clickedEntity != nullptr) {
 				UnitComponent *uc = static_cast<UnitComponent*>(clickedEntity->GetComponent(Component::UNIT));
