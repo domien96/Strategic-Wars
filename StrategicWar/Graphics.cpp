@@ -211,17 +211,15 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	// eerst garbage wegdoen
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	// Draw all segments of the background (level)
-	for (int depth = 0; depth < 4; ++depth) {
-		vector<Entity*> v = *(world->GetWorldEntities(depth));
-		for (vector<Entity*>::iterator it = v.begin(); it != v.end(); ++it) {
-			if ((*it) != nullptr) {
-			PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
-			TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
-			Vector2 v2 = ToPx(pc->pos);
-				DrawBitmap(tc->texture, v2.x, v2.y);
-			}
-
+	vector<Entity*> background = *(world->GetWorldEntities(0));
+	for (vector<Entity*>::iterator it = background.begin(); it != background.end(); ++it) {
+		if ((*it) != nullptr) {
+		PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
+		TextureComponent *tc = static_cast<TextureComponent*>((*it)->GetComponent(Component::TEXTURE));
+		Vector2 v2 = ToPx(pc->pos);
+			DrawBitmap(tc->texture, v2.x, v2.y);
 		}
+
 	}
 
 	//stats tekenen
@@ -229,15 +227,10 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize() + 2);
 	DrawString("Selected unit image here", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_HP, 0, world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2));
-//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_ATTACK, 0, world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2));
-//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2));
-//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MAX, 0, world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2));
-//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2));
-//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 
 	DrawString(to_string((int)floor(al->fps + 0.5)) + " fps", 5, world->getRows()*GetGridSize() + 2 + 6 * (GetGridSize() + 2), Color(1, 1, 0, 1), ALIGN_LEFT, false);
 
