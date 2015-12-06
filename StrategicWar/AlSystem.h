@@ -23,8 +23,15 @@ protected:
 	virtual void Update() {
 		/* eenvoudige strategie
 		* voor elke unit:
-		*	als je iets kan aanvallen -> val aan
-		*	anders bereken path naar headquarter -> move zo ver mogelijk
+		*	bereken path naar HQ
+		*	if (HQ in range)
+		*		attack HQ
+		*	else
+		*		for elke unit van speler
+		*			bereken path naar die unit
+		*			probeer aan te vallen
+		*	if nog AP over
+		*		move richting HQ
 		*/
 		World *world = engine->GetContext()->getworld();
 		vector<Entity*> *v = world->GetWorldEntities(1);
@@ -50,25 +57,27 @@ protected:
 		}
 
 		for (vector<Entity*>::iterator it = vAl.begin(); it != vAl.end(); ++it) {
-			//kijken of er iets kan aangevallen worden adhv pad
 			Pathfinder *finder = new Pathfinder();
 			UnitComponent *uc = static_cast<UnitComponent*>((*it)->GetComponent(Component::UNIT));
 			PositionComponent *pc = static_cast<PositionComponent*>((*it)->GetComponent(Component::POSITION));
-			//eerst nog een controle of de hq zelf kan aangevallen worden
-			//TODO
-			for (vector<Entity*>::iterator it2 = vPlayer.begin(); it2 != vPlayer.end(); ++it2) {
-				PositionComponent *pcHuman = static_cast<PositionComponent*>((*it2)->GetComponent(Component::POSITION));
+			//path naar HQ
+			PositionComponent *pcHQ = static_cast<PositionComponent*>(HQPlayer->GetComponent(Component::POSITION));
+			Path *pHQ = finder->find_path(*world, *uc, pc->pos, pcHQ->pos);
 
-				Path *p = finder->find_path(*world, *uc, pc->pos, pcHuman->pos);
-				//controle of kost ok is
-				if (p->cost < uc->range_max && p->cost > uc->range_min) {
-					//if () { //controle voor attackpoints
+			if (pHQ->cost <= uc->range_max && pHQ->cost >= uc->range_min) { //HQ kan aangevallen worden
+				//attack HQ
+			} else {
+				for (vector<Entity*>::iterator it2 = vPlayer.begin(); it2 != vPlayer.end(); ++it2) {
+					PositionComponent *pcHuman = static_cast<PositionComponent*>((*it2)->GetComponent(Component::POSITION));
+					finder->reset();
+					Path *p = finder->find_path(*world, *uc, pc->pos, pcHuman->pos);
 
-					//}
-					// animationcomponenten aanmaken
+					if (p->cost <= uc->range_max && p->cost >= uc->range_min) {
+						// attack unit in range
+					}
 				}
 			}
-			//path naar hq
+			// naar HQ gaan
 		}
 	};
 
