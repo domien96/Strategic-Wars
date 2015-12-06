@@ -1,5 +1,5 @@
-#ifndef ANIMATION_SYSTEM_H
-#define ANIMATION_SYSTEM_H
+#ifndef AL_SYSTEM_H
+#define AL_SYSTEM_H
 
 #include "System.h"
 #include "Engine.h"

@@ -54,6 +54,8 @@ void Game::LoadAssets()
 	// TODO: Add all required systems
 	engine.AddSystem(&rs);		// Renders all to screen
 	engine.AddSystem(&ms);
+	engine.AddSystem(&as);
+	engine.AddSystem(&als);
 }
 
 /* Load the level from file */
@@ -115,7 +117,10 @@ void Game::DestroyOther()
 
 	// Remove systems
 	// TODO: remove all added systems
-	engine.RemoveSystem(&rs);		
+	engine.RemoveSystem(&rs);	
+	engine.RemoveSystem(&ms);
+	engine.RemoveSystem(&as);
+	engine.RemoveSystem(&als);
 
 	AllegroLib::Instance().Destroy();
 }

@@ -6,6 +6,8 @@
 #include "Context.h"
 #include "RenderSystem.h"
 #include "MouseSystem.h"
+#include "AnimationSystem.h"
+#include "AlSystem.h"
 
 class Game
 {
@@ -16,7 +18,9 @@ public:
 		engine(_context),
 		fps(_context->GetFps()),
 		rs(),
-		ms()
+		ms(),
+		as(),
+		als()
 	{};
 	~Game();
 
@@ -39,6 +43,8 @@ private:
 	Engine engine;
 	RenderSystem rs;
 	MouseSystem ms;
+	AnimationSystem as;
+	AlSystem als;
 	Context* context;
 };
 
