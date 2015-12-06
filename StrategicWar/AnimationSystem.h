@@ -38,7 +38,7 @@ protected:
 				if (ac->is_attacker) {
 					UnitComponent* uc = (UnitComponent*)entity->GetComponent(Component::UNIT);
 					uc->ap = ac->new_ap;
-					es->EntityChanged(entity);
+					engine->UpdateEntity(entity);
 				}
 				else {
 					UnitComponent* uc = (UnitComponent*) entity->GetComponent(Component::UNIT);
@@ -67,7 +67,7 @@ protected:
 					case 1:
 						sprite = Graphics::SPRITE_HEALTH_ONE;
 					case 0:
-						sprite = Graphics::SPRITE_HEALTH_HALF;
+						sprite = Graphics::SPRITE_NONE;
 					default:
 						sprite = Graphics::SPRITE_HEALTH_TEN;
 					}
@@ -79,10 +79,10 @@ protected:
 						health_bar->Add(new TextureComponent(sprite));
 						health_bar->Add(new PositionComponent(pos, 4));
 						world->GetWorldEntities(4)->push_back(health_bar);
-						es->EntityChanged(health_bar);
+						engine->AddEntity(health_bar);
 					} else {
 						world->getWorldEntity(pos.row, pos.col, 4)->Add(new TextureComponent(sprite));
-						es->EntityChanged(world->getWorldEntity(pos.row, pos.col, 4));
+						engine->UpdateEntity(world->getWorldEntity(pos.row, pos.col, 4));
 					}
 
 					//Remove if dead
@@ -90,7 +90,7 @@ protected:
 						entity->Remove(entity->GetComponent(Component::POSITION));
 						entity->Remove(entity->GetComponent(Component::TEXTURE));
 						entity->Remove(entity->GetComponent(Component::UNIT));
-						es->EntityRemoved(entity);
+						engine->RemoveEntity(entity);
 					}
 				}
 			}
