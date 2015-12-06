@@ -11,7 +11,7 @@ Vector2 Graphics::ToPx(Grid gridloc) {
 }
 
 Grid Graphics::ToGrid(Vector2 vector) {
-	return Grid(floor(vector.y / GetGridSize() + 0.5), floor(vector.x / GetGridSize() + 0.5));
+	return Grid(floor(vector.y / GetGridSize()), floor(vector.x / GetGridSize()));
 }
 
 int Graphics::GetGridSize() {
@@ -143,7 +143,7 @@ void Graphics::ExecuteDraws()
 
 
 //This methode is made to update the SPRITE_FOREGROUND with the new entities in world;
-void Graphics::ExecuteHudDraws(World *world) {
+void Graphics::ExecuteHudDraws(World *world, Entity *entity) {
 
 	// Set the target for draw calls to this bitmap
 	al_set_target_bitmap(sprites[SPRITE_FOREGROUND]);
@@ -161,10 +161,37 @@ void Graphics::ExecuteHudDraws(World *world) {
 		}
 	}
 
+	if (entity != nullptr) {
+		UnitComponent *uc = static_cast<UnitComponent*>(entity->GetComponent(Component::UNIT));
+
+		if (uc != nullptr) {
+
+			DrawString("", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			//HP
+			DrawString("" + to_string(uc->hp), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			//ATT
+			DrawString("" + to_string(uc->dp), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			//MIN RANGE
+			DrawString("" + to_string(uc->range_min), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			//MAX RANGE
+			DrawString("" + to_string(uc->range_max), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			// AP
+			DrawString("" + to_string(uc->ap), 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+		}
+		else {
+			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+			DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+		}
+	}
+
 	// Reset the target for draw calls to the backbuffer of the display
 	al_set_target_bitmap(al_get_backbuffer(al->display));
 
 }
+
 
 void Graphics::ClearScreen()
 {
@@ -202,15 +229,15 @@ void Graphics::GenerateBackgroundSprite(World * world)
 	DrawBitmap(SPRITE_INFANTRY, 0, world->getRows()*GetGridSize() + 2);
 	DrawString("Selected unit image here", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize(), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_HP, 0, world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2));
-	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_ATTACK, 0, world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2));
-	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 2 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MIN, 0, world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2));
-	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 3 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_RANGE_MAX, 0, world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2));
-	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 4 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 	DrawBitmap(SPRITE_BADGE_AP, 0, world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2));
-	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
+//	DrawString("-", 2 * (GetGridSize() + 2), world->getRows()*GetGridSize() + 2 + 5 * (GetGridSize() + 2), Color(1, 1, 1, 1), ALIGN_LEFT, false);
 
 	DrawString(to_string((int)floor(al->fps + 0.5)) + " fps", 5, world->getRows()*GetGridSize() + 2 + 6 * (GetGridSize() + 2), Color(1, 1, 0, 1), ALIGN_LEFT, false);
 

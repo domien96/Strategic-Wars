@@ -8,6 +8,7 @@
 #include "AllegroLib.h"
 #include "Color.h"
 #include "Grid.h"
+#include "Entity.h"
 
 // Forward declaration
 class World;
@@ -105,7 +106,7 @@ public:
 	void UnLoadSpriteCache();
 
 	void ExecuteDraws();
-	void ExecuteHudDraws(World *world);
+	void ExecuteHudDraws(World *world, Entity *entity);
 	void ClearScreen();
 
 	void GenerateBackgroundSprite(World* world);
