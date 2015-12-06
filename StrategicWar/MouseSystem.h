@@ -38,8 +38,8 @@ protected:
 				case ALLEGRO_KEY_ESCAPE:
 					// deselecteer de unit
 					//TODO
-					selectedUnit = nullptr;
-					selectedGrid = Grid(0,0);
+					selectedUnit = 0;
+					selectedGrid = Grid(-1,-1);
 					break;
 				}
 			}
@@ -80,14 +80,15 @@ protected:
 				}*/
 
 				//Draw foots if there is a selectedUnit.
-				if (selectedUnit != nullptr) {
+				if (selectedUnit != NULL) {
 
-					Pathfinder finder;
+					Pathfinder* finder = new Pathfinder();
 					UnitComponent *uc = static_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
 
-					Path* p = finder.find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
+					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 
-					finder.reset();
+					//finder->reset();
+					delete finder;
 
 					int path_length = p->cost;
 					vector<Grid> steps = p->steps;
@@ -135,7 +136,7 @@ protected:
 							UnitComponent::UnitType type = uc->type;
 
 							if ((player == 0) && (UnitComponent::UnitType::HQ != type)) {
-								selectedUnit = clickedEntity;
+								selectedUnit = new Entity(*clickedEntity);
 								selectedGrid = *clickedGrid;
 							}
 						}
@@ -182,8 +183,8 @@ protected:
 	virtual Type GetType() { return System::TYPE_MOUSE; };
 
 private:
-	Entity* selectedUnit = nullptr;
-	Grid selectedGrid = Grid(0,0);
+	Entity* selectedUnit = NULL;
+	Grid selectedGrid = Grid(-1,-1);
 };
 
 #endif

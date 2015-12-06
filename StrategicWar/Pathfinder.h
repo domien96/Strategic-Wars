@@ -33,7 +33,7 @@ public:
 	}
 
 	~Pathfinder() {
-		delete graph;
+		//delete graph;
 	}
 
 private:
