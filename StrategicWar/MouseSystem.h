@@ -92,17 +92,17 @@ protected:
 			rightbutton = DESELECT;
 			leftbutton = NONE;
 			if (world->isHuman(selectedUnit)) {
+				Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
+				Grid hoveredGrid = dynamic_cast<PositionComponent*>(hoveredCell->GetComponent(Component::POSITION))->pos;
 				if (hoveredCell && world->isUnit(hoveredCell)) {
-					if (world->isHuman(hoveredCell)) {
-						leftbutton = NONE;
-					}
-					else {
+					if (!world->isHuman(hoveredCell)) {
 						leftbutton = ATTACK;
 					}
 				}
-				else {
+				else if (world->unit_can_walk_over(selectedGrid, hoveredGrid)) {
 					leftbutton = MOVE;
 				}
+
 			}
 		}
 
@@ -113,7 +113,7 @@ protected:
 				switch (ev.keyboard.keycode) {
 				case ALLEGRO_KEY_ESCAPE:
 					// deselecteer de unit
-					//TODO
+					engine->GetEntityStream()->EntityRemoved(selectedUnit);
 					selectedUnit = nullptr;
 					break;
 				}
@@ -214,7 +214,9 @@ protected:
 					case NONE:
 						break;
 					case DESELECT:
-						// TODO
+						// deselecteer de unit
+						engine->GetEntityStream()->EntityRemoved(selectedUnit);
+						selectedUnit = nullptr;
 						break;
 					default:
 						break;
