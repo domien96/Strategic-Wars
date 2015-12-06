@@ -11,6 +11,13 @@
 
 Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
+	if (start.col == target.col && start.row == target.row) {
+		Path* path = new Path();
+		path->steps.push_back(start);
+		path->cost = 0;
+		return path;
+	}
+
 	if (this->graph == nullptr && this->start == nullptr) {
 		graph = new DWGraph(world, unit);
 		this->start = &start;
@@ -18,12 +25,6 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 		Grid current = start;
 		graph->set_cost(start, 0);
 
-		if (start.col == target.col && start.row == target.row) {
-			Path* path = new Path();
-			path->steps.push_back(start);
-			path->cost = 0;
-			return path;
-		}
 
 		queue<Node*> queue;
 
