@@ -26,6 +26,7 @@ public:
 	~MouseSystem() {
 		delete 	selectedUnit;
 		delete hoveredCell;
+		delete finder;
 	};
 
 	Entity* GetSelectedUnit() { return selectedUnit; }
@@ -164,7 +165,7 @@ protected:
 					}
 
 					// NIEUW PAD MAKEN
-					Pathfinder* finder = new Pathfinder();
+					finder = new Pathfinder();
 					UnitComponent *uc = dynamic_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
 					Grid selectedGrid = dynamic_cast<PositionComponent*>(selectedUnit->GetComponent(Component::POSITION))->pos;
 
@@ -322,6 +323,7 @@ protected:
 private:
 	Entity* selectedUnit;
 	Entity* hoveredCell;
+	Pathfinder* finder;
 	ActionType leftbutton, rightbutton;
 };
 
