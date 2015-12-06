@@ -315,7 +315,11 @@ bool World::unit_can_walk_over(Grid from, Grid to) {
 	Entity* e = this->getWorldEntity(to.row, to.col, 0);
 	TextureComponent* tc = (TextureComponent*) e->GetComponent(Component::TEXTURE);
 	Graphics::Sprite sprite = tc->texture;
-	return sprite!=Graphics::SPRITE_WATER && sprite!=Graphics::SPRITE_ROCK;
+	if (sprite==Graphics::SPRITE_WATER || sprite==Graphics::SPRITE_ROCK) return false;
+	Entity* e2 = this->getWorldEntity(from.row, from.col, 0);
+	TextureComponent* tc2 = (TextureComponent*)e2->GetComponent(Component::TEXTURE);
+	Graphics::Sprite sprite2 = tc2->texture;
+	return !(sprite2 == Graphics::SPRITE_WATER || sprite2 == Graphics::SPRITE_ROCK);
 }
 
 
