@@ -101,7 +101,7 @@ int DWGraph::cost(Grid& from, Grid& to) {
 	int f = from.row * number_of_rows + from.col;
 	int t = to.row * number_of_rows + to.col;
 
-	if (!unit_can_walk_over(*world->getWorldEntity(from.row,from.col,1), *world->getWorldEntity(to.row, to.col, 1))) {
+	if (!world->unit_can_walk_over(from, to)) {
 		return INT_MAX;
 	}
 
@@ -111,12 +111,13 @@ int DWGraph::cost(Grid& from, Grid& to) {
 	else return 17;
 }
 
-bool DWGraph::unit_can_walk_over(Entity& unit, Entity& target) {
-	UnitComponent* c = (UnitComponent*) target.GetComponent(Component:: UNIT);
+/*bool DWGraph::unit_can_walk_over(World& world, Grid& to) {
+	if (world.getWorldEntity(to.row, to.col, 1) == NULL) return false;
+	world.getWorldEntity(to.row, to.col, 0)->GetComponent(Component::;
 	//TODO
 	//NEEDS FIX
-	return true;
-}
+	return target == NULL;
+}*/
 
 DWGraph::~DWGraph() {
 	delete visited;

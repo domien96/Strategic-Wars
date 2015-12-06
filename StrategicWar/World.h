@@ -61,7 +61,7 @@ class World {
 		UnitComponent* getUnitComponent(char Symbol);
 		
 
-		//bool level_can_walk_over(cell1, cell2)
+		bool unit_can_walk_over(Grid from, Grid to);
 		
 	private: 
 		// No World creation without filename.
