@@ -50,7 +50,7 @@ protected:
 				Vector2 v = Vector2(ev.mouse.x, ev.mouse.y);
 				Grid *mouseMovedGrid = &(Graphics::Instance().ToGrid(v));
 
-				World *world = engine->world;
+				World *world = engine->GetContext()->getworld();
 				world->GetWorldEntities(3)->clear();
 
 				//  Show blue selection square at the correct square.
@@ -113,7 +113,7 @@ protected:
 				Grid* clickedGrid = &Graphics::Instance().ToGrid(v);
 				cout << "Button down" << clickedGrid->col << "-" << clickedGrid->row << "!" << endl;
 
-				World* world = engine->world;
+				World* world = engine->GetContext()->getworld();
 				Entity* clickedEntity = world->getWorldEntity(clickedGrid->row, clickedGrid->col, 1);
 				
 				if (clickedEntity != nullptr) {
