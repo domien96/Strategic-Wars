@@ -8,7 +8,11 @@
 
 using namespace std;
 
-class Path { public: Grid* steps; int cost; };
+class Path {
+	public:
+		vector<Grid> steps;
+		int cost;
+};
 class Node {
 public:
 	int cost;
@@ -30,7 +34,6 @@ public:
 
 	~Pathfinder() {
 		delete graph;
-		delete start;
 	}
 
 private:
