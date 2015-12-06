@@ -159,6 +159,10 @@ protected:
 
 					Path* p = finder->find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 
+					if (p == nullptr) {
+						p = p;
+					}
+
 					delete finder;
 
 					int path_length = p->cost;

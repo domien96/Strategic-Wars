@@ -32,8 +32,9 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 		while (pqueue.size() > 0) {
 
 			current = pqueue.top()->grid;
-			delete pqueue.top();
+			Node* toDelete = pqueue.top();
 			pqueue.pop();
+			delete toDelete;
 
 			vector<Grid> neighbours = graph->neighbours(current);
 			for (size_t i = 0; i < neighbours.size(); i++) {
@@ -61,8 +62,8 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 	else {
 		Grid current = target;
 		int pathSize = 1;
-		while (graph->get_previous(current) != NULL) {
-			current = *graph->get_previous(current);
+		while (graph->get_previous(current).col != -1) {
+			current = graph->get_previous(current);
 			pathSize++;
 		}
 		current = target;
@@ -72,7 +73,7 @@ Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid
 
 		for (int i = pathSize - 1; i >= 0; i--) {
 			path->steps[i] = current;
-			current = *graph->get_previous(current);
+			current = graph->get_previous(current);
 		}
 
 		return path;

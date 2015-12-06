@@ -31,11 +31,11 @@ DWGraph::DWGraph(World& world, UnitComponent& unit) {
 	}
 
 	//Initialize previous matrix
-	previous = vector<vector<Grid*>>();
+	previous = vector<vector<Grid>>();
 	for (size_t i = 0; i < world.getRows(); i++) {
-		vector<Grid*> row;
+		vector<Grid> row;
 		for (size_t j = 0; j < world.getColumns(); j++) {
-			row.push_back(NULL);
+			row.push_back(Grid(-1,-1));
 		}
 		previous.push_back(row);
 	}
@@ -58,9 +58,9 @@ bool DWGraph::is_visited(Grid& g) {
 }
 
 void DWGraph::set_previous(Grid& g, Grid& prev) {
-	previous[g.row][g.col] = &prev;
+	previous[g.row][g.col] = prev;
 }
-Grid* DWGraph::get_previous(Grid& g) {
+Grid DWGraph::get_previous(Grid& g) {
 	return previous[g.row][g.col];
 }
 
