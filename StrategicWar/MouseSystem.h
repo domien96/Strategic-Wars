@@ -78,6 +78,7 @@ protected:
 		World *world = engine->GetContext()->getworld();
 
 		// ACTIONS AANPASSEN
+		// MERK OP: Ook AI UNITS kunnen gesleecteerd worden, maar niet mee gespeeld worden.
 		if (selectedUnit == nullptr) {
 			rightbutton = NONE;
 			if (hoveredCell && world->isUnit(hoveredCell)) {
