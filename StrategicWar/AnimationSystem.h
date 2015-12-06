@@ -19,8 +19,10 @@ public:
 
 protected:
 
-	virtual void move(World* world, Entity* entity, Grid& from, Grid& to) {
-		//world->getWorldEntity(from.row, from.col, 1)=NULL;
+	virtual void move(EntityStream* es, Entity* entity, Grid& from, Grid& to) {
+		PositionComponent* pc = (PositionComponent*) entity->GetComponent(Component::POSITION);
+		pc->pos = to;
+		es->EntityChanged(entity);
 		//TODO
 	}
 
@@ -75,8 +77,10 @@ protected:
 						health_bar->Add(new TextureComponent(sprite));
 						health_bar->Add(new PositionComponent(pos, 4));
 						world->GetWorldEntities(4)->push_back(health_bar);
+						es->EntityChanged(health_bar);
 					} else {
 						world->getWorldEntity(pos.row, pos.col, 4)->Add(new TextureComponent(sprite));
+						es->EntityChanged(world->getWorldEntity(pos.row, pos.col, 4));
 					}
 				}
 			}
@@ -86,7 +90,7 @@ protected:
 				for (size_t i = 0; i < ac->path->steps.size()-1; i++){
 					Grid from = ac->path->steps[i];
 					Grid to = ac->path->steps[i + 1];
-					move(world, entity, from, to);
+					move(es, entity, from, to);
 				}
 				
 			}
