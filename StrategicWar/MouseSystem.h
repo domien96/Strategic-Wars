@@ -25,7 +25,7 @@ public:
 	~MouseSystem() {};
 
 	Entity* GetSelectedUnit() { return selectedUnit; }
-	Grid* GetSelectedGrid() { return selectedGrid; }
+	Grid* GetSelectedGrid() { return &selectedGrid; }
 
 protected:
 	virtual void Update() {
@@ -39,7 +39,7 @@ protected:
 					// deselecteer de unit
 					//TODO
 					selectedUnit = nullptr;
-					selectedGrid = nullptr;
+					selectedGrid = Grid(0,0);
 					break;
 				}
 			}
@@ -85,7 +85,7 @@ protected:
 					Pathfinder finder;
 					UnitComponent *uc = static_cast<UnitComponent*>(selectedUnit->GetComponent(Component::UNIT));
 
-					Path* p = finder.find_path(*world, *uc,*selectedGrid, *mouseMovedGrid);
+					Path* p = finder.find_path(*world, *uc, selectedGrid, *mouseMovedGrid);
 
 					finder.reset();
 
@@ -136,7 +136,7 @@ protected:
 
 							if ((player == 0) && (UnitComponent::UnitType::HQ != type)) {
 								selectedUnit = clickedEntity;
-								selectedGrid = clickedGrid;
+								selectedGrid = *clickedGrid;
 							}
 						}
 
@@ -183,7 +183,7 @@ protected:
 
 private:
 	Entity* selectedUnit = nullptr;
-	Grid* selectedGrid = nullptr;
+	Grid selectedGrid = Grid(0,0);
 };
 
 #endif
