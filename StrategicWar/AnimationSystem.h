@@ -23,7 +23,7 @@ protected:
 		PositionComponent* pc = (PositionComponent*) entity->GetComponent(Component::POSITION);
 		pc->pos = to;
 		es->EntityChanged(entity);
-		//TODO
+		//TODO	
 	}
 
 	virtual void Update() {

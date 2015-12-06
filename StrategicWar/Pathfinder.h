@@ -33,7 +33,12 @@ public:
 	}
 
 	~Pathfinder() {
-		//delete graph;
+		if (graph != nullptr) {
+			delete graph;
+		}
+		if (start != nullptr) {
+			delete start;
+		}
 	}
 
 private:
