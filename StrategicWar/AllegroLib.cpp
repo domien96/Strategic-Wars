@@ -139,7 +139,7 @@ bool AllegroLib::IsKeyboardEvent()
 
 bool AllegroLib::IsMouseEvent()
 {
-	return event.type == ALLEGRO_EVENT_MOUSE_AXES;
+	return event.type == ALLEGRO_EVENT_MOUSE_AXES || event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP || event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN;
 }
 
 bool AllegroLib::IsRedraw()
