@@ -18,11 +18,6 @@ int Graphics::GetGridSize() {
 	return GRID_SIZE;
 }
 
-float Graphics::GetFps()
-{
-	return al->fps;
-}
-
 void Graphics::LoadFonts()
 {
 	font = al_load_ttf_font("../assets/fonts/arialn.ttf", FONT_SIZE_SMALL, 0);
