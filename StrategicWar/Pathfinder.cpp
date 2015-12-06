@@ -11,7 +11,7 @@ bool comp(Node* i, Node* j) {
 
 Path* Pathfinder::find_path(World& world, UnitComponent& unit, Grid& start, Grid& target) {
 
-	if (this->graph == NULL && this->start == NULL) {
+	if (this->graph == (DWGraph*)0xcccccccc && this->start == (Grid*)0xcccccccc) {
 		graph = new DWGraph(world, unit);
 		this->start = &start;
 
