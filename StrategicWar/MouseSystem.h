@@ -164,7 +164,7 @@ protected:
 					int path_length = p->cost;
 					vector<Grid> steps = p->steps;
 					int max_cost = uc->ap;
-					int length_move = max(path_length, max_cost);
+					int length_move = min(path_length, max_cost);
 
 					for (int i = 0; i < length_move; i++) {
 						Grid g = steps[i];
